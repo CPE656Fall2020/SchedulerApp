@@ -1,0 +1,74 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <ListBox Background="LightGray">
+            <ListBoxItem Background="AliceBlue">Mission #1</ListBoxItem>
+            <ListBoxItem>Mission #2</ListBoxItem>
+            <ListBoxItem>Mission #3</ListBoxItem>
+        </ListBox>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <StackPanel Background="LightGray" Orientation="Horizontal">
+                <TextBlock Padding="5,0,5,0">1:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">2:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">3:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">4:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">5:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">6:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">7:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">8:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">9:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">10:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">11:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">12:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">13:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">14:00</TextBlock>
+                <TextBlock Padding="5,0,5,0">15:00</TextBlock>
+            </StackPanel>
+        <local:GanttRowPanel Grid.Row="1"  MinDate="09:00" MaxDate="17:30">
+            <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="09:00" local:GanttRowPanel.EndDate="12:00"/>
+            <TextBlock Text="Mission" Background="LightGreen" local:GanttRowPanel.StartDate="12:00" local:GanttRowPanel.EndDate="15:30"/>
+            <TextBlock Text="Encrypt" Background="IndianRed" local:GanttRowPanel.StartDate="15:30" local:GanttRowPanel.EndDate="16:30"/>
+                <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="16:30" local:GanttRowPanel.EndDate="17:30"/>
+            </local:GanttRowPanel>
+            <Grid  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <ListBox Background="LightGray">
+                    <ListBoxItem>Devices: </ListBoxItem>
+                    <ListBoxItem Background="AliceBlue">MSP430</ListBoxItem>
+                    <ListBoxItem>MSP432</ListBoxItem>
+                    <ListBoxItem>ODROID</ListBoxItem>
+                </ListBox>
+                <Border BorderBrush="Black" Grid.Column="1"  BorderThickness="2">
+                    <Grid Grid.Column="1"  Background="LightGray" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Padding="5,0,5,0">Power avaible: Some amount of amps</TextBlock>
+                        <TextBlock Grid.Row="1" Padding="5,0,5,0">Estimated Power conuption: some other amount of amps</TextBlock>
+                        <TextBlock Grid.Row="2" Background="White" Padding="5,0,5,0">Graph of power availible over time</TextBlock>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
