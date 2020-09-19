@@ -14,3 +14,4 @@ C:\Users\jwschult\Source\Repos\WpfApp1\WpfApp1\obj\Debug\WpfApp1.csproj.Generate
 C:\Users\jwschult\Source\Repos\WpfApp1\WpfApp1\obj\Debug\WpfApp1.csproj.CoreCompileInputs.cache
 C:\Users\jwschult\Source\Repos\WpfApp1\WpfApp1\obj\Debug\WpfApp1.exe
 C:\Users\jwschult\Source\Repos\WpfApp1\WpfApp1\obj\Debug\WpfApp1.pdb
+C:\Users\jwschult\Source\Repos\WpfApp1\WpfApp1\obj\Debug\Dictionary1.baml

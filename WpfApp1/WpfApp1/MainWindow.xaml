@@ -6,15 +6,25 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:Userinterfaceviewmodel></local:Userinterfaceviewmodel>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionary1.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <ListBox Background="LightGray">
-            <ListBoxItem Background="AliceBlue">Mission #1</ListBoxItem>
-            <ListBoxItem>Mission #2</ListBoxItem>
-            <ListBoxItem>Mission #3</ListBoxItem>
+        <ListBox Background="LightGray"
+                 ItemTemplate="{DynamicResource PassListtemplate}"
+                 ItemsSource="{Binding PassItems}"
+                 SelectedItem="{Binding SelectedPassItem, Mode=TwoWay}">
         </ListBox>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -39,11 +49,11 @@
                 <TextBlock Padding="5,0,5,0">14:00</TextBlock>
                 <TextBlock Padding="5,0,5,0">15:00</TextBlock>
             </StackPanel>
-        <local:GanttRowPanel Grid.Row="1"  MinDate="09:00" MaxDate="17:30">
-            <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="09:00" local:GanttRowPanel.EndDate="12:00"/>
-            <TextBlock Text="Mission" Background="LightGreen" local:GanttRowPanel.StartDate="12:00" local:GanttRowPanel.EndDate="15:30"/>
-            <TextBlock Text="Encrypt" Background="IndianRed" local:GanttRowPanel.StartDate="15:30" local:GanttRowPanel.EndDate="16:30"/>
-                <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="16:30" local:GanttRowPanel.EndDate="17:30"/>
+            <local:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPassItem}"  MinDate="{Binding startTime}" MaxDate="{Binding endTime}">
+                <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="{Binding sunlight.startTime}" local:GanttRowPanel.EndDate="{Binding sunlight.endTime}"/>
+                <TextBlock Text="Mission" Background="LightGreen" local:GanttRowPanel.StartDate="{Binding mission.startTime}" local:GanttRowPanel.EndDate="{Binding mission.endTime}"/>
+                <TextBlock Text="Encrypt" Background="IndianRed" local:GanttRowPanel.StartDate="{Binding encryption.startTime}" local:GanttRowPanel.EndDate="{Binding encryption.endTime}"/>
+                <TextBlock Text="Datalink" Background="DeepSkyBlue" local:GanttRowPanel.StartDate="{Binding Datalink.startTime}" local:GanttRowPanel.EndDate="{Binding Datalink.endTime}"/>
             </local:GanttRowPanel>
             <Grid  Grid.Row="2">
                 <Grid.ColumnDefinitions>
