@@ -10,6 +10,13 @@ namespace WpfApp1
     {
         public DateTime startTime { get; set; } = new DateTime();
         public DateTime endTime { get; set; } = new DateTime();
+        public DateTime midTime {
+            get
+            {
+                TimeSpan ts = endTime.Subtract(startTime);
+                return startTime.AddMinutes(ts.TotalMinutes / 2);
+            }
+        } 
         public Passitem mission { get; set; } 
         public Passitem encryption { get; set; } 
         public Passitem sunlight { get; set; } 

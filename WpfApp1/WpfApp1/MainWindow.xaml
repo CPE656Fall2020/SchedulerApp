@@ -21,34 +21,41 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <ListBox Background="LightGray"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <ListBox Background="LightGray"
                  ItemTemplate="{DynamicResource PassListtemplate}"
                  ItemsSource="{Binding PassItems}"
                  SelectedItem="{Binding SelectedPassItem, Mode=TwoWay}">
-        </ListBox>
+            </ListBox>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"  Content="Edit"  Command="{Binding EditClick}"/>
+                <Button Grid.Column="1"  Content="Add" Command="{Binding AddClicked}"/>
+            </Grid>
+        </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <StackPanel Background="LightGray" Orientation="Horizontal">
-                <TextBlock Padding="5,0,5,0">1:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">2:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">3:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">4:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">5:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">6:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">7:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">8:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">9:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">10:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">11:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">12:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">13:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">14:00</TextBlock>
-                <TextBlock Padding="5,0,5,0">15:00</TextBlock>
-            </StackPanel>
+            <Grid Background="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"  TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPassItem.startTime}"></TextBlock>
+                <TextBlock Grid.Column="1" TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPassItem.midTime}"></TextBlock>
+                <TextBlock Grid.Column="2" TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPassItem.endTime}"></TextBlock>
+            </Grid>
             <local:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPassItem}"  MinDate="{Binding startTime}" MaxDate="{Binding endTime}">
                 <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="{Binding sunlight.startTime}" local:GanttRowPanel.EndDate="{Binding sunlight.endTime}"/>
                 <TextBlock Text="Mission" Background="LightGreen" local:GanttRowPanel.StartDate="{Binding mission.startTime}" local:GanttRowPanel.EndDate="{Binding mission.endTime}"/>

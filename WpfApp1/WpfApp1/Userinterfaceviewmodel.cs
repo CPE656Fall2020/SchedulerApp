@@ -13,13 +13,19 @@ namespace WpfApp1
 {
     public class Userinterfaceviewmodel
     {
-        private List<Passdata> _passitems = new List<Passdata>(); 
+        private List<Passdata> _passitems = new List<Passdata>();
+        private editwindow ew;
         public List<Passdata> PassItems
         {
             get
             {
                 return _passitems;
             }
+        }
+        public ICommand EditClick
+        {
+            get;
+            set;
         }
 
         public Passdata SelectedPassItem
@@ -41,6 +47,17 @@ namespace WpfApp1
             temp.Datalink.startTime = new DateTime(2016, 7, 15, 4, 7, 59);
             temp.Datalink.endTime = new DateTime(2016, 7, 15, 5, 7, 59);
             SelectedPassItem = _passitems.ElementAt<Passdata>(0);
+            EditClick = new RelayCommand(new Action<object>(HandleEditClicked));
+        }
+
+        private void HandleEditClicked(object something)
+        {
+            if (ew == null)
+            {
+                editwindow ew = new editwindow();
+                ew.DataContext = this;
+                ew.Show();
+            }
         }
     }
 }
