@@ -36,3 +36,5 @@ C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\addwindow.
 C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\addwindow.baml
 C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\editwindow.g.cs
 C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\editwindow.baml
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\TimeControl.g.cs
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\TimeControl.baml

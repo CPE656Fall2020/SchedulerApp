@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="editwindow" Height="450" Width="800">
-    <Grid>
+        Title="editwindow" Height="400" Width="800">
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0">Name:</Label>
+            <Label Grid.Row="0" Grid.Column="1" Content="{Binding SelectedPassItem.Name}"></Label>
+        </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" />
@@ -17,22 +28,58 @@
                 <RowDefinition Height="1*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Name:</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPassItem.Name}"></TextBox>
-            <Label Grid.Row="1" Grid.Column="0">Start Time:</Label>
-            <DatePicker Grid.Row="1" Grid.Column="1"></DatePicker>
-            <Label Grid.Row="2" Grid.Column="0">End Time:</Label>
-            <DatePicker Grid.Row="2" Grid.Column="1"></DatePicker>
+            <Label Grid.Row="0" Grid.Column="0">Sunlight</Label>
+            <Label Grid.Row="1" Grid.Column="0">Duration</Label>
+            <local:TimeControl x:Name="Sunlight" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.sunlight.Duration}"></local:TimeControl>
+            </Grid>
+        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0">Mission</Label>
+            <Label Grid.Row="1" Grid.Column="0">Duration</Label>
+            <local:TimeControl x:Name="Mission" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.mission.Duration}"></local:TimeControl>
+
+        </Grid>
+    <Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="1*" />
+        <RowDefinition Height="1*" />
+        <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0">encryption</Label>
+            <Label Grid.Row="1" Grid.Column="0">Duration</Label>
+            <local:TimeControl x:Name="encryption" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.encryption.Duration}"></local:TimeControl>
 
         </Grid>
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0">Datalink</Label>
+            <Label Grid.Row="1" Grid.Column="0">Duration</Label>
+            <local:TimeControl x:Name="datalink" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.Datalink.Duration}"></local:TimeControl>
 
         </Grid>
-        <Grid>
-
-        </Grid>
-        <Grid>
-
-        </Grid>
-    </Grid>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Content="OK" Padding="10" Margin="0,40,10,0" Width="60" Click="Button_Click_1"/>
+            <Button Content="Cancel" Padding="10" Margin="0,40,10,0" Click="Button_Click"/>
+        </StackPanel>
+    </StackPanel>
 </Window>

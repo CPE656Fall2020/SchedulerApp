@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace WpfApp1
 {
-
+    //this class may be expanded in the futre
     public class Passitem
     {
-        public DateTime startTime { get; set; } = new DateTime();
-        public DateTime endTime { get; set; } = new DateTime();
-        public Passitem(DateTime starttime, DateTime endtime)
+       public TimeSpan Duration
         {
-            startTime = starttime;
-            endTime = endtime;
+            get;
+            set;
+        }
+        public Passitem(TimeSpan duration)
+        {
+            this.Duration = duration;
         }
     }
 }
