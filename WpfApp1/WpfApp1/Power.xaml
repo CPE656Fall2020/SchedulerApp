@@ -8,7 +8,7 @@
     <Viewbox StretchDirection="Both" Stretch="Fill">
         <Grid>
             <ProgressBar Margin="10,23,12,0" Minimum="0" Maximum="100" Value="77" FlowDirection="RightToLeft" Height="19" VerticalAlignment="Top" />
-            <Label Content="Power Status" Margin="128,0,127,0" Height="26" VerticalAlignment="Top" />
+            <Label Content="Device Current Power Status" Margin="128,0,127,0" Height="26" VerticalAlignment="Top" />
         </Grid>
     </Viewbox>
 </UserControl>
