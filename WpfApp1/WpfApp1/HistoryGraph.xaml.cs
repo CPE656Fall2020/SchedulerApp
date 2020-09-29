@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using OxyPlot;
 
@@ -9,15 +10,26 @@ namespace WpfApp1
     /// </summary>
     public partial class HistoryGraph : UserControl
     {
-        public string Title { get; private set; }
+        private Random random = new Random();
+
+        public string Title { get; set; }
+
+        public string yTitle { get; set; }
+        public string xTitle { get; set; }
+
+        public string dataSet { get; set; }
 
         public IList<DataPoint> Points { get; private set; }
 
         public HistoryGraph()
         {
-            InitializeComponent();
+            DataContext = this;
             this.Title = "Energy Consumtion Over time";
-            this.Points = new List<DataPoint>
+
+            switch (random.Next(1, 4))
+            {
+                case 1:
+                    this.Points = new List<DataPoint>
                               {
                                   new DataPoint(128,10000 ),
                                   new DataPoint(112,9000),
@@ -29,10 +41,72 @@ namespace WpfApp1
                                   new DataPoint(16,1000 ),
                                   new DataPoint(0, 0),
                               };
+                    break;
 
-            //xLabels = new[] { "128", "112", "96", "80", "64", "48", "32", "16", "0" };
+                case 2:
+                    this.Points = new List<DataPoint>
+                              {
+                                  new DataPoint(128,10000 ),
+                                  new DataPoint(112,9500),
+                                  new DataPoint(96,9000),
+                                  new DataPoint( 80,9000),
+                                  new DataPoint(64,4000 ),
+                                  new DataPoint( 48,2000),
+                                  new DataPoint(32,1800 ),
+                                  new DataPoint(16,500 ),
+                                  new DataPoint(0, 0),
+                              };
+                    break;
 
-            //yLabels = new[] { "10000", "9000", "8000", "7000", "6000", "5000", "4000", "3000", "2000", "1000", "0" };
+                case 3:
+                    this.Points = new List<DataPoint>
+                              {
+                                  new DataPoint(128,10000 ),
+                                  new DataPoint(112,9500),
+                                  new DataPoint(96,9000),
+                                  new DataPoint( 80,8000),
+                                  new DataPoint(64,7000 ),
+                                  new DataPoint( 48,6000),
+                                  new DataPoint(32,5800 ),
+                                  new DataPoint(16,500 ),
+                                  new DataPoint(0, 0),
+                              };
+                    break;
+
+                case 4:
+                    this.Points = new List<DataPoint>
+                              {
+                                  new DataPoint(128,8000 ),
+                                  new DataPoint(112,7500),
+                                  new DataPoint(96,6000),
+                                  new DataPoint( 80,5000),
+                                  new DataPoint(64,4000 ),
+                                  new DataPoint( 48,3000),
+                                  new DataPoint(32,2800 ),
+                                  new DataPoint(16,500 ),
+                                  new DataPoint(0, 0),
+                              };
+                    break;
+
+                default:
+                    this.Points = new List<DataPoint>
+                              {
+                                  new DataPoint(128,10000 ),
+                                  new DataPoint(112,9500),
+                                  new DataPoint(96,9000),
+                                  new DataPoint( 80,9000),
+                                  new DataPoint(64,4000 ),
+                                  new DataPoint( 48,2000),
+                                  new DataPoint(32,1800 ),
+                                  new DataPoint(16,500 ),
+                                  new DataPoint(0, 0),
+                              };
+                    break;
+            }
+
+            xTitle = "Time in Mins";
+            yTitle = "Milli-jewels Consumed";
+            InitializeComponent();
         }
     }
 }
