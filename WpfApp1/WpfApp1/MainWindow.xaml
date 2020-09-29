@@ -57,10 +57,10 @@
                 <TextBlock Grid.Column="2" TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPassItem.endTime}"></TextBlock>
             </Grid>
             <local:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPassItem}"  MinDate="{Binding startTime}" MaxDate="{Binding endTime}">
-                <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="{Binding sunlight.startTime}" local:GanttRowPanel.EndDate="{Binding sunlight.endTime}"/>
-                <TextBlock Text="Mission" Background="LightGreen" local:GanttRowPanel.StartDate="{Binding mission.startTime}" local:GanttRowPanel.EndDate="{Binding mission.endTime}"/>
-                <TextBlock Text="Encrypt" Background="IndianRed" local:GanttRowPanel.StartDate="{Binding encryption.startTime}" local:GanttRowPanel.EndDate="{Binding encryption.endTime}"/>
-                <TextBlock Text="Datalink" Background="DeepSkyBlue" local:GanttRowPanel.StartDate="{Binding Datalink.startTime}" local:GanttRowPanel.EndDate="{Binding Datalink.endTime}"/>
+                <TextBlock Text="sunlight" Background="LightYellow" local:GanttRowPanel.StartDate="{Binding sunlightStart}" local:GanttRowPanel.EndDate="{Binding sunlightEnd}"/>
+                <TextBlock Text="Mission" Background="LightGreen" local:GanttRowPanel.StartDate="{Binding missionStart}" local:GanttRowPanel.EndDate="{Binding missionEnd}"/>
+                <TextBlock Text="Encrypt" Background="IndianRed" local:GanttRowPanel.StartDate="{Binding encryptionStart}" local:GanttRowPanel.EndDate="{Binding encryptionEnd}"/>
+                <TextBlock Text="Datalink" Background="DeepSkyBlue" local:GanttRowPanel.StartDate="{Binding DatalinkStart}" local:GanttRowPanel.EndDate="{Binding DatalinkEnd}"/>
             </local:GanttRowPanel>
             <Grid  Grid.Row="2">
                 <Grid.ColumnDefinitions>
