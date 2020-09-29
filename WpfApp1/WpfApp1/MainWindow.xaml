@@ -37,7 +37,7 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"  Content="Edit"  Command="{Binding EditClick}"/>
-                <Button Grid.Column="1"  Content="Add" Command="{Binding AddClicked}"/>
+                <Button Grid.Column="1"  Content="Add" Command="{Binding AddClick}"/>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">
