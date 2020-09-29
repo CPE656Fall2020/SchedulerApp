@@ -71,6 +71,9 @@
     <Compile Include="editwindow.xaml.cs">
       <DependentUpon>editwindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="HistoryGraph.xaml.cs">
+      <DependentUpon>HistoryGraph.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Passdata.cs" />
     <Compile Include="Passitem.cs" />
     <Compile Include="Power.xaml.cs">
@@ -90,6 +93,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="editwindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HistoryGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
