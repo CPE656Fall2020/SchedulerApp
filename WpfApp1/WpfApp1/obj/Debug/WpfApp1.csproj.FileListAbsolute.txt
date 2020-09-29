@@ -38,3 +38,12 @@ C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\editwindow
 C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\editwindow.baml
 C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\TimeControl.g.cs
 C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\TimeControl.baml
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\bin\Debug\OxyPlot.dll
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\bin\Debug\OxyPlot.Wpf.dll
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\bin\Debug\OxyPlot.xml
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\bin\Debug\OxyPlot.Wpf.xml
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\HistoryGraph.g.cs
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\Power.g.cs
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\HistoryGraph.baml
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\Power.baml
+C:\Users\jwschult\Documents\GitHub\UIMockUp\WpfApp1\WpfApp1\obj\Debug\WpfApp1.csproj.CopyComplete
