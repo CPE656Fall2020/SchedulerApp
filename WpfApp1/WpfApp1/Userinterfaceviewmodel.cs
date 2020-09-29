@@ -85,9 +85,8 @@ namespace WpfApp1
         {
             DateTime moment = DateTime.Now;
             DateTime startdate = new DateTime(moment.Year, moment.Month, moment.Day, moment.Hour, moment.Minute, 0);
-            DateTime endDate = new DateTime(moment.Year, moment.Month, moment.Day, (int)(moment.Hour) + 2, (int)(moment.Minute) + 8, 0);
-
-            _passitems.Add(new Passdata("pass #" + (_passitems.Count + 1), new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 4, 15, 58)));
+            DateTime endDate = startdate.AddMinutes(128);
+            _passitems.Add(new Passdata("pass #" + (_passitems.Count + 1), startdate, endDate));
             Passdata temp = _passitems[_passitems.Count - 1];
 
             OrderedDictionary phaseTimes = RandomPhaseTimes();
@@ -109,7 +108,7 @@ namespace WpfApp1
                         break;
 
                     case "mission":
-                        temp.sunlight.Duration = new TimeSpan(runningHour, runningMin, 0);
+                        temp.mission.Duration = new TimeSpan(runningHour, runningMin, 0);
                         break;
 
                     case "encryption":
