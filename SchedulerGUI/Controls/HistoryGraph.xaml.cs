@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using OxyPlot;
 
-namespace SchedulerGUI
+namespace SchedulerGUI.Controls
 {
     /// <summary>
     /// Interaction logic for HistoryGraph.xaml

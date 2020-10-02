@@ -1,9 +1,10 @@
-﻿<Window x:Class="SchedulerGUI.editwindow"
+﻿<Window x:Class="SchedulerGUI.Views.editwindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SchedulerGUI"
+        xmlns:controls="clr-namespace:SchedulerGUI.Controls"
         mc:Ignorable="d"
         Title="editwindow" Height="400" Width="800">
     <StackPanel>
@@ -30,8 +31,8 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">Sunlight</Label>
             <Label Grid.Row="1" Grid.Column="0">Duration</Label>
-            <local:TimeControl x:Name="Sunlight" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.sunlight.Duration}"></local:TimeControl>
-            </Grid>
+            <controls:TimeControl x:Name="Sunlight" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.sunlight.Duration}" />
+        </Grid>
         <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -44,7 +45,7 @@
         </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">Mission</Label>
             <Label Grid.Row="1" Grid.Column="0">Duration</Label>
-            <local:TimeControl x:Name="Mission" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.mission.Duration}"></local:TimeControl>
+            <controls:TimeControl x:Name="Mission" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.mission.Duration}" />
 
         </Grid>
     <Grid>
@@ -59,7 +60,7 @@
     </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">encryption</Label>
             <Label Grid.Row="1" Grid.Column="0">Duration</Label>
-            <local:TimeControl x:Name="encryption" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.encryption.Duration}"></local:TimeControl>
+            <controls:TimeControl x:Name="encryption" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.encryption.Duration}" />
 
         </Grid>
         <Grid>
@@ -74,7 +75,7 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0">Datalink</Label>
             <Label Grid.Row="1" Grid.Column="0">Duration</Label>
-            <local:TimeControl x:Name="datalink" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.Datalink.Duration}"></local:TimeControl>
+            <controls:TimeControl x:Name="datalink" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedPassItem.Datalink.Duration}" />
 
         </Grid>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">

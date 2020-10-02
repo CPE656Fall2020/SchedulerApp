@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SchedulerGUI.Models;
+using SchedulerGUI.Views;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +13,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace SchedulerGUI
+namespace SchedulerGUI.ViewModels
 {
     public class Userinterfaceviewmodel : INotifyPropertyChanged
     {

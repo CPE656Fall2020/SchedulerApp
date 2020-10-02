@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace SchedulerGUI
+namespace SchedulerGUI.Controls
 {
     public class GanttRowPanel : Panel
     {

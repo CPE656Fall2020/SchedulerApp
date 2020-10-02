@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace SchedulerGUI
+namespace SchedulerGUI.Controls
 {
     /// <summary>
     /// Interaction logic for Power.xaml
