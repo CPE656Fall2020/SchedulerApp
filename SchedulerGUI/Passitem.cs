@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1
+namespace SchedulerGUI
 {
     //this class may be expanded in the futre
     public class Passitem

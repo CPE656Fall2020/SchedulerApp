@@ -11,7 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WpfApp1
+namespace SchedulerGUI
 {
     public class Userinterfaceviewmodel : INotifyPropertyChanged
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WpfApp1
+namespace SchedulerGUI
 {
     public class RelayCommand : ICommand
     {
