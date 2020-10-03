@@ -38,6 +38,5 @@ namespace SchedulerGUI.ViewModels.Controls
         /// Gets the duration that has been entered into the control.
         /// </summary>
         public TimeSpan SelectedDuration => new TimeSpan(this.Hours, this.Minutes, this.Seconds);
-
     }
 }

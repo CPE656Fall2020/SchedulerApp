@@ -10,12 +10,9 @@
                      mc:Ignorable="d"
                      Icon="pack://application:,,,/SchedulerGUI;component/Resources/satellite_small.ico"
                      Title="UAH Satellite Power Scheduler"
+                     DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
                      Width="1280" Height="768">
     
-    <Window.DataContext>
-        <vm:MainWindowViewModel />
-    </Window.DataContext>
-
     <!--Top Level Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -38,8 +35,27 @@
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Group">
-                    <Fluent:Button Header="Green"/>
+                    <Fluent:Button Header="Green"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                    <Fluent:Button Header="Grey"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="Database">
+                <Fluent:RibbonGroupBox Header="Group">
+                    <Fluent:Button Header="Green"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
                     <Fluent:Button Header="Grey"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="About">
+                <Fluent:RibbonGroupBox Header="Group">
+                    <Fluent:Button Header="Green"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>

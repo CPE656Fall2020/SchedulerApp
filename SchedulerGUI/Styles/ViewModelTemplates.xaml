@@ -3,8 +3,12 @@
                     xmlns:views="clr-namespace:SchedulerGUI.Views"
                     xmlns:vm="clr-namespace:SchedulerGUI.ViewModels"
                     xmlns:controlviews="clr-namespace:SchedulerGUI.Views.Controls"
-                    xmlns:controlvms="clr-namespace:SchedulerGUI.ViewModels.Controls">
+                    xmlns:controlvms="clr-namespace:SchedulerGUI.ViewModels.Controls" 
+                    xmlns:local="clr-namespace:SchedulerGUI">
 
+    <!--Use VM Locator for Top-Level Window View Resolution-->
+    <local:ViewModelLocator x:Key="ViewModelLocator" />
+    
     <!--    We define the data templates here so we can apply them across the
             entire application.
             
@@ -15,7 +19,7 @@
             view (UserControl), doesn't need to have it's DataContext set
             directly.
             -->
-    
+
     <!--Top Level Views-->
     <DataTemplate DataType="{x:Type vm:AddWindowViewModel}">
         <views:AddWindow />
