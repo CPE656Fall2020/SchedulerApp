@@ -1,28 +1,16 @@
-﻿using SchedulerGUI.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using SchedulerGUI.ViewModels;
 
 namespace SchedulerGUI.Views
 {
     /// <summary>
-    /// Interaction logic for editwindow.xaml
+    /// Interaction logic for EditWindow.xaml
     /// </summary>
-    public partial class editwindow : Window
+    public partial class EditWindow : Window
     {
-        public editwindow()
+        public EditWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -32,10 +20,10 @@ namespace SchedulerGUI.Views
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Userinterfaceviewmodel data = DataContext as Userinterfaceviewmodel;
-            data.SelectedPassItem.sunlight.Duration = this.Sunlight.Value;
-            data.SelectedPassItem.mission.Duration = this.Mission.Value;
-            data.SelectedPassItem.encryption.Duration = this.encryption.Value;
+            Userinterfaceviewmodel data = this.DataContext as Userinterfaceviewmodel;
+            data.SelectedPassItem.Sunlight.Duration = this.Sunlight.Value;
+            data.SelectedPassItem.Mission.Duration = this.Mission.Value;
+            data.SelectedPassItem.Encryption.Duration = this.encryption.Value;
             data.SelectedPassItem.Datalink.Duration = this.datalink.Value;
             this.Close();
         }

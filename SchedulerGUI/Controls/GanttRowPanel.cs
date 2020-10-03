@@ -8,14 +8,27 @@ namespace SchedulerGUI.Controls
     {
         public static readonly DependencyProperty StartDateProperty =
            DependencyProperty.RegisterAttached("StartDate", typeof(DateTime), typeof(GanttRowPanel), new FrameworkPropertyMetadata(DateTime.MinValue, FrameworkPropertyMetadataOptions.AffectsParentArrange));
+
         public static readonly DependencyProperty EndDateProperty =
             DependencyProperty.RegisterAttached("EndDate", typeof(DateTime), typeof(GanttRowPanel), new FrameworkPropertyMetadata(DateTime.MaxValue, FrameworkPropertyMetadataOptions.AffectsParentArrange));
 
         public static readonly DependencyProperty MaxDateProperty =
            DependencyProperty.Register("MaxDate", typeof(DateTime), typeof(GanttRowPanel), new FrameworkPropertyMetadata(DateTime.MaxValue, FrameworkPropertyMetadataOptions.AffectsMeasure));
+
         public static readonly DependencyProperty MinDateProperty =
             DependencyProperty.Register("MinDate", typeof(DateTime), typeof(GanttRowPanel), new FrameworkPropertyMetadata(DateTime.MaxValue, FrameworkPropertyMetadataOptions.AffectsMeasure));
 
+        public DateTime MaxDate
+        {
+            get => (DateTime)this.GetValue(MaxDateProperty);
+            set => this.SetValue(MaxDateProperty, value);
+        }
+
+        public DateTime MinDate
+        {
+            get => (DateTime)this.GetValue(MinDateProperty);
+            set => this.SetValue(MinDateProperty, value);
+        }
 
         public static DateTime GetStartDate(DependencyObject obj)
         {
@@ -37,21 +50,9 @@ namespace SchedulerGUI.Controls
             obj.SetValue(EndDateProperty, value);
         }
 
-        public DateTime MaxDate
-        {
-            get { return (DateTime)GetValue(MaxDateProperty); }
-            set { SetValue(MaxDateProperty, value); }
-        }
-
-        public DateTime MinDate
-        {
-            get { return (DateTime)GetValue(MinDateProperty); }
-            set { SetValue(MinDateProperty, value); }
-        }
-
         protected override Size MeasureOverride(Size availableSize)
         {
-            foreach (UIElement child in Children)
+            foreach (UIElement child in this.Children)
             {
                 child.Measure(availableSize);
             }
@@ -61,12 +62,14 @@ namespace SchedulerGUI.Controls
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            double range = (MaxDate - MinDate).Ticks;
+            double range = (this.MaxDate - this.MinDate).Ticks;
+            range = (range != 0) ? range : 1; // TODO: Alex - added to avoid crash, need to permafix later
+
             double pixelsPerTick = finalSize.Width / range;
 
-            foreach (UIElement child in Children)
+            foreach (UIElement child in this.Children)
             {
-                ArrangeChild(child, MinDate, pixelsPerTick, finalSize.Height);
+                this.ArrangeChild(child, this.MinDate, pixelsPerTick, finalSize.Height);
             }
 
             return finalSize;

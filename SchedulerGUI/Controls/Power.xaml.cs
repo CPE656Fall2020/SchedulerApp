@@ -9,7 +9,7 @@ namespace SchedulerGUI.Controls
     {
         public Power()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

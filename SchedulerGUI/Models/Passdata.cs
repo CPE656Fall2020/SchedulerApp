@@ -1,93 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchedulerGUI.Models
 {
     public class Passdata
     {
-        public DateTime startTime { get; set; } = new DateTime();
-        public DateTime endTime { get; set; } = new DateTime();
-        public DateTime midTime {
-            get
-            {
-                TimeSpan ts = endTime.Subtract(startTime);
-                return startTime.AddMinutes(ts.TotalMinutes / 2);
-            }
-        } 
-        public Passitem mission { get; set; }
-        public DateTime missionStart
+        public Passdata(string name, DateTime starttime, DateTime endtime)
+        {
+            this.Name = name;
+            this.StartTime = starttime;
+            this.EndTime = endtime;
+            this.Sunlight = new Passitem(new TimeSpan(0, 45, 0));
+            this.Encryption = new Passitem(new TimeSpan(0, 25, 0));
+            this.Mission = new Passitem(new TimeSpan(0, 30, 0));
+            this.Datalink = new Passitem(new TimeSpan(0, 28, 0));
+        }
+
+        public DateTime StartTime { get; set; } = default;
+
+        public DateTime EndTime { get; set; } = default;
+
+        public DateTime MidTime
         {
             get
             {
-                return sunlightEnd;
+                TimeSpan ts = this.EndTime.Subtract(this.StartTime);
+                return this.StartTime.AddMinutes(ts.TotalMinutes / 2);
             }
         }
-        public DateTime missionEnd
+
+        public Passitem Mission { get; set; }
+
+        public DateTime MissionStart
         {
-            get
-            {
-                return sunlightEnd.AddMinutes(mission.Duration.TotalMinutes);
-            }
+            get => this.SunlightEnd;
         }
-        public Passitem encryption { get; set; }
-        public DateTime encryptionStart
+
+        public DateTime MissionEnd
         {
-            get
-            {
-                return missionEnd;
-            }
+            get => this.SunlightEnd.AddMinutes(this.Mission.Duration.TotalMinutes);
         }
-        public DateTime encryptionEnd
+
+        public Passitem Encryption { get; set; }
+
+        public DateTime EncryptionStart
         {
-            get
-            {
-                return missionEnd.AddMinutes(encryption.Duration.TotalMinutes);
-            }
+            get => this.MissionEnd;
         }
-        public Passitem sunlight { get; set; }
-        public DateTime sunlightStart
+
+        public DateTime EncryptionEnd
         {
-            get
-            {
-                return startTime;
-            }
+            get => this.MissionEnd.AddMinutes(this.Encryption.Duration.TotalMinutes);
         }
-        public DateTime sunlightEnd
+
+        public Passitem Sunlight { get; set; }
+
+        public DateTime SunlightStart
         {
-            get
-            {
-                return startTime.AddMinutes(sunlight.Duration.TotalMinutes);
-            }
+            get => this.StartTime;
         }
+
+        public DateTime SunlightEnd
+        {
+            get => this.StartTime.AddMinutes(this.Sunlight.Duration.TotalMinutes);
+        }
+
         public Passitem Datalink { get; set; }
+
         public DateTime DatalinkStart
         {
-            get
-            {
-                return encryptionEnd;
-            }
+            get => this.EncryptionEnd;
         }
-        public DateTime DatalinkEnd
-        {
-            get
-            {
-                return encryptionEnd.AddMinutes(Datalink.Duration.TotalMinutes);
-            }
-        }
-        public string Name { get; set; }
 
-        public Passdata(string name,DateTime starttime,DateTime endtime)
-        {
-            Name = name;
-            startTime = starttime;
-            endTime = endtime;
-            sunlight = new Passitem(new TimeSpan(0, 45, 0));
-            encryption = new Passitem(new TimeSpan(0, 25, 0));
-            mission = new Passitem(new TimeSpan(0,30, 0));
-            Datalink = new Passitem(new TimeSpan(0, 28, 0));
-        }
+        public DateTime DatalinkEnd => this.EncryptionEnd.AddMinutes(this.Datalink.Duration.TotalMinutes);
+
+        public string Name { get; set; }
     }
 }

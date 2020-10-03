@@ -30,6 +30,7 @@ namespace SchedulerGUI
             : this(execute, DefaultCanExecute)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the RelayCommand class
         /// Creates a new command.
@@ -60,7 +61,7 @@ namespace SchedulerGUI
         /// An event to raise when the CanExecute value is changed
         /// </summary>
         /// <remarks>
-        /// Any subscription to this event will automatically subscribe to both 
+        /// Any subscription to this event will automatically subscribe to both
         /// the local OnCanExecuteChanged method AND
         /// the CommandManager RequerySuggested event
         /// </remarks>
@@ -113,7 +114,7 @@ namespace SchedulerGUI
             EventHandler handler = this.CanExecuteChangedInternal;
             if (handler != null)
             {
-                //DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
+                // DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
                 handler.Invoke(this, EventArgs.Empty);
             }
         }
