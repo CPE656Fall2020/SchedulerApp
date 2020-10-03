@@ -69,7 +69,9 @@
     <Compile Include="Views\AddWindow.xaml.cs">
       <DependentUpon>AddWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\Popup.xaml.cs" />
+    <Compile Include="Views\Controls\Popup.xaml.cs" >
+      <DependentUpon>Popup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditDialog.xaml.cs">
       <DependentUpon>EditDialog.xaml</DependentUpon>
     </Compile>
