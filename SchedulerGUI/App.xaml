@@ -8,9 +8,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
                 
-                <ResourceDictionary Source="Resources\ViewModelTemplates.xaml" />
-                <ResourceDictionary Source="Resources\LocalDataTemplates.xaml" />
-                <ResourceDictionary Source="Resources\GlobalResources.xaml" />
+                <ResourceDictionary Source="Styles\ViewModelTemplates.xaml" />
+                <ResourceDictionary Source="Styles\LocalDataTemplates.xaml" />
+                <ResourceDictionary Source="Styles\GlobalResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
