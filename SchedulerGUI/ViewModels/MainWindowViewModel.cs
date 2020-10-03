@@ -12,18 +12,18 @@ using SchedulerGUI.Views;
 
 namespace SchedulerGUI.ViewModels
 {
-    public class Userinterfaceviewmodel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private static readonly Random random = new Random();
 
-        private Passdata selectedPassItem;
+        private PassData selectedPassItem;
         private EditWindow ew = new EditWindow();
 
-        public Userinterfaceviewmodel()
+        public MainWindowViewModel()
         {
-            this.PassItems.Add(new Passdata("pass #1", new DateTime(2016, 7, 15, 0, 0, 0), new DateTime(2016, 7, 15, 2, 7, 59)));
-            this.PassItems.Add(new Passdata("pass #2", new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 4, 15, 58)));
-            Passdata temp = this.PassItems.ElementAt<Passdata>(1);
+            this.PassItems.Add(new PassData("pass #1", new DateTime(2016, 7, 15, 0, 0, 0), new DateTime(2016, 7, 15, 2, 7, 59)));
+            this.PassItems.Add(new PassData("pass #2", new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 4, 15, 58)));
+            PassData temp = this.PassItems.ElementAt<PassData>(1);
             temp.Sunlight.Duration = new TimeSpan(1, 0, 0);
             temp.Mission.Duration = new TimeSpan(0, 30, 0);
             temp.Encryption.Duration = new TimeSpan(0, 30, 0);
@@ -33,13 +33,13 @@ namespace SchedulerGUI.ViewModels
             this.AddClick = new RelayCommand(this.HandleAddClicked);
         }
 
-        public ObservableCollection<Passdata> PassItems { get; } = new ObservableCollection<Passdata>();
+        public ObservableCollection<PassData> PassItems { get; } = new ObservableCollection<PassData>();
 
         public ICommand EditClick { get; }
 
         public ICommand AddClick { get; }
 
-        public Passdata SelectedPassItem
+        public PassData SelectedPassItem
         {
             get => this.selectedPassItem;
             set => this.Set(() => this.SelectedPassItem, ref this.selectedPassItem, value);
@@ -88,8 +88,8 @@ namespace SchedulerGUI.ViewModels
             DateTime moment = DateTime.Now;
             DateTime startdate = new DateTime(moment.Year, moment.Month, moment.Day, moment.Hour, moment.Minute, 0);
             DateTime endDate = startdate.AddMinutes(128);
-            this.PassItems.Add(new Passdata("pass #" + (this.PassItems.Count + 1), startdate, endDate));
-            Passdata temp = this.PassItems[this.PassItems.Count - 1];
+            this.PassItems.Add(new PassData("pass #" + (this.PassItems.Count + 1), startdate, endDate));
+            PassData temp = this.PassItems[this.PassItems.Count - 1];
 
             OrderedDictionary phaseTimes = this.RandomPhaseTimes();
             int totalMins = 0;

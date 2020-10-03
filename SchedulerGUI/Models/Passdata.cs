@@ -2,17 +2,17 @@
 
 namespace SchedulerGUI.Models
 {
-    public class Passdata
+    public class PassData
     {
-        public Passdata(string name, DateTime startTime, DateTime endTime)
+        public PassData(string name, DateTime startTime, DateTime endTime)
         {
             this.Name = name;
             this.StartTime = startTime;
             this.EndTime = endTime;
-            this.Sunlight = new Passitem(new TimeSpan(0, 45, 0));
-            this.Encryption = new Passitem(new TimeSpan(0, 25, 0));
-            this.Mission = new Passitem(new TimeSpan(0, 30, 0));
-            this.Datalink = new Passitem(new TimeSpan(0, 28, 0));
+            this.Sunlight = new PassItem(new TimeSpan(0, 45, 0));
+            this.Encryption = new PassItem(new TimeSpan(0, 25, 0));
+            this.Mission = new PassItem(new TimeSpan(0, 30, 0));
+            this.Datalink = new PassItem(new TimeSpan(0, 28, 0));
         }
 
         public DateTime StartTime { get; set; } = default;
@@ -28,7 +28,7 @@ namespace SchedulerGUI.Models
             }
         }
 
-        public Passitem Mission { get; set; }
+        public PassItem Mission { get; set; }
 
         public DateTime MissionStart
         {
@@ -40,7 +40,7 @@ namespace SchedulerGUI.Models
             get => this.SunlightEnd.AddMinutes(this.Mission.Duration.TotalMinutes);
         }
 
-        public Passitem Encryption { get; set; }
+        public PassItem Encryption { get; set; }
 
         public DateTime EncryptionStart
         {
@@ -52,7 +52,7 @@ namespace SchedulerGUI.Models
             get => this.MissionEnd.AddMinutes(this.Encryption.Duration.TotalMinutes);
         }
 
-        public Passitem Sunlight { get; set; }
+        public PassItem Sunlight { get; set; }
 
         public DateTime SunlightStart
         {
@@ -64,7 +64,7 @@ namespace SchedulerGUI.Models
             get => this.StartTime.AddMinutes(this.Sunlight.Duration.TotalMinutes);
         }
 
-        public Passitem Datalink { get; set; }
+        public PassItem Datalink { get; set; }
 
         public DateTime DatalinkStart
         {

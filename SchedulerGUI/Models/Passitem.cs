@@ -3,9 +3,9 @@
 namespace SchedulerGUI.Models
 {
     // this class may be expanded in the futre
-    public class Passitem
+    public class PassItem
     {
-        public Passitem(TimeSpan duration)
+        public PassItem(TimeSpan duration)
         {
             this.Duration = duration;
         }

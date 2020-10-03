@@ -20,7 +20,7 @@ namespace SchedulerGUI.Views
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Userinterfaceviewmodel data = this.DataContext as Userinterfaceviewmodel;
+            MainWindowViewModel data = this.DataContext as MainWindowViewModel;
             data.SelectedPassItem.Sunlight.Duration = this.Sunlight.Value;
             data.SelectedPassItem.Mission.Duration = this.Mission.Value;
             data.SelectedPassItem.Encryption.Duration = this.encryption.Value;
