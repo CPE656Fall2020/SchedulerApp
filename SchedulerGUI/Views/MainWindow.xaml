@@ -8,6 +8,7 @@
                      xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
                      xmlns:vm="clr-namespace:SchedulerGUI.ViewModels" 
                      mc:Ignorable="d"
+                     Icon="pack://application:,,,/SchedulerGUI;component/Resources/satellite_small.ico"
                      Title="UAH Satellite Power Scheduler"
                      Width="1280" Height="768">
     
