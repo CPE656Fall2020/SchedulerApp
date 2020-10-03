@@ -14,7 +14,7 @@ namespace SchedulerGUI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private static readonly Random random = new Random();
+        private static readonly Random Random = new Random();
 
         private PassData selectedPassItem;
         private EditWindow ew = new EditWindow();
@@ -52,7 +52,7 @@ namespace SchedulerGUI.ViewModels
             while (candidates.Count < 4)
             {
                 // May strike a duplicate.
-                candidates.Add(random.Next(0, 4));
+                candidates.Add(Random.Next(0, 4));
             }
 
             // load them in to a list.
@@ -64,7 +64,7 @@ namespace SchedulerGUI.ViewModels
             while (i > 1)
             {
                 i--;
-                int k = random.Next(i + 1);
+                int k = Random.Next(i + 1);
                 int value = result[k];
                 result[k] = result[i];
                 result[i] = value;
@@ -153,11 +153,11 @@ namespace SchedulerGUI.ViewModels
                 int phaseTime = 0;
                 if (timeLeftMins == 128)
                 {
-                    phaseTime = random.Next(0, 64);
+                    phaseTime = Random.Next(0, 64);
                 }
                 else
                 {
-                    phaseTime = random.Next(0, timeLeftMins - i);
+                    phaseTime = Random.Next(0, timeLeftMins - i);
                 }
 
                 phases[place] = phaseTime;
