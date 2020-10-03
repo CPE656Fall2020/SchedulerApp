@@ -4,11 +4,11 @@ namespace SchedulerGUI.Models
 {
     public class Passdata
     {
-        public Passdata(string name, DateTime starttime, DateTime endtime)
+        public Passdata(string name, DateTime startTime, DateTime endTime)
         {
             this.Name = name;
-            this.StartTime = starttime;
-            this.EndTime = endtime;
+            this.StartTime = startTime;
+            this.EndTime = endTime;
             this.Sunlight = new Passitem(new TimeSpan(0, 45, 0));
             this.Encryption = new Passitem(new TimeSpan(0, 25, 0));
             this.Mission = new Passitem(new TimeSpan(0, 30, 0));

@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using SchedulerGUI.Models;
 using SchedulerGUI.Views;
 
 namespace SchedulerGUI.ViewModels
 {
-    public class Userinterfaceviewmodel : INotifyPropertyChanged
+    public class Userinterfaceviewmodel : ViewModelBase
     {
         private static readonly Random random = new Random();
 
@@ -28,13 +28,10 @@ namespace SchedulerGUI.ViewModels
             temp.Mission.Duration = new TimeSpan(0, 30, 0);
             temp.Encryption.Duration = new TimeSpan(0, 30, 0);
             temp.Datalink.Duration = new TimeSpan(0, 8, 0);
-            this.SelectedPassItem = this.PassItems.ElementAt<Passdata>(0);
-            this.PassItems.CollectionChanged += this.OnPassItemsCollectionChanged;
-            this.EditClick = new RelayCommand(new Action<object>(this.HandleEditClicked));
-            this.AddClick = new RelayCommand(new Action<object>(this.HandleAddClicked));
+            this.SelectedPassItem = this.PassItems[0];
+            this.EditClick = new RelayCommand(this.HandleEditClicked);
+            this.AddClick = new RelayCommand(this.HandleAddClicked);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<Passdata> PassItems { get; } = new ObservableCollection<Passdata>();
 
@@ -44,23 +41,8 @@ namespace SchedulerGUI.ViewModels
 
         public Passdata SelectedPassItem
         {
-            get
-            {
-                return this.selectedPassItem;
-            }
-
-            set
-            {
-                this.selectedPassItem = value;
-                this.OnPropertyChanged("SelectedPassItem");
-            }
-        }
-
-        // Create the OnPropertyChanged method to raise the event
-        // The calling member's name will be used as the parameter.
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            get => this.selectedPassItem;
+            set => this.Set(() => this.SelectedPassItem, ref this.selectedPassItem, value);
         }
 
         private static List<int> GenerateRandomOrder()
@@ -91,7 +73,7 @@ namespace SchedulerGUI.ViewModels
             return result;
         }
 
-        private void HandleEditClicked(object something)
+        private void HandleEditClicked()
         {
             if (!this.ew.IsActive)
             {
@@ -101,7 +83,7 @@ namespace SchedulerGUI.ViewModels
             }
         }
 
-        private void HandleAddClicked(object something)
+        private void HandleAddClicked()
         {
             DateTime moment = DateTime.Now;
             DateTime startdate = new DateTime(moment.Year, moment.Month, moment.Day, moment.Hour, moment.Minute, 0);
@@ -148,16 +130,6 @@ namespace SchedulerGUI.ViewModels
             // temp.mission.Duration = new TimeSpan(0, 30, 0);
             // temp.encryption.Duration = new TimeSpan(0, 30, 0);
             // temp.Datalink.Duration = new TimeSpan(0, 8, 0);
-        }
-
-        private void OnPassItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            this.OnPropertyChanged();
-        }
-
-        private DateTime DateGenerator(DateTime start, int hourOffset, int minOffset)
-        {
-            return new DateTime(start.Year, start.Month, start.Day, start.Hour + hourOffset, start.Minute + minOffset, 0);
         }
 
         private OrderedDictionary RandomPhaseTimes()
