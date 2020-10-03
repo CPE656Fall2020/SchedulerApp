@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Ioc;
 using SchedulerDatabase;
 using SchedulerDatabase.Models;
 using SchedulerGUI.Models;
@@ -29,12 +30,13 @@ namespace SchedulerGUI.ViewModels
         {
             this.Plot = new AESGraphViewModel();
 
-            this.Context = new SchedulerContext(@"data.db");
-            this.Summarizer = new SchedulingSummarizer(this.Context);
-
-            this.Authors = new ObservableCollection<string>(this.Summarizer.GetAllTestAuthors());
-            this.Platforms = new ObservableCollection<string>(this.Summarizer.GetAllTestedPlatforms());
-            this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
+            using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
+            {
+                var summarizer = new SchedulingSummarizer(context);
+                this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
+                this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
+                this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
+            }
 
             this.Authors.Insert(0, AllItems);
             this.Platforms.Insert(0, AllItems);
@@ -61,7 +63,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets the title of the application.
         /// </summary>
-        public string Title => $"CPE656 Standalone Plot Tool - {GlobalAssemblyInfo.InformationalVersion}";
+        public string Title => $"CPE656 Data Plot Tool - {GlobalAssemblyInfo.InformationalVersion}";
 
         /// <summary>
         /// Gets or sets the selected plot option.
@@ -104,10 +106,6 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public AESGraphViewModel Plot { get; }
 
-        private SchedulingSummarizer Summarizer { get; }
-
-        private SchedulerContext Context { get; }
-
         private void SetAndUpdatePlot<T>(Expression<Func<T>> propertyExpression, ref T field, T newValue)
         {
             this.Set(propertyExpression, ref field, newValue);
@@ -116,39 +114,43 @@ namespace SchedulerGUI.ViewModels
 
         private void GeneratePlot()
         {
-            var rawData = this.Context.AESProfiles.AsQueryable();
-
-            // Include platform filters
-            if (this.SelectedPlatform != AllItems)
+            using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
-                rawData = rawData
-                    .Where(a => a.PlatformName == this.SelectedPlatform);
-            }
+                var summarizer = new SchedulingSummarizer(context);
+                var rawData = context.AESProfiles.AsQueryable();
 
-            // Include author filters
-            if (this.SelectedAuthor != AllItems)
-            {
-                rawData = rawData
-                    .Where(a => a.Author == this.SelectedAuthor);
-            }
+                // Include platform filters
+                if (this.SelectedPlatform != AllItems)
+                {
+                    rawData = rawData
+                        .Where(a => a.PlatformName == this.SelectedPlatform);
+                }
 
-            // Include accelerator filters
-            if (this.SelectedAccelerator != AllItems)
-            {
-                var accelerator = (AESEncyptorProfile.AcceleratorType)Enum.Parse(typeof(AESEncyptorProfile.AcceleratorType), this.SelectedAccelerator);
-                rawData = rawData
-                    .Where(a => a.PlatformAccelerator == accelerator);
-            }
+                // Include author filters
+                if (this.SelectedAuthor != AllItems)
+                {
+                    rawData = rawData
+                        .Where(a => a.Author == this.SelectedAuthor);
+                }
 
-            switch (this.SelectedOption)
-            {
-                case PlotOption.Raw:
-                    this.Plot.DisplayedData = rawData;
-                    break;
+                // Include accelerator filters
+                if (this.SelectedAccelerator != AllItems)
+                {
+                    var accelerator = (AESEncyptorProfile.AcceleratorType)Enum.Parse(typeof(AESEncyptorProfile.AcceleratorType), this.SelectedAccelerator);
+                    rawData = rawData
+                        .Where(a => a.PlatformAccelerator == accelerator);
+                }
 
-                case PlotOption.Summarized:
-                    this.Plot.DisplayedData = this.Summarizer.SummarizeResults(rawData);
-                    break;
+                switch (this.SelectedOption)
+                {
+                    case PlotOption.Raw:
+                        this.Plot.DisplayedData = rawData.ToList();
+                        break;
+
+                    case PlotOption.Summarized:
+                        this.Plot.DisplayedData = summarizer.SummarizeResults(rawData).ToList();
+                        break;
+                }
             }
         }
     }

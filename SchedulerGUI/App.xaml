@@ -11,6 +11,8 @@
                 <ResourceDictionary Source="Styles\ViewModelTemplates.xaml" />
                 <ResourceDictionary Source="Styles\LocalDataTemplates.xaml" />
                 <ResourceDictionary Source="Styles\GlobalResources.xaml" />
+
+                <ResourceDictionary Source="Resources\VS2017\Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

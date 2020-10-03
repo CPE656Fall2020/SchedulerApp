@@ -4,10 +4,10 @@
                     xmlns:vm="clr-namespace:SchedulerGUI.ViewModels"
                     xmlns:controlviews="clr-namespace:SchedulerGUI.Views.Controls"
                     xmlns:controlvms="clr-namespace:SchedulerGUI.ViewModels.Controls" 
-                    xmlns:local="clr-namespace:SchedulerGUI">
+                    xmlns:services="clr-namespace:SchedulerGUI.Services">
 
     <!--Use VM Locator for Top-Level Window View Resolution-->
-    <local:ViewModelLocator x:Key="ViewModelLocator" />
+    <services:ViewModelLocator x:Key="ViewModelLocator" />
     
     <!--    We define the data templates here so we can apply them across the
             entire application.
@@ -36,5 +36,9 @@
 
     <DataTemplate DataType="{x:Type controlvms:TimeControlViewModel}">
         <controlviews:TimeControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
+        <controlviews:AESGraphControl />
     </DataTemplate>
 </ResourceDictionary>

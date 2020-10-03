@@ -4,18 +4,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Windows.Forms.Design;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
+using SchedulerDatabase;
 using SchedulerGUI.Models;
+using SchedulerGUI.Services;
+using SchedulerGUI.Settings;
 using SchedulerGUI.ViewModels.Controls;
 using SchedulerGUI.Views;
 
 namespace SchedulerGUI.ViewModels
 {
     /// <summary>
-    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and is statically bound to the <see cref="Views.MainWindow"/> view.
+    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and bound to the <see cref="Views.MainWindow"/> view.
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
@@ -25,10 +29,14 @@ namespace SchedulerGUI.ViewModels
 
         public MainWindowViewModel()
         {
+            // Setup shared services like DbContext and SettingsManager for the entire application.
+            this.Startup();
+
             this.Passes = new ObservableCollection<PassData>();
 
             this.EditCommand = new RelayCommand(this.EditClickedHandler);
             this.AddCommand = new RelayCommand(this.AddClickedHandler);
+            this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
 
             this.DialogManager = new PopupViewModel()
             {
@@ -77,6 +85,11 @@ namespace SchedulerGUI.ViewModels
         public ICommand AddCommand { get; }
 
         /// <summary>
+        /// Gets the command to execute to open the Scheduler Plotter tool.
+        /// </summary>
+        public ICommand OpenSchedulerPlotterCommand { get; }
+
+        /// <summary>
         /// Gets the Dialog Manager for the main window.
         /// </summary>
         public PopupViewModel DialogManager { get; }
@@ -107,6 +120,31 @@ namespace SchedulerGUI.ViewModels
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Performs application initialization.
+        /// </summary>
+        private void Startup()
+        {
+            // Setup the SettingsManager
+            const string SettingsFileName = "settings.json";
+            SimpleIoc.Default.Register(() => new SettingsManager(SettingsFileName));
+
+            // Load the user's settings file
+            var settingsManager = SimpleIoc.Default.GetInstance<SettingsManager>();
+            settingsManager.LoadSettings();
+
+            // Didn't have a settings file? Make one now
+            settingsManager.SaveSettings();
+
+            // Register the DBContext with DI based on the provided path in Settings.
+            SimpleIoc.Default.Register(() => new SchedulerContext(settingsManager.CoreSettings.DatabaseLocation));
+
+            // EF Core kinda lags on the first time it opens a new context
+            // Make a new instance int the background and just toss it to allow most of the startup cost
+            // to be done ahead-of-time and allow for building it's internal cache.
+            Task.Run(() => SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>().AESProfiles.Count());
         }
 
         private void EditClickedHandler()
@@ -217,6 +255,13 @@ namespace SchedulerGUI.ViewModels
             }
 
             return phases;
+        }
+
+        private void OpenSchedulerPlotterHandler()
+        {
+            var instance = SimpleIoc.Default.GetInstanceWithoutCaching<PlotWindowViewModel>();
+            var dialogService = SimpleIoc.Default.GetInstance<WindowService>();
+            dialogService.ShowWindow<PlotWindow>(instance);
         }
     }
 }

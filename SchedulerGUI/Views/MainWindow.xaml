@@ -44,11 +44,11 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Database">
-                <Fluent:RibbonGroupBox Header="Group">
-                    <Fluent:Button Header="Green"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
-                    <Fluent:Button Header="Grey"/>
+                <Fluent:RibbonGroupBox Header="Tools">
+                    <Fluent:Button Header="Plot Tool"
+                                   Icon="{StaticResource VS2017Icons.AvailablityColumnChart}"
+                                   LargeIcon="{StaticResource VS2017Icons.AvailablityColumnChart}"
+                                   Command="{Binding OpenSchedulerPlotterCommand}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="About">
