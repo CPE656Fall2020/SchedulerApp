@@ -1,128 +1,156 @@
-﻿<Window x:Class="SchedulerGUI.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:SchedulerGUI.Controls"
-        xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
-        xmlns:vm="clr-namespace:SchedulerGUI.ViewModels" 
-        mc:Ignorable="d"
-        Title="UAH Satellite Power Scheduler"
-        Width="1280" Height="768">
+﻿<Fluent:RibbonWindow x:Class="SchedulerGUI.Views.MainWindow"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:Fluent="urn:fluent-ribbon" 
+                     xmlns:controls="clr-namespace:SchedulerGUI.Controls"
+                     xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
+                     xmlns:vm="clr-namespace:SchedulerGUI.ViewModels" 
+                     mc:Ignorable="d"
+                     Title="UAH Satellite Power Scheduler"
+                     Width="1280" Height="768">
     
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
 
+    <!--Top Level Grid-->
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+      
+        <Fluent:Ribbon Grid.Row="0">
+            <!--Backstage-->
+            <Fluent:Ribbon.Menu>
+                <Fluent:Backstage>
+                    <Fluent:BackstageTabControl>
+                        <Fluent:BackstageTabItem Header="New" />
+                        <Fluent:BackstageTabItem Header="Print" />
+                        <Fluent:Button Header="Blue" />
+                    </Fluent:BackstageTabControl>
+                </Fluent:Backstage>
+            </Fluent:Ribbon.Menu>
 
-        
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <!--Tabs-->
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Group">
+                    <Fluent:Button Header="Green"/>
+                    <Fluent:Button Header="Grey"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+
+        <!--Content Grid-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
             
-            <ListView Background="LightGray"
-                      VerticalAlignment="Stretch"
-                      ItemsSource="{Binding Passes}"
-                      SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+            <!--Left Sidebar - Passes-->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <TextBlock VerticalAlignment="Center"
-                                       FontSize="15"
-                                       Text="{Binding Name}" />
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            
-            <UniformGrid Grid.Row="1" Rows="1">
-                <Button Content="Edit"  Command="{Binding EditCommand}" />
-                <Button Content="Add" Command="{Binding AddCommand}" />
-            </UniformGrid>
-        </Grid>
+                <ListView Background="LightGray"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{Binding Passes}"
+                    SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="5" />
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock VerticalAlignment="Center"
+                                    FontSize="15"
+                                    Text="{Binding Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            
-            <Grid Background="LightGray">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"  TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPass.StartTime}"></TextBlock>
-                <TextBlock Grid.Column="1" TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPass.MidTime}"></TextBlock>
-                <TextBlock Grid.Column="2" TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPass.EndTime}"></TextBlock>
+                <UniformGrid Grid.Row="1" Rows="1">
+                    <Button Content="Edit"  Command="{Binding EditCommand}" />
+                    <Button Content="Add" Command="{Binding AddCommand}" />
+                </UniformGrid>
             </Grid>
 
-            <controls:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPass}"  MinDate="{Binding StartTime}" MaxDate="{Binding EndTime}">
-                <TextBlock Text="sunlight" Background="LightYellow" controls:GanttRowPanel.StartDate="{Binding SunlightStart}" controls:GanttRowPanel.EndDate="{Binding SunlightEnd}" />
-                <TextBlock Text="Mission" Background="LightGreen" controls:GanttRowPanel.StartDate="{Binding MissionStart}" controls:GanttRowPanel.EndDate="{Binding MissionEnd}" />
-                <TextBlock Text="Encrypt" Background="IndianRed" controls:GanttRowPanel.StartDate="{Binding EncryptionStart}" controls:GanttRowPanel.EndDate="{Binding EncryptionEnd}" />
-                <TextBlock Text="Datalink" Background="DeepSkyBlue" controls:GanttRowPanel.StartDate="{Binding DatalinkStart}" controls:GanttRowPanel.EndDate="{Binding DatalinkEnd}" />
-            </controls:GanttRowPanel>
-            
-            <Grid  Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
-                
-                <ListBox Background="LightGray">
-                    <ListBoxItem>Devices:</ListBoxItem>
-                    <ListBoxItem Background="AliceBlue">MSP430</ListBoxItem>
-                    <ListBoxItem>MSP432</ListBoxItem>
-                    <ListBoxItem>ODROID</ListBoxItem>
-                </ListBox>
-                
-                <Border BorderBrush="Black" Grid.Column="1"  BorderThickness="2">
-                    <Grid>
-                        <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
-                        <!--<Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>-->
-                        <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>
-                        <Label Margin="392,5,0,161" Content="7000 mJ" />
-                        <TabControl Margin="0,41,0,0">
-                            <TabItem>
-                                <TabItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Pass #1" Foreground="Black" />
-                                    </StackPanel>
-                                </TabItem.Header>
-                                <controls:HistoryGraph />
-                            </TabItem>
-                            <TabItem>
-                                <TabItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Pass #2" Foreground="Black" />
-                                    </StackPanel>
-                                </TabItem.Header>
-                                <controls:HistoryGraph />
-                            </TabItem>
-                        </TabControl>
-                        <Separator HorizontalAlignment="Left" Background="Black" Height="13" Margin="0,31,0,0" VerticalAlignment="Top" Width="465" />
-                        <!--<TextBlock Grid.Row="1" Padding="5,0,5,0">Estimated Power conuption: some other amount of amps</TextBlock>
-                        <TextBlock Grid.Row="2" Background="White" Padding="5,0,5,0">Graph of power availible over time</TextBlock>-->
-                    </Grid>
-                </Border>
+            <!--Grid Resizer for left sidebar and body-->
+            <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Width="5" />
+
+            <!--Right Body Pane-->
+            <Grid Grid.Column="2" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <UniformGrid Background="LightGray" Rows="1">
+                    <TextBlock TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPass.StartTime}"></TextBlock>
+                    <TextBlock TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPass.MidTime}"></TextBlock>
+                    <TextBlock TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPass.EndTime}"></TextBlock>
+                </UniformGrid>
+
+                <controls:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPass}"  MinDate="{Binding StartTime}" MaxDate="{Binding EndTime}">
+                    <TextBlock Text="sunlight" Background="LightYellow" controls:GanttRowPanel.StartDate="{Binding SunlightStart}" controls:GanttRowPanel.EndDate="{Binding SunlightEnd}" />
+                    <TextBlock Text="Mission" Background="LightGreen" controls:GanttRowPanel.StartDate="{Binding MissionStart}" controls:GanttRowPanel.EndDate="{Binding MissionEnd}" />
+                    <TextBlock Text="Encrypt" Background="IndianRed" controls:GanttRowPanel.StartDate="{Binding EncryptionStart}" controls:GanttRowPanel.EndDate="{Binding EncryptionEnd}" />
+                    <TextBlock Text="Datalink" Background="DeepSkyBlue" controls:GanttRowPanel.StartDate="{Binding DatalinkStart}" controls:GanttRowPanel.EndDate="{Binding DatalinkEnd}" />
+                </controls:GanttRowPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Background="LightGray">
+                        <ListBoxItem>Devices:</ListBoxItem>
+                        <ListBoxItem Background="AliceBlue">MSP430</ListBoxItem>
+                        <ListBoxItem>MSP432</ListBoxItem>
+                        <ListBoxItem>ODROID</ListBoxItem>
+                    </ListBox>
+
+                    <Border BorderBrush="Black" Grid.Column="1"  BorderThickness="2">
+                        <Grid>
+                            <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
+                            <!--<Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>-->
+                            <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>
+                            <Label Margin="392,5,0,161" Content="7000 mJ" />
+                            <TabControl Margin="0,41,0,0">
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Pass #1" Foreground="Black" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <controls:HistoryGraph />
+                                </TabItem>
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Pass #2" Foreground="Black" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <controls:HistoryGraph />
+                                </TabItem>
+                            </TabControl>
+                            <Separator HorizontalAlignment="Left" Background="Black" Height="13" Margin="0,31,0,0" VerticalAlignment="Top" Width="465" />
+                            <!--<TextBlock Grid.Row="1" Padding="5,0,5,0">Estimated Power conuption: some other amount of amps</TextBlock>
+                    <TextBlock Grid.Row="2" Background="White" Padding="5,0,5,0">Graph of power availible over time</TextBlock>-->
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
         </Grid>
 
@@ -132,4 +160,4 @@
                         Grid.ColumnSpan="3"
                         DataContext="{Binding DialogManager}" />
     </Grid>
-</Window>
+</Fluent:RibbonWindow>

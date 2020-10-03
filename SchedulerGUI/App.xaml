@@ -6,6 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+                
                 <ResourceDictionary Source="Resources\ViewModelTemplates.xaml" />
                 <ResourceDictionary Source="Resources\LocalDataTemplates.xaml" />
                 <ResourceDictionary Source="Resources\GlobalResources.xaml" />
