@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SchedulerGUI"
         xmlns:controls="clr-namespace:SchedulerGUI.Controls"
-        xmlns:vm="clr-namespace:SchedulerGUI.ViewModels"
+        xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
+        xmlns:vm="clr-namespace:SchedulerGUI.ViewModels" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="UAH Satellite Power Scheduler"
+        Width="1280" Height="768">
     
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -15,67 +16,82 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
+        
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ListBox Background="LightGray"
-                 ItemTemplate="{DynamicResource SchedulerGUI.PassListTemplate}"
-                 ItemsSource="{Binding PassItems}"
-                 SelectedItem="{Binding SelectedPassItem, Mode=TwoWay}">
-            </ListBox>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  Content="Edit"  Command="{Binding EditClick}" />
-                <Button Grid.Column="1"  Content="Add" Command="{Binding AddClick}" />
-            </Grid>
+            
+            <ListView Background="LightGray"
+                      VerticalAlignment="Stretch"
+                      ItemsSource="{Binding Passes}"
+                      SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock VerticalAlignment="Center"
+                                       FontSize="15"
+                                       Text="{Binding Name}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <UniformGrid Grid.Row="1" Rows="1">
+                <Button Content="Edit"  Command="{Binding EditCommand}" />
+                <Button Content="Add" Command="{Binding AddCommand}" />
+            </UniformGrid>
         </Grid>
+        
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            
             <Grid Background="LightGray">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0"  TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPassItem.StartTime}"></TextBlock>
-                <TextBlock Grid.Column="1" TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPassItem.MidTime}"></TextBlock>
-                <TextBlock Grid.Column="2" TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPassItem.EndTime}"></TextBlock>
+                <TextBlock Grid.Column="0"  TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPass.StartTime}"></TextBlock>
+                <TextBlock Grid.Column="1" TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPass.MidTime}"></TextBlock>
+                <TextBlock Grid.Column="2" TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPass.EndTime}"></TextBlock>
             </Grid>
-            <controls:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPassItem}"  MinDate="{Binding startTime}" MaxDate="{Binding endTime}">
-                <TextBlock Text="sunlight" Background="LightYellow" controls:GanttRowPanel.StartDate="{Binding sunlightStart}" controls:GanttRowPanel.EndDate="{Binding sunlightEnd}" />
-                <TextBlock Text="Mission" Background="LightGreen" controls:GanttRowPanel.StartDate="{Binding missionStart}" controls:GanttRowPanel.EndDate="{Binding missionEnd}" />
-                <TextBlock Text="Encrypt" Background="IndianRed" controls:GanttRowPanel.StartDate="{Binding encryptionStart}" controls:GanttRowPanel.EndDate="{Binding encryptionEnd}" />
+
+            <controls:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPass}"  MinDate="{Binding StartTime}" MaxDate="{Binding EndTime}">
+                <TextBlock Text="sunlight" Background="LightYellow" controls:GanttRowPanel.StartDate="{Binding SunlightStart}" controls:GanttRowPanel.EndDate="{Binding SunlightEnd}" />
+                <TextBlock Text="Mission" Background="LightGreen" controls:GanttRowPanel.StartDate="{Binding MissionStart}" controls:GanttRowPanel.EndDate="{Binding MissionEnd}" />
+                <TextBlock Text="Encrypt" Background="IndianRed" controls:GanttRowPanel.StartDate="{Binding EncryptionStart}" controls:GanttRowPanel.EndDate="{Binding EncryptionEnd}" />
                 <TextBlock Text="Datalink" Background="DeepSkyBlue" controls:GanttRowPanel.StartDate="{Binding DatalinkStart}" controls:GanttRowPanel.EndDate="{Binding DatalinkEnd}" />
             </controls:GanttRowPanel>
+            
             <Grid  Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
+                
                 <ListBox Background="LightGray">
                     <ListBoxItem>Devices:</ListBoxItem>
                     <ListBoxItem Background="AliceBlue">MSP430</ListBoxItem>
                     <ListBoxItem>MSP432</ListBoxItem>
                     <ListBoxItem>ODROID</ListBoxItem>
                 </ListBox>
+                
                 <Border BorderBrush="Black" Grid.Column="1"  BorderThickness="2">
                     <Grid>
                         <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
                         <!--<Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>-->
                         <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>
@@ -105,5 +121,11 @@
                 </Border>
             </Grid>
         </Grid>
+
+        <!--Top Most Dialog Popup-->
+        <Controls:Popup Grid.Row="0" Grid.Column="0"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"
+                        DataContext="{Binding DialogManager}" />
     </Grid>
 </Window>

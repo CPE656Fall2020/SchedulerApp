@@ -4,46 +4,82 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Forms.Design;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using SchedulerGUI.Models;
+using SchedulerGUI.ViewModels.Controls;
 using SchedulerGUI.Views;
 
 namespace SchedulerGUI.ViewModels
 {
+    /// <summary>
+    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and is statically bound to the <see cref="Views.MainWindow"/> view.
+    /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
         private static readonly Random Random = new Random();
 
-        private PassData selectedPassItem;
-        private EditWindow ew = new EditWindow();
+        private PassData selectedPass;
 
         public MainWindowViewModel()
         {
-            this.PassItems.Add(new PassData("pass #1", new DateTime(2016, 7, 15, 0, 0, 0), new DateTime(2016, 7, 15, 2, 7, 59)));
-            this.PassItems.Add(new PassData("pass #2", new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 4, 15, 58)));
-            PassData temp = this.PassItems.ElementAt<PassData>(1);
+            this.Passes = new ObservableCollection<PassData>();
+
+            this.EditCommand = new RelayCommand(this.EditClickedHandler);
+            this.AddCommand = new RelayCommand(this.AddClickedHandler);
+
+            this.DialogManager = new PopupViewModel()
+            {
+                ClosePopup = new RelayCommand(() => this.DialogManager.PopupDialog = null, true),
+                EasyClosePopup = null, // Leave EasyClose off for now,
+                PopupDialog = null,
+            };
+
+            // Test
+            this.Passes.Add(new PassData("pass #1", new DateTime(2016, 7, 15, 0, 0, 0), new DateTime(2016, 7, 15, 2, 7, 59)));
+            this.Passes.Add(new PassData("pass #2", new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 4, 15, 58)));
+            this.Passes.Add(new PassData("pass #3", new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 6, 15, 58)));
+            this.Passes.Add(new PassData("pass #4", new DateTime(2016, 7, 15, 2, 7, 59), new DateTime(2016, 7, 15, 8, 15, 58)));
+
+            PassData temp = this.Passes.ElementAt<PassData>(1);
             temp.Sunlight.Duration = new TimeSpan(1, 0, 0);
             temp.Mission.Duration = new TimeSpan(0, 30, 0);
             temp.Encryption.Duration = new TimeSpan(0, 30, 0);
             temp.Datalink.Duration = new TimeSpan(0, 8, 0);
-            this.SelectedPassItem = this.PassItems[0];
-            this.EditClick = new RelayCommand(this.HandleEditClicked);
-            this.AddClick = new RelayCommand(this.HandleAddClicked);
+
+            this.SelectedPass = this.Passes[0];
         }
 
-        public ObservableCollection<PassData> PassItems { get; } = new ObservableCollection<PassData>();
+        /// <summary>
+        /// Gets the passes that are currently available for scheduling or editing.
+        /// </summary>
+        public ObservableCollection<PassData> Passes { get; }
 
-        public ICommand EditClick { get; }
-
-        public ICommand AddClick { get; }
-
-        public PassData SelectedPassItem
+        /// <summary>
+        /// Gets or sets the pass item that is currently selected.
+        /// </summary>
+        public PassData SelectedPass
         {
-            get => this.selectedPassItem;
-            set => this.Set(() => this.SelectedPassItem, ref this.selectedPassItem, value);
+            get => this.selectedPass;
+            set => this.Set(() => this.SelectedPass, ref this.selectedPass, value);
         }
+
+        /// <summary>
+        /// Gets the command to execute when the edit button is selected.
+        /// </summary>
+        public ICommand EditCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute when the add button is selected.
+        /// </summary>
+        public ICommand AddCommand { get; }
+
+        /// <summary>
+        /// Gets the Dialog Manager for the main window.
+        /// </summary>
+        public PopupViewModel DialogManager { get; }
 
         private static List<int> GenerateRandomOrder()
         {
@@ -73,23 +109,38 @@ namespace SchedulerGUI.ViewModels
             return result;
         }
 
-        private void HandleEditClicked()
+        private void EditClickedHandler()
         {
-            if (!this.ew.IsActive)
+            void SaveCommand(PassData passData)
             {
-                this.ew = new EditWindow();
-                this.ew.DataContext = this;
-                this.ew.Show();
+                var currentIndex = this.Passes.IndexOf(this.SelectedPass);
+                this.Passes[currentIndex] = passData;
+                this.DialogManager.PopupDialog = null;
+
+                // Restore the selected pass
+                this.SelectedPass = this.Passes[currentIndex];
             }
+
+            void CancelCommand()
+            {
+                this.DialogManager.PopupDialog = null;
+            }
+
+            var editDialog = new EditWindowViewModel(
+                this.SelectedPass,
+                SaveCommand,
+                CancelCommand);
+
+            this.DialogManager.PopupDialog = editDialog;
         }
 
-        private void HandleAddClicked()
+        private void AddClickedHandler()
         {
             DateTime moment = DateTime.Now;
             DateTime startdate = new DateTime(moment.Year, moment.Month, moment.Day, moment.Hour, moment.Minute, 0);
             DateTime endDate = startdate.AddMinutes(128);
-            this.PassItems.Add(new PassData("pass #" + (this.PassItems.Count + 1), startdate, endDate));
-            PassData temp = this.PassItems[this.PassItems.Count - 1];
+            this.Passes.Add(new PassData("pass #" + (this.Passes.Count + 1), startdate, endDate));
+            PassData temp = this.Passes[this.Passes.Count - 1];
 
             OrderedDictionary phaseTimes = this.RandomPhaseTimes();
             int totalMins = 0;

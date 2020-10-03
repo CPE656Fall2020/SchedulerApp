@@ -2,14 +2,4 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SchedulerGUI">
 
-    <DataTemplate x:Key="SchedulerGUI.PassListTemplate" DataType="local:Passdata">
-        <Grid>
-            <TextBlock
-                VerticalAlignment="Center"
-                FontSize="15"
-                Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=Foreground}"
-                Text="{Binding Name}" />
-        </Grid>
-    </DataTemplate>
-
 </ResourceDictionary>
