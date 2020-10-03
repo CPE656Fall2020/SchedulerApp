@@ -5,11 +5,11 @@ using System.Windows;
 namespace SchedulerGUI.Views
 {
     /// <summary>
-    /// Interaction logic for addwindow.xaml
+    /// Interaction logic for AddWindow.xaml
     /// </summary>
-    public partial class addwindow : Window
+    public partial class AddWindow : Window
     {
-        public addwindow()
+        public AddWindow()
         {
             InitializeComponent();
         }
