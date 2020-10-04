@@ -9,8 +9,8 @@
                 <ResourceDictionary Source="pack://application:,,,/Styles/ViewModelTemplates.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/LocalDataTemplates.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/GlobalResources.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Styles/SchedulerLight.xaml" />
 
+                <!--Scalable Icon Packs-->
                 <ResourceDictionary Source="pack://application:,,,/Resources/VS2017/Icons.xaml" />
 
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
@@ -23,7 +23,10 @@
 
                 <!--Fluent Ribbon-->
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Light.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Light.Blue.Colorful.xaml" />
+
+                <!--Merge Our Colors at the END to allow for overriding-->
+                <ResourceDictionary Source="pack://application:,,,/Styles/SchedulerLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
