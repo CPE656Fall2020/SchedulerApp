@@ -37,9 +37,13 @@
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
-                        <Fluent:BackstageTabItem Header="New" />
-                        <Fluent:BackstageTabItem Header="Print" />
-                        <Fluent:Button Header="Blue" />
+                        <Fluent:Button Header="Exit">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Fluent:Button>
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
@@ -61,6 +65,16 @@
                                    Icon="{StaticResource VS2017Icons.AvailablityColumnChart}"
                                    LargeIcon="{StaticResource VS2017Icons.AvailablityColumnChart}"
                                    Command="{Binding OpenSchedulerPlotterCommand}" />
+
+                    <Fluent:Button Header="Data Import Tool"
+                                   Icon="{StaticResource VS2017Icons.DataGenerationPlan}"
+                                   LargeIcon="{StaticResource VS2017Icons.DataGenerationPlan}"
+                                   Command="{Binding OpenImportToolGUICommand}" />
+
+                    <Fluent:Button Header="Data Import Terminal"
+                                   Icon="{StaticResource VS2017Icons.Console}"
+                                   LargeIcon="{StaticResource VS2017Icons.Console}"
+                                   Command="{Binding OpenImportToolCLICommand}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="About">
@@ -189,4 +203,4 @@
                         Grid.ColumnSpan="3"
                         DataContext="{Binding DialogManager}" />
     </Grid>
-</Fluent:RibbonWindow>
+</metro:MetroWindow>

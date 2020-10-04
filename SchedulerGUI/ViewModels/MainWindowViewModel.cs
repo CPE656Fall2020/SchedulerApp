@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -37,6 +38,8 @@ namespace SchedulerGUI.ViewModels
             this.EditCommand = new RelayCommand(this.EditClickedHandler);
             this.AddCommand = new RelayCommand(this.AddClickedHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
+            this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
+            this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
 
             this.DialogManager = new PopupViewModel()
             {
@@ -88,6 +91,16 @@ namespace SchedulerGUI.ViewModels
         /// Gets the command to execute to open the Scheduler Plotter tool.
         /// </summary>
         public ICommand OpenSchedulerPlotterCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to open the GUI import tools.
+        /// </summary>
+        public ICommand OpenImportToolGUICommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to open the CLI import tools.
+        /// </summary>
+        public ICommand OpenImportToolCLICommand { get; }
 
         /// <summary>
         /// Gets the Dialog Manager for the main window.
@@ -262,6 +275,23 @@ namespace SchedulerGUI.ViewModels
             var instance = SimpleIoc.Default.GetInstanceWithoutCaching<PlotWindowViewModel>();
             var dialogService = SimpleIoc.Default.GetInstance<WindowService>();
             dialogService.ShowWindow<PlotWindow>(instance);
+        }
+
+        private void OpenImportToolGUIHandler()
+        {
+            var editDialog = new ImportToolDialogViewModel(
+                () => this.DialogManager.PopupDialog = null);
+
+            this.DialogManager.PopupDialog = editDialog;
+        }
+
+        private void OpenImportToolCLIHandler()
+        {
+            var appDir = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            Process.Start(new ProcessStartInfo(
+                "cmd.exe",
+                $"/k \"set PATH=%PATH%;\"{appDir}\"\"; && cd %USERPROFILE%\\Desktop && SchedulerImportTools.exe"));
         }
     }
 }

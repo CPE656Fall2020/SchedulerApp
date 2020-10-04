@@ -29,6 +29,10 @@
         <views:EditDialog />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:ImportToolDialogViewModel}">
+        <views:ImportToolDialog />
+    </DataTemplate>
+
     <!--VM Based Controls-->
     <DataTemplate DataType="{x:Type controlvms:PopupViewModel}">
         <controlviews:Popup />
@@ -41,4 +45,6 @@
     <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
         <controlviews:AESGraphControl />
     </DataTemplate>
+    
+    
 </ResourceDictionary>
