@@ -56,7 +56,7 @@ namespace SchedulerDatabase
         }
 
         /// <summary>
-        /// Gets a listing of all the platforms which have test results included in the database.
+        /// Gets a listing of all number of cores which have test results included in the database.
         /// </summary>
         /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
         public IQueryable<int> GetAllNumCores()

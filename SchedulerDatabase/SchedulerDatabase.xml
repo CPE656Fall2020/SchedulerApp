@@ -182,7 +182,7 @@
         </member>
         <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllNumCores">
             <summary>
-            Gets a listing of all the platforms which have test results included in the database.
+            Gets a listing of all number of cores which have test results included in the database.
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of platform names.</returns>
         </member>
