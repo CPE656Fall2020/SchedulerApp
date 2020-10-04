@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SchedulerDatabase</name>
+    </assembly>
+    <members>
+        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
+            </summary>
+        </member>
+        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile.AESMode">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AESMode"/> defines the different modes in which the AES encryption can be performed.
+            </summary>
+        </member>
+        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.CTR">
+            <summary>
+            Counter Mode.
+            </summary>
+        </member>
+        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.CBC">
+            <summary>
+            Chained Block Cipher Mode.
+            </summary>
+        </member>
+        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.ECB">
+            <summary>
+            Embedded Codeblock Mode.
+            </summary>
+        </member>
+        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> defines different types of AES accelerators that can be used.
+            </summary>
+        </member>
+        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType.None">
+            <summary>
+            No accelerator is used.
+            </summary>
+        </member>
+        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType.CpuHardware">
+            <summary>
+            CPU-provided Hardware acceleration is used.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ProfileId">
+            <summary>
+            Gets or sets the unique identifier for this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.Description">
+            <summary>
+            Gets or sets a free-form description of the conditions under which this experiment was performed or any other relevant details.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.Author">
+            <summary>
+            Gets or sets the name of the person who authored this entry.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformName">
+            <summary>
+            Gets or sets the name of the computing platform or module.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ProviderName">
+            <summary>
+            Gets or sets the name of the AES implementation provider.
+            For software implementations, this likely represents the library name.
+            For hardware-accelerated implementations, this value is typically not used.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformAccelerator">
+            <summary>
+             Gets or sets the type of AES Accelerator that is used on this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedAESMode">
+            <summary>
+            Gets or sets the AES encryption mode that was tested under this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedAESBitLength">
+            <summary>
+            Gets or sets the length of the AES encryption key (in bits) that was tested under this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestedByteSize">
+            <summary>
+            Gets or sets the total number of bytes that were encrypted when profiling this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestedEnergyJoules">
+            <summary>
+            Gets or sets the total number of joules that were consumed when profiling this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestTime">
+            <summary>
+            Gets or sets the total runtime of the this profile when benchmarking this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedFrequency">
+            <summary>
+            Gets or sets the processor frequency (in Hz) during the test profile when benchmarking this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AverageVoltage">
+            <summary>
+            Gets or sets the average voltage (in Volts) used to power the device during the duration of the test.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AverageCurrent">
+            <summary>
+            Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
+            </summary>
+        </member>
+        <member name="T:SchedulerDatabase.SchedulerContext">
+            <summary>
+            <see cref="T:SchedulerDatabase.SchedulerContext"/> provides a context for accessing the database of available profiles to use while scheduling a mission.
+            </summary>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulerContext.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SchedulerDatabase.SchedulerContext"/> class.
+            </summary>
+            <remarks>Provided for EF Core Migration generation.</remarks>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulerContext.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SchedulerDatabase.SchedulerContext"/> class.
+            </summary>
+            <param name="databaseName">The name of the database file to open.</param>
+        </member>
+        <member name="P:SchedulerDatabase.SchedulerContext.AESProfiles">
+            <summary>
+            Gets or sets the <see cref="P:SchedulerDatabase.SchedulerContext.AESProfiles"/>s stored in the database.
+            </summary>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulerContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <inheritdoc/>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulerContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc/>
+        </member>
+        <member name="T:SchedulerDatabase.SchedulingSummarizer">
+            <summary>
+            <see cref="T:SchedulerDatabase.SchedulingSummarizer"/> provides support for retreiving summarized test results from an underlying database
+            accessed through a <see cref="T:SchedulerDatabase.SchedulerContext"/>.
+            </summary>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.#ctor(SchedulerDatabase.SchedulerContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SchedulerDatabase.SchedulingSummarizer"/> class.
+            </summary>
+            <param name="context">The database context to use.</param>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllTestAuthors">
+            <summary>
+            Gets a listing of all the authors who have test results included in the database.
+            </summary>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of author names.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllTestedPlatforms">
+            <summary>
+            Gets a listing of all the platforms which have test results included in the database.
+            </summary>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of platform names.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllResultsForAccelerator(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+            <summary>
+            Gets a listing of test profiles for all experiments conducted using a specific accelerator device.
+            </summary>
+            <param name="acceleratorType">The specific accelerator type to query for.</param>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of test results.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncyptorProfile})">
+            <summary>
+            Computes summarized results for each unique test case provided in a collection of raw profiles.
+            </summary>
+            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/>.</param>
+            <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        </member>
+    </members>
+</doc>
