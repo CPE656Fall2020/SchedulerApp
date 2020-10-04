@@ -1,0 +1,219 @@
+﻿<metro:MetroWindow x:Class="SchedulerGUI.Views.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                   xmlns:Fluent="urn:fluent-ribbon" 
+                   xmlns:controls="clr-namespace:SchedulerGUI.Controls"
+                   xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
+                   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                   mc:Ignorable="d"
+                   WindowTitleBrush="{DynamicResource RibbonActiveBrush}"
+                   NonActiveWindowTitleBrush="{DynamicResource RibbonActiveBrush}"
+                   GlowBrush="Black"
+                   BorderThickness="0"
+                   
+                   ShowSystemMenuOnRightClick="False"
+                   Title="UAH Satellite Power Scheduler"
+                   DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
+                   Width="1280" Height="768" >
+
+    <metro:MetroWindow.TitleTemplate>
+        <!--https://fluentribbon.github.io/documentation/interop_with_MahApps.Metro-->
+        <DataTemplate>
+            <Fluent:RibbonTitleBar x:Name="RibbonTitleBar"                                   
+                                   Header="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        </DataTemplate>
+    </metro:MetroWindow.TitleTemplate>
+
+    <metro:MetroWindow.Style>
+        <Style TargetType="{x:Type metro:MetroWindow}">
+            <Setter Property="TitleForeground" Value="White" />
+            <Style.Triggers>
+                <Trigger Property="IsActive" Value="False">
+                    <Setter Property="TitleForeground" Value="#A5B9D1" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </metro:MetroWindow.Style>
+
+    <!--Top Level Grid-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+      
+        <Fluent:Ribbon Grid.Row="0">
+            <!--Backstage-->
+            <Fluent:Ribbon.Menu>
+                <Fluent:Backstage>
+                    <Fluent:BackstageTabControl>
+                        <Fluent:Button Header="Exit">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:CallMethodAction MethodName="Close" TargetObject="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Fluent:Button>
+                    </Fluent:BackstageTabControl>
+                </Fluent:Backstage>
+            </Fluent:Ribbon.Menu>
+
+            <!--Tabs-->
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Group">
+                    <Fluent:Button Header="Green"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                    <Fluent:Button Header="Grey"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="Database">
+                <Fluent:RibbonGroupBox Header="Tools">
+                    <Fluent:Button Header="Plot Tool"
+                                   Icon="{StaticResource VS2017Icons.AvailablityColumnChart}"
+                                   LargeIcon="{StaticResource VS2017Icons.AvailablityColumnChart}"
+                                   Command="{Binding OpenSchedulerPlotterCommand}" />
+
+                    <Fluent:Button Header="Data Import Tool"
+                                   Icon="{StaticResource VS2017Icons.DataGenerationPlan}"
+                                   LargeIcon="{StaticResource VS2017Icons.DataGenerationPlan}"
+                                   Command="{Binding OpenImportToolGUICommand}" />
+
+                    <Fluent:Button Header="Data Import Terminal"
+                                   Icon="{StaticResource VS2017Icons.Console}"
+                                   LargeIcon="{StaticResource VS2017Icons.Console}"
+                                   Command="{Binding OpenImportToolCLICommand}" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="About">
+                <Fluent:RibbonGroupBox Header="Group">
+                    <Fluent:Button Header="Green"
+                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
+                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+
+        <!--Content Grid-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            
+            <!--Left Sidebar - Passes-->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ListView Background="LightGray"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{Binding Passes}"
+                    SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <TextBlock VerticalAlignment="Center"
+                                    FontSize="15"
+                                    Text="{Binding Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <UniformGrid Grid.Row="1" Rows="1">
+                    <Button Content="Edit"  Command="{Binding EditCommand}" />
+                    <Button Content="Add" Command="{Binding AddCommand}" />
+                </UniformGrid>
+            </Grid>
+
+            <!--Grid Resizer for left sidebar and body-->
+            <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Width="5" />
+
+            <!--Right Body Pane-->
+            <Grid Grid.Column="2" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <UniformGrid Background="LightGray" Rows="1">
+                    <TextBlock TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPass.StartTime}"></TextBlock>
+                    <TextBlock TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPass.MidTime}"></TextBlock>
+                    <TextBlock TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPass.EndTime}"></TextBlock>
+                </UniformGrid>
+
+                <controls:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPass}"  MinDate="{Binding StartTime}" MaxDate="{Binding EndTime}">
+                    <TextBlock Text="sunlight" Background="LightYellow" controls:GanttRowPanel.StartDate="{Binding SunlightStart}" controls:GanttRowPanel.EndDate="{Binding SunlightEnd}" />
+                    <TextBlock Text="Mission" Background="LightGreen" controls:GanttRowPanel.StartDate="{Binding MissionStart}" controls:GanttRowPanel.EndDate="{Binding MissionEnd}" />
+                    <TextBlock Text="Encrypt" Background="IndianRed" controls:GanttRowPanel.StartDate="{Binding EncryptionStart}" controls:GanttRowPanel.EndDate="{Binding EncryptionEnd}" />
+                    <TextBlock Text="Datalink" Background="DeepSkyBlue" controls:GanttRowPanel.StartDate="{Binding DatalinkStart}" controls:GanttRowPanel.EndDate="{Binding DatalinkEnd}" />
+                </controls:GanttRowPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Background="LightGray">
+                        <ListBoxItem>Devices:</ListBoxItem>
+                        <ListBoxItem Background="AliceBlue">MSP430</ListBoxItem>
+                        <ListBoxItem>MSP432</ListBoxItem>
+                        <ListBoxItem>ODROID</ListBoxItem>
+                    </ListBox>
+
+                    <Border BorderBrush="Black" Grid.Column="1"  BorderThickness="2">
+                        <Grid>
+                            <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
+                            <!--<Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>-->
+                            <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>
+                            <Label Margin="392,5,0,161" Content="7000 mJ" />
+                            <TabControl Margin="0,41,0,0">
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Pass #1" Foreground="Black" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <controls:HistoryGraph />
+                                </TabItem>
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Pass #2" Foreground="Black" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <controls:HistoryGraph />
+                                </TabItem>
+                            </TabControl>
+                            <Separator HorizontalAlignment="Left" Background="Black" Height="13" Margin="0,31,0,0" VerticalAlignment="Top" Width="465" />
+                            <!--<TextBlock Grid.Row="1" Padding="5,0,5,0">Estimated Power conuption: some other amount of amps</TextBlock>
+                    <TextBlock Grid.Row="2" Background="White" Padding="5,0,5,0">Graph of power availible over time</TextBlock>-->
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!--Top Most Dialog Popup-->
+        <Controls:Popup Grid.Row="0" Grid.Column="0"
+                        Grid.RowSpan="2"
+                        Grid.ColumnSpan="3"
+                        DataContext="{Binding DialogManager}" />
+    </Grid>
+</metro:MetroWindow>
