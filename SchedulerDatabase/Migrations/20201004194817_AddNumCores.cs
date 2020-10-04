@@ -12,7 +12,7 @@ namespace SchedulerDatabase.Migrations
                 name: "NumCores",
                 table: "AESProfiles",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 1);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

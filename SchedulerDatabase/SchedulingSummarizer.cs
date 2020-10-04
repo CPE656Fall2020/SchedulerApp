@@ -56,9 +56,9 @@ namespace SchedulerDatabase
         }
 
         /// <summary>
-        /// Gets a listing of all number of cores which have test results included in the database.
+        /// Gets a listing of the different numbers of cores available for the available platforms.
         /// </summary>
-        /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
+        /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
         public IQueryable<int> GetAllNumCores()
         {
             return this.Context.AESProfiles
