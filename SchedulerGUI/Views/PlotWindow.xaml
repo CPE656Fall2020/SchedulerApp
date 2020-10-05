@@ -17,8 +17,8 @@
         <ContentControl Content="{Binding Plot}"
                         Grid.Row="0"/>
 
-        <Grid Grid.Row="1">
-
+        <!--Row 1 - Filter Options-->
+        <Grid Margin="0,0,5,0"  Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -31,6 +31,9 @@
 
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Grid.Resources>
@@ -42,25 +45,26 @@
 
             <TextBlock Text="Plot Type" Grid.Column="0" />
             <ComboBox ItemsSource="{Binding Source={converters:EnumBindingSource {x:Type models:PlotOption}}}"
-                      SelectedValue="{Binding SelectedOption}"
-                      HorizontalContentAlignment="Left"
-                      Margin="0"
-                      Grid.Column="1" />
+                        SelectedValue="{Binding SelectedOption}"
+                        Grid.Column="1" />
 
             <TextBlock Text="Author" Grid.Column="2"/>
             <ComboBox ItemsSource="{Binding Authors}"
-                      SelectedItem="{Binding SelectedAuthor}"
-                      Grid.Column="3"/>
+                        SelectedItem="{Binding SelectedAuthor}"
+                        Grid.Column="3"/>
 
             <TextBlock Text="Device/Platform" Grid.Column="4" />
             <ComboBox ItemsSource="{Binding Platforms}"
-                      SelectedItem="{Binding SelectedPlatform}"
-                      Grid.Column="5"/>
+                        SelectedItem="{Binding SelectedPlatform}"
+                        Grid.Column="5"/>
 
             <TextBlock Text="Accelerator Type" Grid.Column="6" />
             <ComboBox ItemsSource="{Binding Accelerators}"
-                      SelectedItem="{Binding SelectedAccelerator}" 
-                      Grid.Column="7"/>
+                        SelectedItem="{Binding SelectedAccelerator}" 
+                        Grid.Column="7"/>
+
+            <CheckBox Content="Show Energy as Logarithmic" IsChecked="{Binding ShowEnergyLogarithmic}" Grid.Column="8" Margin="5"/>
+            <CheckBox Content="Show Throughput as Logarithmic" IsChecked="{Binding ShowThroughputLogarithmic}" Grid.Column="9" Margin="5"/>
         </Grid>
     </Grid>
 </Window>

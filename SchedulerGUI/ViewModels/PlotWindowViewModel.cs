@@ -102,6 +102,24 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the throughput axis should be shown on a log scale.
+        /// </summary>
+        public bool ShowThroughputLogarithmic
+        {
+            get => this.Plot.ShowThroughputLogarithmic;
+            set => this.Plot.ShowThroughputLogarithmic = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the energy axis should be shown on a log scale.
+        /// </summary>
+        public bool ShowEnergyLogarithmic
+        {
+            get => this.Plot.ShowEnergyLogarithmic;
+            set => this.Plot.ShowEnergyLogarithmic = value;
+        }
+
+        /// <summary>
         /// Gets the generated AES plot.
         /// </summary>
         public AESGraphViewModel Plot { get; }

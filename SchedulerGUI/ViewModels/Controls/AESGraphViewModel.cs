@@ -17,6 +17,8 @@ namespace SchedulerGUI.ViewModels.Controls
         private IEnumerable<AESEncyptorProfile> displayedData;
         private double joulesPerByteStdDev;
         private double bytesPerSecondStdDev;
+        private bool showBytesLog;
+        private bool showEnergyLog;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AESGraphViewModel"/> class.
@@ -38,6 +40,32 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.displayedData = value;
+                this.GeneratePlot();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether throughput is displayed on a log scale.
+        /// </summary>
+        public bool ShowThroughputLogarithmic
+        {
+            get => this.showBytesLog;
+            set
+            {
+                this.showBytesLog = value;
+                this.GeneratePlot();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether energy is displayed on a log scale.
+        /// </summary>
+        public bool ShowEnergyLogarithmic
+        {
+            get => this.showEnergyLog;
+            set
+            {
+                this.showEnergyLog = value;
                 this.GeneratePlot();
             }
         }
@@ -116,8 +144,11 @@ namespace SchedulerGUI.ViewModels.Controls
 
             foreach (var aesProfile in this.DisplayedData)
             {
-                joulesPerByteSeriesData.Add(new ColumnItem() { Value = aesProfile.TotalTestedEnergyJoules / aesProfile.TotalTestedByteSize });
-                bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.TotalTestedByteSize / aesProfile.TotalTestTime.TotalSeconds });
+                var joulesPerByte = aesProfile.TotalTestedEnergyJoules / aesProfile.TotalTestedByteSize;
+                var bytesPerSecond = aesProfile.TotalTestedByteSize / aesProfile.TotalTestTime.TotalSeconds;
+
+                joulesPerByteSeriesData.Add(new ColumnItem() { Value = joulesPerByte });
+                bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = bytesPerSecond });
                 categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.Author}");
             }
 
@@ -132,39 +163,85 @@ namespace SchedulerGUI.ViewModels.Controls
                 IsZoomEnabled = false,
             });
 
-            this.Plot.Axes.Add(new FixedCenterLinearAxis(0)
+            // Add the Energy Axis (either log or linear)
+            const string EnergyAxisKey = "JoulesPerByteAxis";
+            const string energyAxisTitle = "Joules / byte";
+            if (this.ShowEnergyLogarithmic)
             {
-                Position = AxisPosition.Left,
-                Key = "JoulesPerByteAxis",
-                Title = "Joules / byte",
-                AbsoluteMinimum = 0,
-                Minimum = 0,
-                IsPanEnabled = false,
-            });
+                this.Plot.Axes.Add(new FixedCenterLogAxis(1e-10)
+                {
+                    Position = AxisPosition.Left,
+                    Key = EnergyAxisKey,
+                    Title = energyAxisTitle,
+                    Base = 10,
+                    Minimum = 1e-10,
+                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "J/b", binary: false),
+                    IsPanEnabled = false,
+                });
+            }
+            else
+            {
+                this.Plot.Axes.Add(new FixedCenterLinearAxis(0)
+                {
+                    Position = AxisPosition.Left,
+                    Key = EnergyAxisKey,
+                    Title = energyAxisTitle,
+                    AbsoluteMinimum = 0,
+                    Minimum = 0,
+                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "J/b", binary: false),
+                    IsPanEnabled = false,
+                });
+            }
 
-            this.Plot.Axes.Add(new FixedCenterLinearAxis(0)
+            // Add the Throughput Axis (either log or linear)
+            const string ThroughputAxisKey = "BytesPerSecondAxis";
+            const string throughputAxisTitle = "bytes / sec";
+            if (this.ShowThroughputLogarithmic)
             {
-                Position = AxisPosition.Right,
-                Key = "BytesPerSecondAxis",
-                Title = "Bytes / sec",
-                AbsoluteMinimum = 0,
-                Minimum = 0,
-                IsPanEnabled = false,
-            });
+                this.Plot.Axes.Add(new FixedCenterLogAxis(1)
+                {
+                    Position = AxisPosition.Right,
+                    Key = ThroughputAxisKey,
+                    Title = throughputAxisTitle,
+                    Base = 1024,
+                    Minimum = 0,
+                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "B/s", binary: true),
+                    IsPanEnabled = false,
+                });
+            }
+            else
+            {
+                this.Plot.Axes.Add(new FixedCenterLinearAxis(0)
+                {
+                    Position = AxisPosition.Right,
+                    Key = ThroughputAxisKey,
+                    Title = throughputAxisTitle,
+                    AbsoluteMinimum = 0,
+                    Minimum = 0,
+                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "B/s", binary: true),
+                    IsPanEnabled = false,
+                });
+            }
+
+            // From https://stackoverflow.com/questions/47887366/oxyplot-logarithmic-stem-plot-is-upside-down
+            var baseValueThroughput = this.ShowThroughputLogarithmic ? 1 : 0;
+            var baseValueEnergy = this.ShowEnergyLogarithmic ? 1e-10 : 0;
 
             this.Plot.Series.Clear();
             this.Plot.Series.Add(new ColumnSeries()
             {
                 ItemsSource = joulesPerByteSeriesData,
-                YAxisKey = "JoulesPerByteAxis",
+                YAxisKey = EnergyAxisKey,
+                BaseValue = baseValueEnergy,
                 FillColor = OxyColors.Red,
             });
 
             this.Plot.Series.Add(new ColumnSeries()
             {
                 ItemsSource = bytesPerSecondSeriesData,
-                YAxisKey = "BytesPerSecondAxis",
+                YAxisKey = ThroughputAxisKey,
                 FillColor = OxyColors.Green,
+                BaseValue = baseValueThroughput,
                 TrackerFormatString = "{0}\n{1}: {2}\n{SpeedString}",
             });
 
@@ -172,6 +249,82 @@ namespace SchedulerGUI.ViewModels.Controls
 
             this.JoulesPerByteStdDev = CalculateStandardDeviation(joulesPerByteSeriesData.Select(s => s.Value));
             this.BytesPerSecondStdDev = CalculateStandardDeviation(bytesPerSecondSeriesData.Select(s => s.Value));
+        }
+
+        // Adapted from https://stackoverflow.com/a/40266660.
+        private string ValueAxisLabelFormatter(double input, string unit, bool binary = false)
+        {
+            double res = double.NaN;
+            string suffix = string.Empty;
+            var powBase = binary ? 2 : 10;
+
+            // Smaller than Base unit
+            if (Math.Abs(input) <= 0.001)
+            {
+                var siLow = new Dictionary<int, string> { };
+
+                if (!binary)
+                {
+                    siLow = new Dictionary<int, string>
+                    {
+                        [-12] = "p",
+                        [-9] = "n",
+                        [-6] = "μ",
+                        [-3] = "m",
+                    };
+                }
+
+                foreach (var v in siLow.Keys)
+                {
+                    if (input != 0 && Math.Abs(input) <= Math.Pow(powBase, v))
+                    {
+                        res = input * Math.Pow(powBase, Math.Abs(v));
+                        suffix = siLow[v];
+                        break;
+                    }
+                }
+            }
+
+            // Greater than Base Unit
+            if (Math.Abs(input) >= 1000)
+            {
+                Dictionary<int, string> siHigh;
+
+                if (!binary)
+                {
+                    // Powers of 10
+                    siHigh = new Dictionary<int, string>
+                    {
+                        [12] = "T",
+                        [9] = "G",
+                        [6] = "M",
+                        [3] = "k",
+                    };
+                }
+                else
+                {
+                    // As defined in IEEE 1541, expect without the trailing "i" since that's not commonly used in written text.
+                    siHigh = new Dictionary<int, string>
+                    {
+                        [40] = "T",
+                        [30] = "G",
+                        [20] = "M",
+                        [10] = "k",
+                    };
+                }
+
+                foreach (var v in siHigh.Keys)
+                {
+                    if (input != 0 && Math.Abs(input) >= Math.Pow(powBase, v))
+                    {
+                        res = input / Math.Pow(powBase, Math.Abs(v));
+                        suffix = siHigh[v];
+                        break;
+                    }
+                }
+            }
+
+            return double.IsNaN(res) ? $"{input:0.000}{unit}" : $"{res:0.000}{suffix}{unit}";
         }
 
         private class ThroughputColumnItem : ColumnItem
@@ -197,6 +350,28 @@ namespace SchedulerGUI.ViewModels.Controls
             }
 
             private double Center { get; } = 0;
+
+            public override void ZoomAt(double factor, double x)
+            {
+                base.ZoomAt(factor, this.Center);
+            }
+        }
+
+        // Adapted from https://stackoverflow.com/questions/41565360/oxyplot-axis-locking-center-when-mouse-wheel.
+        private class FixedCenterLogAxis : LogarithmicAxis
+        {
+            public FixedCenterLogAxis()
+                : base()
+            {
+            }
+
+            public FixedCenterLogAxis(double center)
+                : base()
+            {
+                this.Center = center;
+            }
+
+            private double Center { get; } = 1;
 
             public override void ZoomAt(double factor, double x)
             {
