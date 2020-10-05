@@ -111,12 +111,30 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+<<<<<<< HEAD
+        /// Gets or sets a value indicating whether the throughput axis should be shown on a log scale.
+        /// </summary>
+        public bool ShowThroughputLogarithmic
+        {
+            get => this.Plot.ShowThroughputLogarithmic;
+            set => this.Plot.ShowThroughputLogarithmic = value;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the energy axis should be shown on a log scale.
+        /// </summary>
+        public bool ShowEnergyLogarithmic
+        {
+            get => this.Plot.ShowEnergyLogarithmic;
+            set => this.Plot.ShowEnergyLogarithmic = value;
+=======
         /// Gets or sets the selected number of cores to display data for.
         /// </summary>
         public int SelectedNumCores
         {
             get => this.selectedNumCores;
             set => this.SetAndUpdatePlot(() => this.SelectedNumCores, ref this.selectedNumCores, value);
+>>>>>>> 1d4c3e939b9305786a0ef1355d1429b95ba3aba5
         }
 
         /// <summary>
