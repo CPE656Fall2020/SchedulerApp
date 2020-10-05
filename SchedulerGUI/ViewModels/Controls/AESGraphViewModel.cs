@@ -149,7 +149,7 @@ namespace SchedulerGUI.ViewModels.Controls
 
                 joulesPerByteSeriesData.Add(new ColumnItem() { Value = joulesPerByte });
                 bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = bytesPerSecond });
-                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.Author}");
+                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.NumCores} core(s) {aesProfile.Author}");
             }
 
             this.Plot.Axes.Clear();

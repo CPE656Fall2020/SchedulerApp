@@ -6,7 +6,7 @@
         xmlns:converters="clr-namespace:SchedulerGUI.Converters"
         xmlns:models="clr-namespace:SchedulerGUI.Models"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="450" Width="937.731">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -32,9 +32,12 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
 
+
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+
+     			<ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />            </Grid.ColumnDefinitions>
 
             <Grid.Resources>
                 <Style TargetType="TextBlock">
@@ -65,6 +68,11 @@
 
             <CheckBox Content="Show Energy as Logarithmic" IsChecked="{Binding ShowEnergyLogarithmic}" Grid.Column="8" Margin="5"/>
             <CheckBox Content="Show Throughput as Logarithmic" IsChecked="{Binding ShowThroughputLogarithmic}" Grid.Column="9" Margin="5"/>
+
+            <TextBlock Text="Number of Cores" Grid.Column="8" />
+            <ComboBox ItemsSource="{Binding NumCores}"
+                      SelectedItem="{Binding SelectedNumCores}" 
+                      Grid.Column="9"/>
         </Grid>
     </Grid>
 </Window>

@@ -17,11 +17,13 @@ namespace SchedulerGUI.ViewModels
     public class PlotWindowViewModel : ViewModelBase
     {
         private const string AllItems = "(All)";
+        private const int AllItemsInt = 0;
 
         private PlotOption selectedOption = PlotOption.Raw;
         private string selectedAuthor = AllItems;
         private string selectedPlatform = AllItems;
         private string selectedAccelerator = AllItems;
+        private int selectedNumCores = AllItemsInt;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlotWindowViewModel"/> class.
@@ -36,11 +38,13 @@ namespace SchedulerGUI.ViewModels
                 this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
                 this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
                 this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
+                this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores());
             }
 
             this.Authors.Insert(0, AllItems);
             this.Platforms.Insert(0, AllItems);
             this.Accelerators.Insert(0, AllItems);
+            this.NumCores.Insert(0, AllItemsInt);
 
             this.GeneratePlot();
         }
@@ -59,6 +63,11 @@ namespace SchedulerGUI.ViewModels
         /// Gets a listing of available accelerators.
         /// </summary>
         public ObservableCollection<string> Accelerators { get; }
+
+        /// <summary>
+        /// Gets a listing of available number of cores.
+        /// </summary>
+        public ObservableCollection<int> NumCores { get; }
 
         /// <summary>
         /// Gets the title of the application.
@@ -102,7 +111,16 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the throughput axis should be shown on a log scale.
+   		/// Gets or sets the selected number of cores to display data for.
+        /// </summary>
+        public int SelectedNumCores
+        {
+            get => this.selectedNumCores;
+            set => this.SetAndUpdatePlot(() => this.SelectedNumCores, ref this.selectedNumCores, value);
+        }
+
+ 		/// <summary>
+		/// Gets or sets a value indicating whether the throughput axis should be shown on a log scale.
         /// </summary>
         public bool ShowThroughputLogarithmic
         {
@@ -117,10 +135,7 @@ namespace SchedulerGUI.ViewModels
         {
             get => this.Plot.ShowEnergyLogarithmic;
             set => this.Plot.ShowEnergyLogarithmic = value;
-        }
-
-        /// <summary>
-        /// Gets the generated AES plot.
+        }        /// Gets the generated AES plot.
         /// </summary>
         public AESGraphViewModel Plot { get; }
 
@@ -157,6 +172,13 @@ namespace SchedulerGUI.ViewModels
                     var accelerator = (AESEncyptorProfile.AcceleratorType)Enum.Parse(typeof(AESEncyptorProfile.AcceleratorType), this.SelectedAccelerator);
                     rawData = rawData
                         .Where(a => a.PlatformAccelerator == accelerator);
+                }
+
+                // Include author filters
+                if (this.SelectedNumCores != AllItemsInt)
+                {
+                    rawData = rawData
+                        .Where(a => a.NumCores == this.SelectedNumCores);
                 }
 
                 switch (this.SelectedOption)

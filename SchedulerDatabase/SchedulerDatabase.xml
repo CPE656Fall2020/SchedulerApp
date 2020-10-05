@@ -116,6 +116,11 @@
             Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
             </summary>
         </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.NumCores">
+            <summary>
+            Gets or sets an integer value representing the number of processor cores utilized during the test.
+            </summary>
+        </member>
         <member name="T:SchedulerDatabase.SchedulerContext">
             <summary>
             <see cref="T:SchedulerDatabase.SchedulerContext"/> provides a context for accessing the database of available profiles to use while scheduling a mission.
@@ -174,6 +179,12 @@
             </summary>
             <param name="acceleratorType">The specific accelerator type to query for.</param>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of test results.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllNumCores">
+            <summary>
+            Gets a listing of the different numbers of cores available for the available platforms.
+            </summary>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of platform core counts.</returns>
         </member>
         <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncyptorProfile})">
             <summary>
