@@ -32,12 +32,12 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
 
-
                 <ColumnDefinition Width="Auto" />
+<<<<<<< HEAD
+                <ColumnDefinition Width="Auto" />
+=======
                 <ColumnDefinition Width="*" />
-
-     			<ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />            
+>>>>>>> 1d4c3e939b9305786a0ef1355d1429b95ba3aba5
             </Grid.ColumnDefinitions>
 
             <Grid.Resources>
@@ -64,18 +64,21 @@
 
             <TextBlock Text="Accelerator Type" Grid.Column="6" />
             <ComboBox ItemsSource="{Binding Accelerators}"
+<<<<<<< HEAD
                         SelectedItem="{Binding SelectedAccelerator}" 
                         Grid.Column="7"/>
+
+            <CheckBox Content="Show Energy as Logarithmic" IsChecked="{Binding ShowEnergyLogarithmic}" Grid.Column="8" Margin="5"/>
+            <CheckBox Content="Show Throughput as Logarithmic" IsChecked="{Binding ShowThroughputLogarithmic}" Grid.Column="9" Margin="5"/>
+=======
+                      SelectedItem="{Binding SelectedAccelerator}" 
+                      Grid.Column="7"/>
 
             <TextBlock Text="Number of Cores" Grid.Column="8" />
             <ComboBox ItemsSource="{Binding NumCores}"
                       SelectedItem="{Binding SelectedNumCores}" 
                       Grid.Column="9"/>
-
-            <CheckBox Content="Show Energy as Logarithmic" IsChecked="{Binding Plot.ShowEnergyLogarithmic}" Grid.Column="10" Margin="5"/>
-            <CheckBox Content="Show Throughput as Logarithmic" IsChecked="{Binding Plot.ShowThroughputLogarithmic}" Grid.Column="11" Margin="5"/>
-
-        
+>>>>>>> 1d4c3e939b9305786a0ef1355d1429b95ba3aba5
         </Grid>
     </Grid>
 </Window>

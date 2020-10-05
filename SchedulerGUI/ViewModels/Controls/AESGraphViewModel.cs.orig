@@ -144,12 +144,18 @@ namespace SchedulerGUI.ViewModels.Controls
 
             foreach (var aesProfile in this.DisplayedData)
             {
+<<<<<<< HEAD
                 var joulesPerByte = aesProfile.TotalTestedEnergyJoules / aesProfile.TotalTestedByteSize;
                 var bytesPerSecond = aesProfile.TotalTestedByteSize / aesProfile.TotalTestTime.TotalSeconds;
 
                 joulesPerByteSeriesData.Add(new ColumnItem() { Value = joulesPerByte });
                 bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = bytesPerSecond });
+                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.Author}");
+=======
+                joulesPerByteSeriesData.Add(new ColumnItem() { Value = aesProfile.TotalTestedEnergyJoules / aesProfile.TotalTestedByteSize });
+                bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.TotalTestedByteSize / aesProfile.TotalTestTime.TotalSeconds });
                 categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.NumCores} core(s) {aesProfile.Author}");
+>>>>>>> 1d4c3e939b9305786a0ef1355d1429b95ba3aba5
             }
 
             this.Plot.Axes.Clear();
