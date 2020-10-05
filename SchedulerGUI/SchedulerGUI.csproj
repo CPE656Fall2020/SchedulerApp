@@ -69,7 +69,10 @@
     </ApplicationDefinition>
     <Compile Include="Converters\EnumBindingSourceExtension.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="GlobalAssemblyInfo.cs" />
+    <Compile Include="Interfaces\IPassPhase.cs" />
+    <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
@@ -98,8 +101,8 @@
     <Compile Include="Controls\HistoryGraph.xaml.cs">
       <DependentUpon>HistoryGraph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\PassData.cs" />
-    <Compile Include="Models\PassItem.cs" />
+    <Compile Include="Models\PassOrbit.cs" />
+    <Compile Include="Models\PassPhase.cs" />
     <Compile Include="Controls\Power.xaml.cs">
       <DependentUpon>Power.xaml</DependentUpon>
     </Compile>
@@ -241,6 +244,9 @@
       <Version>1.1.118</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Timeline">
+      <Version>2.0.2.41912</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

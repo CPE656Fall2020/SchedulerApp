@@ -62,5 +62,19 @@ namespace SchedulerGUI.Views
         {
             ThemeManager.Current.ThemeChanged -= this.SyncThemes;
         }
+
+        private void timeline_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            timeline.CurrentDateTime = timeline.MinDateTime + new TimeSpan((int)e.NewValue, 0, 0, 0);
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            timeline.ClearEvents();
+        }
     }
 }
