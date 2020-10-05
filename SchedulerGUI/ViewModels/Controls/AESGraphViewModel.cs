@@ -118,7 +118,7 @@ namespace SchedulerGUI.ViewModels.Controls
             {
                 joulesPerByteSeriesData.Add(new ColumnItem() { Value = aesProfile.TotalTestedEnergyJoules / aesProfile.TotalTestedByteSize });
                 bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.TotalTestedByteSize / aesProfile.TotalTestTime.TotalSeconds });
-                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.Author}");
+                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.NumCores} core(s) {aesProfile.Author}");
             }
 
             this.Plot.Axes.Clear();

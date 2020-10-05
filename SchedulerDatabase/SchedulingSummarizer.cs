@@ -56,6 +56,17 @@ namespace SchedulerDatabase
         }
 
         /// <summary>
+        /// Gets a listing of the different numbers of cores available for the available platforms.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
+        public IQueryable<int> GetAllNumCores()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.NumCores)
+                .Distinct();
+        }
+
+        /// <summary>
         /// Computes summarized results for each unique test case provided in a collection of raw profiles.
         /// </summary>
         /// <param name="profiles">A collection of raw <see cref="AESEncyptorProfile"/>.</param>
@@ -68,7 +79,7 @@ namespace SchedulerDatabase
             foreach (var profile in profiles)
             {
                 // For two profiles to be considered different iterations of the same test case, they have to match on the following criteria:
-                var id = $"{profile.PlatformName}{profile.PlatformAccelerator}{profile.ProviderName}{profile.TestedAESBitLength}{profile.TestedAESMode}{profile.TestedFrequency}";
+                var id = $"{profile.PlatformName}{profile.PlatformAccelerator}{profile.ProviderName}{profile.TestedAESBitLength}{profile.TestedAESMode}{profile.TestedFrequency}{profile.NumCores}";
 
                 if (!buckets.ContainsKey(id))
                 {
@@ -107,6 +118,7 @@ namespace SchedulerDatabase
                     TestedAESBitLength = bucket.Value.First().TestedAESBitLength,
                     TestedAESMode = bucket.Value.First().TestedAESMode,
                     TestedFrequency = bucket.Value.First().TestedFrequency,
+                    NumCores = bucket.Value.First().NumCores,
 
                     /* Averaged results */
                     AverageCurrent = summation.AverageCurrent / count,

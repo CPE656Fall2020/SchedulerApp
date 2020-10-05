@@ -115,5 +115,10 @@ namespace SchedulerDatabase.Models
         /// Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
         /// </summary>
         public double AverageCurrent { get; set; }
+
+        /// <summary>
+        /// Gets or sets an integer value representing the number of processor cores utilized during the test.
+        /// </summary>
+        public int NumCores { get; set; }
     }
 }
