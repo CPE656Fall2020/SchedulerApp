@@ -13,6 +13,7 @@ using SchedulerGUI.Services;
 using SchedulerGUI.Settings;
 using SchedulerGUI.ViewModels.Controls;
 using SchedulerGUI.Views;
+using TimelineLibrary;
 
 namespace SchedulerGUI.ViewModels
 {
@@ -24,6 +25,10 @@ namespace SchedulerGUI.ViewModels
         private const double NUMPASSES = 11.25;
         private const double PASSDURATION = (24 / NUMPASSES) * 60;
         private PassOrbit selectedPass;
+        private DateTime startTime;
+        private DateTime endTime;
+        private ObservableCollection<TimelineEvent> timelineEventPasses;
+        private ObservableCollection<TimelineEvent> timelineEventPhases;
 
         public MainWindowViewModel()
         {
@@ -31,6 +36,8 @@ namespace SchedulerGUI.ViewModels
             this.Startup();
 
             this.Passes = new ObservableCollection<PassOrbit>();
+            this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
+            this.TimelineEventPhases = new ObservableCollection<TimelineEvent>();
 
             this.EditCommand = new RelayCommand(this.EditClickedHandler);
             this.AddCommand = new RelayCommand(this.AddClickedHandler);
@@ -46,12 +53,31 @@ namespace SchedulerGUI.ViewModels
             };
 
             this.InitPasses();
+            this.InitTimelineEvents();
         }
 
         /// <summary>
         /// Gets the passes that are currently available for scheduling or editing.
         /// </summary>
         public ObservableCollection<PassOrbit> Passes { get; }
+
+        /// <summary>
+        /// Gets or sets the passes as timeline events for viewing.
+        /// </summary>
+        public ObservableCollection<TimelineEvent> TimelineEventPasses
+        {
+            get => this.timelineEventPasses;
+            set => this.Set(() => this.TimelineEventPasses, ref this.timelineEventPasses, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the phases as timeline events for viewing.
+        /// </summary>
+        public ObservableCollection<TimelineEvent> TimelineEventPhases
+        {
+            get => this.timelineEventPhases;
+            set => this.Set(() => this.TimelineEventPhases, ref this.timelineEventPhases, value);
+        }
 
         /// <summary>
         /// Gets or sets the pass item that is currently selected.
@@ -91,6 +117,18 @@ namespace SchedulerGUI.ViewModels
         /// Gets the Dialog Manager for the main window.
         /// </summary>
         public PopupViewModel DialogManager { get; }
+
+        public DateTime StartTime
+        {
+            get => this.startTime;
+            set => this.Set(() => this.StartTime, ref this.startTime, value);
+        }
+
+        public DateTime EndTime
+        {
+            get => this.endTime;
+            set => this.Set(() => this.EndTime, ref this.endTime, value);
+        }
 
         /// <summary>
         /// Performs application initialization.
@@ -175,11 +213,40 @@ namespace SchedulerGUI.ViewModels
         private void InitPasses()
         {
             DateTime startTime = DateTime.Now;
+            this.StartTime = startTime;
 
             for (int i = 0; i < NUMPASSES; i++)
             {
                 this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION)));
                 startTime = startTime.AddMinutes(PASSDURATION);
+            }
+
+            this.EndTime = startTime;
+        }
+
+        private void InitTimelineEvents()
+        {
+            foreach (PassOrbit pass in this.Passes.ToList())
+            {
+                this.TimelineEventPasses.Add(new TimelineEvent
+                {
+                    EndDate = pass.EndTime,
+                    StartDate = pass.StartTime,
+                    Title = pass.Name,
+                    EventColor = "red",
+                });
+
+                //foreach (IPassPhase phase in pass.PassPhases.ToList())
+                //{
+                //    this.TimelineEventPhases.Add(new TimelineEvent
+                //    {
+                //        EndDate = phase.EndTime,
+                //        StartDate = phase.StartTime,
+                //        Title = phase.PhaseName.ToString(),
+                //        EventColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)).Name,
+                //        Row = 1,
+                //    });
+                //}
             }
         }
     }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerImportTools", "Sch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerDatabase", "SchedulerDatabase\SchedulerDatabase.csproj", "{4E41A325-3B1F-4F96-80B7-3CAB606EC532}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimelineLib", "WPF\TimelineLib\TimelineLib.csproj", "{D2188E92-117C-4E93-A759-5CC251DC226D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4E41A325-3B1F-4F96-80B7-3CAB606EC532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E41A325-3B1F-4F96-80B7-3CAB606EC532}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E41A325-3B1F-4F96-80B7-3CAB606EC532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2188E92-117C-4E93-A759-5CC251DC226D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2188E92-117C-4E93-A759-5CC251DC226D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2188E92-117C-4E93-A759-5CC251DC226D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2188E92-117C-4E93-A759-5CC251DC226D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
