@@ -79,7 +79,6 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
-    <Compile Include="ViewModels\AddWindowViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
     <Compile Include="ViewModels\Controls\TimeControlViewModel.cs" />
@@ -87,9 +86,6 @@
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
-    <Compile Include="Views\AddWindow.xaml.cs">
-      <DependentUpon>AddWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
       <DependentUpon>AESGraphControl.xaml</DependentUpon>
     </Compile>
@@ -132,10 +128,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ViewModelTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -275,9 +267,9 @@
       <Project>{ca3c4d12-e316-4c62-9811-3095fccda735}</Project>
       <Name>SchedulerImportTools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WPF\TimelineLib\TimelineLib.csproj">
+    <ProjectReference Include="..\externals\TimelineLib\WPF\TimelineLib\TimelineLibrary.csproj">
       <Project>{D2188E92-117C-4E93-A759-5CC251DC226D}</Project>
-      <Name>TimelineLib</Name>
+      <Name>TimelineLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
