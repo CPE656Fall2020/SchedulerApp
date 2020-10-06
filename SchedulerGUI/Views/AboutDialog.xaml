@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="SchedulerGUI.Views.AboutDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             Background="{DynamicResource MahApps.Brushes.Control.Background}"
+             Width="600"
+             Padding="10">
+
+    <StackPanel Orientation="Vertical">
+        <!--Header-->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image Source="/SchedulerGUI;component/Resources/satellite_ico.ico" Width="32" VerticalAlignment="Center" />
+            <TextBlock Text="UAH Satellite Power Scheduling Application" FontSize="26" VerticalAlignment="Center" Padding="10"/>
+        </StackPanel>
+
+        <TextBlock Text="CPE656 Fall 2020" FontSize="22" Padding="0,0,0,10"/>
+        
+        <TextBlock Text="Team Members" FontSize="22"/>
+
+        <UniformGrid Rows="1">
+            <TextBlock FontSize="16">
+                <Bold>Odroid / MSP432 Analysis</Bold>
+                <LineBreak />
+                Erin Barrow
+                <LineBreak />
+                Alex Dillon
+                <LineBreak />
+                James Shultz
+            </TextBlock>
+            <TextBlock FontSize="16">
+                <Bold>Raspberry Pi / MSP430 Analysis</Bold>
+                <LineBreak />
+                John Coan
+                <LineBreak />
+                Jesse Moore
+                <LineBreak />
+                Douglass Stitt
+            </TextBlock>
+        </UniformGrid>
+
+        <TextBlock Text="{Binding ShortVersion, StringFormat=Application Version: {0}}" />
+
+        <TextBlock Text="{Binding FullVersion, StringFormat=Build: {0}}" />
+
+    </StackPanel>
+</UserControl>

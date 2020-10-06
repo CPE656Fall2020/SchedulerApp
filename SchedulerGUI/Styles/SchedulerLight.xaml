@@ -9,8 +9,10 @@
 
     <!--Colors-->
     <Color x:Key="RibbonActiveColor">#0078D7</Color> <!--MahApps-->
-        <!--<Color x:Key="RibbonActiveColor">#2B579A</Color>--> <!--MS Word-->
-
+    
     <!--Brushes-->
     <SolidColorBrush options:Freeze="True" x:Key="RibbonActiveBrush" Color="{DynamicResource RibbonActiveColor}"/>
+    
+    <!--Make the ribbon look more Office 2016 and less Office 2013 in light theme mode-->
+    <!--<SolidColorBrush x:Key="Fluent.Ribbon.Brushes.RibbonTabControl.Content.Background" Color="#F3F3F3" />-->
 </ResourceDictionary>
