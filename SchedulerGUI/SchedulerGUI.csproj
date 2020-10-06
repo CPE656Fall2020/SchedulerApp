@@ -275,9 +275,9 @@
       <Project>{ca3c4d12-e316-4c62-9811-3095fccda735}</Project>
       <Name>SchedulerImportTools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WPF\TimelineLib\TimelineLib.csproj">
+    <ProjectReference Include="..\externals\TimelineLib\WPF\TimelineLib\TimelineLibrary.csproj">
       <Project>{D2188E92-117C-4E93-A759-5CC251DC226D}</Project>
-      <Name>TimelineLib</Name>
+      <Name>TimelineLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

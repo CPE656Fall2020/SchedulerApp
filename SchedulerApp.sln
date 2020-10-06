@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerImportTools", "Sch
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulerDatabase", "SchedulerDatabase\SchedulerDatabase.csproj", "{4E41A325-3B1F-4F96-80B7-3CAB606EC532}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimelineLib", "WPF\TimelineLib\TimelineLib.csproj", "{D2188E92-117C-4E93-A759-5CC251DC226D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimelineLibrary", "externals\TimelineLib\WPF\TimelineLib\TimelineLibrary.csproj", "{D2188E92-117C-4E93-A759-5CC251DC226D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "externals", "externals", "{43C3094B-20A0-4D5E-B0EC-FC67F04B5A03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D2188E92-117C-4E93-A759-5CC251DC226D} = {43C3094B-20A0-4D5E-B0EC-FC67F04B5A03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5409E2A3-C9BC-4AA6-A9C4-09B09A37D989}
