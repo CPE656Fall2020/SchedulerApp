@@ -254,7 +254,8 @@ namespace SchedulerGUI.ViewModels
                 //    });
                 //}
             }
-            
+        }
+
         private void OpenAboutHandler()
         {
             this.DialogManager.PopupDialog = new AboutDialogViewModel();
