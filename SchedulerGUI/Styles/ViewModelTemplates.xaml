@@ -21,10 +21,6 @@
             -->
 
     <!--Top Level Views-->
-    <DataTemplate DataType="{x:Type vm:AddWindowViewModel}">
-        <views:AddWindow />
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:EditWindowViewModel}">
         <views:EditDialog />
     </DataTemplate>

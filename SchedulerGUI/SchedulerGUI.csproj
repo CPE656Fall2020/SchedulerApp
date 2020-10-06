@@ -79,7 +79,6 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
-    <Compile Include="ViewModels\AddWindowViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
     <Compile Include="ViewModels\Controls\TimeControlViewModel.cs" />
@@ -87,9 +86,6 @@
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
-    <Compile Include="Views\AddWindow.xaml.cs">
-      <DependentUpon>AddWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
       <DependentUpon>AESGraphControl.xaml</DependentUpon>
     </Compile>
@@ -132,10 +128,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ViewModelTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
