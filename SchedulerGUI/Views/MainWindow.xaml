@@ -8,6 +8,7 @@
                    xmlns:controls="clr-namespace:SchedulerGUI.Controls"
                    xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                   xmlns:timeline="clr-namespace:TimelineLibrary;assembly=TimelineLibrary"
                    mc:Ignorable="d"
                    WindowTitleBrush="{DynamicResource RibbonActiveBrush}"
                    NonActiveWindowTitleBrush="{DynamicResource RibbonActiveBrush}"
@@ -17,7 +18,7 @@
                    ShowSystemMenuOnRightClick="False"
                    Title="UAH Satellite Power Scheduler"
                    DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
-                   Width="1280" Height="768" >
+                   WindowState="Maximized" >
 
     <metro:MetroWindow.TitleTemplate>
         <!--https://fluentribbon.github.io/documentation/interop_with_MahApps.Metro-->
@@ -42,10 +43,10 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
       
-        <Fluent:Ribbon Grid.Row="0">
+        <Fluent:Ribbon>
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
@@ -104,12 +105,11 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
             
             <!--Left Sidebar - Passes-->
-            <Grid Grid.Column="0">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -136,35 +136,78 @@
                     <Button Content="Add" Command="{Binding AddCommand}" />
                 </UniformGrid>
             </Grid>
-
-            <!--Grid Resizer for left sidebar and body-->
-            <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch" Width="5" />
-
+            
             <!--Right Body Pane-->
             <Grid Grid.Column="2" Grid.Row="1">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <TabControl>
+                    <TabItem x:Name="tiTimeLine" Header="TimeLine">
+                        <Grid x:Name="grdTimeLine" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
 
-                <UniformGrid Background="LightGray" Rows="1">
-                    <TextBlock TextAlignment="Left" Padding="5,0,5,0" Text="{Binding SelectedPass.StartTime}"></TextBlock>
-                    <TextBlock TextAlignment="Center" Padding="5,0,5,0" Text="{Binding SelectedPass.MidTime}"></TextBlock>
-                    <TextBlock TextAlignment="Right" Padding="5,0,5,0" Text="{Binding SelectedPass.EndTime}"></TextBlock>
-                </UniformGrid>
+                            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                                <Label Height="28" HorizontalAlignment="Left" Margin="5"
+                                Content="MinDateTime" VerticalAlignment="Top" Width="120" />
 
-                <controls:GanttRowPanel Grid.Row="1" DataContext="{Binding SelectedPass}"  MinDate="{Binding StartTime}" MaxDate="{Binding EndTime}">
-                    <TextBlock Text="sunlight" Background="LightYellow" controls:GanttRowPanel.StartDate="{Binding SunlightStart}" controls:GanttRowPanel.EndDate="{Binding SunlightEnd}" />
-                    <TextBlock Text="Mission" Background="LightGreen" controls:GanttRowPanel.StartDate="{Binding MissionStart}" controls:GanttRowPanel.EndDate="{Binding MissionEnd}" />
-                    <TextBlock Text="Encrypt" Background="IndianRed" controls:GanttRowPanel.StartDate="{Binding EncryptionStart}" controls:GanttRowPanel.EndDate="{Binding EncryptionEnd}" />
-                    <TextBlock Text="Datalink" Background="DeepSkyBlue" controls:GanttRowPanel.StartDate="{Binding DatalinkStart}" controls:GanttRowPanel.EndDate="{Binding DatalinkEnd}" />
-                </controls:GanttRowPanel>
+                                <TextBox Height="23" Width="150" HorizontalAlignment="Right" Margin="5" 
+                                VerticalAlignment="Top" Text="{Binding Path=MinDateTime, ElementName=timeline}" />
+                                
+                                <Label Height="28" HorizontalAlignment="Left" Margin="5"
+                                VerticalAlignment="Top" Content="MaxDateTime" Width="120" />
+                                
+                                <TextBox Height="23" Width="150" Margin="5" Name="maxDateTime" VerticalAlignment="Top"
+                                 HorizontalAlignment="Right" Text="{Binding Path=MaxDateTime, ElementName=timeline}" />
+                                
+                                <Label Height="28" HorizontalAlignment="Right" Margin="5"
+                                Content="CurrentDateTime" VerticalAlignment="Top" Width="120" />
 
+                                <TextBox Height="23" HorizontalAlignment="Right" Margin="5" 
+                                VerticalAlignment="Top" Width="150" Text="{Binding Path=CurrentDateTime, ElementName=timeline}" />
+
+                                <!--<Slider Width="200" Height="26" Margin="5"
+                                VerticalAlignment="Top" Maximum="36500" />
+
+                                <Label Content="Selected" Height="28" HorizontalAlignment="Right"
+                                Margin="5" VerticalAlignment="Top" />
+
+                                <Label Content="{Binding ElementName=timeline, Path=SelectedTimelineEvents.Count,NotifyOnSourceUpdated=True}"
+                                Height="25" Width="100" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top" 
+                                Target="{Binding ElementName=timeline, Path=SelectedTimelineEvents}" />-->
+                            </StackPanel>
+
+                            <timeline:TimelineTray x:Name="timeline" Grid.Row="1" MinDateTime="{Binding StartTime}" 
+                                MaxDateTime="{Binding EndTime}" Events="{Binding TimelineEventPasses}" CalendarType="gregorian" HorizontalAlignment="Stretch" 
+                                CurrentDateTime="{Binding Passes[0].StartTime}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="60" />
+                                </Grid.RowDefinitions>
+
+                                <timeline:TimelineBand IsMainBand="True" Grid.Row="1"
+                                ItemSourceType="hours" TimelineWindowSize="20" MaxEventHeight="130" />
+
+                                <timeline:TimelineBand x:Name="minorBand" Grid.Row="2" ItemSourceType="hours" 
+                                                       TimelineWindowSize="20" MaxEventHeight="130" />
+
+                                <timeline:TimelineToolbox Height="22" />
+                            </timeline:TimelineTray>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
                     <ListBox Background="LightGray">
@@ -177,11 +220,6 @@
                     <Border BorderBrush="Black" Grid.Column="1"  BorderThickness="2">
                         <Grid>
                             <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
-                            <!--<Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>-->
                             <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>
                             <Label Margin="392,5,0,161" Content="7000 mJ" />
                             <TabControl Margin="0,41,0,0">
@@ -203,8 +241,6 @@
                                 </TabItem>
                             </TabControl>
                             <Separator HorizontalAlignment="Left" Background="Black" Height="13" Margin="0,31,0,0" VerticalAlignment="Top" Width="465" />
-                            <!--<TextBlock Grid.Row="1" Padding="5,0,5,0">Estimated Power conuption: some other amount of amps</TextBlock>
-                    <TextBlock Grid.Row="2" Background="White" Padding="5,0,5,0">Graph of power availible over time</TextBlock>-->
                         </Grid>
                     </Border>
                 </Grid>
@@ -212,9 +248,7 @@
         </Grid>
 
         <!--Top Most Dialog Popup-->
-        <Controls:Popup Grid.Row="0" Grid.Column="0"
-                        Grid.RowSpan="2"
-                        Grid.ColumnSpan="3"
+        <Controls:Popup Grid.RowSpan="2" Grid.ColumnSpan="3"
                         DataContext="{Binding DialogManager}" />
     </Grid>
 </metro:MetroWindow>

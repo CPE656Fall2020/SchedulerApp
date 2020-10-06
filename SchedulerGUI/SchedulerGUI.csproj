@@ -69,7 +69,10 @@
     </ApplicationDefinition>
     <Compile Include="Converters\EnumBindingSourceExtension.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="GlobalAssemblyInfo.cs" />
+    <Compile Include="Interfaces\IPassPhase.cs" />
+    <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
@@ -102,8 +105,8 @@
     <Compile Include="Controls\HistoryGraph.xaml.cs">
       <DependentUpon>HistoryGraph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\PassData.cs" />
-    <Compile Include="Models\PassItem.cs" />
+    <Compile Include="Models\PassOrbit.cs" />
+    <Compile Include="Models\PassPhase.cs" />
     <Compile Include="Controls\Power.xaml.cs">
       <DependentUpon>Power.xaml</DependentUpon>
     </Compile>
@@ -271,6 +274,10 @@
     <ProjectReference Include="..\SchedulerImportTools\SchedulerImportTools.csproj">
       <Project>{ca3c4d12-e316-4c62-9811-3095fccda735}</Project>
       <Name>SchedulerImportTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WPF\TimelineLib\TimelineLib.csproj">
+      <Project>{D2188E92-117C-4E93-A759-5CC251DC226D}</Project>
+      <Name>TimelineLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
