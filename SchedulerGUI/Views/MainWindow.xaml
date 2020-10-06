@@ -92,10 +92,11 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="About">
-                <Fluent:RibbonGroupBox Header="Group">
-                    <Fluent:Button Header="Green"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                <Fluent:RibbonGroupBox Header="About">
+                    <Fluent:Button Header="About"
+                                   Icon="{StaticResource VS2017Icons.StatusInformation}"
+                                   LargeIcon="{StaticResource VS2017Icons.StatusInformation}"
+                                   Command="{Binding OpenAboutCommand}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>

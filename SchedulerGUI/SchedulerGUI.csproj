@@ -78,6 +78,7 @@
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
+    <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\AddWindowViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
@@ -94,6 +95,9 @@
     </Compile>
     <Compile Include="Views\Controls\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AboutDialog.xaml.cs">
+      <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditDialog.xaml.cs">
       <DependentUpon>EditDialog.xaml</DependentUpon>
@@ -144,6 +148,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\Popup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AboutDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -232,6 +240,9 @@
       <Version>1.1.19</Version>
     </PackageReference>
     <PackageReference Include="MvvmLight">
+      <Version>5.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmLightLibs">
       <Version>5.4.1.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
