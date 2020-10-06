@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -18,14 +19,14 @@ namespace SchedulerGUI.ViewModels
         /// <param name="pass">The pass to edit.</param>
         /// <param name="editComplete">The action to execute when the edit is completed.</param>
         /// <param name="editCancel">The action to execute if the edit is cancelled.</param>
-        public EditWindowViewModel(PassData pass, Action<PassData> editComplete, Action editCancel)
+        public EditWindowViewModel(PassOrbit pass, Action<PassOrbit> editComplete, Action editCancel)
         {
             this.Pass = pass;
 
-            this.SunlightEditor = new TimeControlViewModel(this.Pass.Sunlight.Duration);
-            this.MissionEditor = new TimeControlViewModel(this.Pass.Mission.Duration);
-            this.EncryptionEditor = new TimeControlViewModel(this.Pass.Encryption.Duration);
-            this.DatalinkEditor = new TimeControlViewModel(this.Pass.Datalink.Duration);
+            this.SunlightEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight).Duration);
+            this.MissionEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission).Duration);
+            this.EncryptionEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption).Duration);
+            this.DatalinkEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink).Duration);
 
             this.SaveCallback = editComplete;
             this.SaveCommand = new RelayCommand(this.SaveCommandHandler);
@@ -33,9 +34,9 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
-        /// Gets the <see cref="PassData"/> that is currently being edited.
+        /// Gets the <see cref="PassOrbit"/> that is currently being edited.
         /// </summary>
-        public PassData Pass { get; }
+        public PassOrbit Pass { get; }
 
         /// <summary>
         /// Gets the editor control for the sunlight phase duration.
@@ -67,17 +68,16 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public ICommand CancelCommand { get; }
 
-        private Action<PassData> SaveCallback { get; }
+        private Action<PassOrbit> SaveCallback { get; }
 
         private void SaveCommandHandler()
         {
-            var newPassData = new PassData(this.Pass.Name, this.Pass.StartTime, this.Pass.EndTime);
-            newPassData.Sunlight.Duration = this.SunlightEditor.SelectedDuration;
-            newPassData.Mission.Duration = this.MissionEditor.SelectedDuration;
-            newPassData.Encryption.Duration = this.EncryptionEditor.SelectedDuration;
-            newPassData.Datalink.Duration = this.DatalinkEditor.SelectedDuration;
+            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight).Duration = this.SunlightEditor.SelectedDuration;
+            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission).Duration = this.MissionEditor.SelectedDuration;
+            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption).Duration = this.EncryptionEditor.SelectedDuration;
+            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink).Duration = this.DatalinkEditor.SelectedDuration;
 
-            this.SaveCallback(newPassData);
+            this.SaveCallback(this.Pass);
         }
     }
 }
