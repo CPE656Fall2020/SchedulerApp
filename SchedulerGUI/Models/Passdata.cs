@@ -31,36 +31,6 @@ namespace SchedulerGUI.Models
         public string Name { get; } // TODO: Alex - removed set. Add back if needed, if not, keep immutable.
 
         /// <summary>
-        /// Gets or sets the total number of bytes encrypted in this pass.
-        /// </summary>
-        public int TotalNumOfBytesEncr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number of bytes currently encrypted in this pass.
-        /// </summary>
-        public int CurrentNumOfBytesEncr { get; set; }
-
-        /// <summary>
-        /// Gets or sets and sets the amount of energy available in a given pass. This data is recorded in millijoules.
-        /// </summary>
-        public int EnergyAvalible { get; set; }
-
-        /// <summary>
-        /// Gets or sets the amount of time left in a given pass. This data is recorded in minutes.
-        /// </summary>
-        public DateTime TineAvalible { get; set; } = new DateTime();
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the status of the pass as the active pass.
-        /// </summary>
-        public bool IsCurrentPass { get; set; } = false;
-
-        /// <summary>
-        /// Gets and sets the number of bytes encrypted in this pass.
-        /// </summary>
-        public int NumOfBytesEncr { get; set; }
-
-        /// <summary>
         /// Gets the starting time for this pass.
         /// </summary>
         public DateTime StartTime { get; } = default; // TODO: Alex - removed set. Add back if needed, if not, keep immutable.
