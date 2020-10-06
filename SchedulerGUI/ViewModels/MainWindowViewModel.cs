@@ -40,6 +40,7 @@ namespace SchedulerGUI.ViewModels
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
             this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
+            this.OpenAboutCommand = new RelayCommand(this.OpenAboutHandler);
 
             this.DialogManager = new PopupViewModel()
             {
@@ -101,6 +102,11 @@ namespace SchedulerGUI.ViewModels
         /// Gets the command to execute to open the CLI import tools.
         /// </summary>
         public ICommand OpenImportToolCLICommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to show the about screen.
+        /// </summary>
+        public ICommand OpenAboutCommand { get; }
 
         /// <summary>
         /// Gets the Dialog Manager for the main window.
@@ -292,6 +298,11 @@ namespace SchedulerGUI.ViewModels
             Process.Start(new ProcessStartInfo(
                 "cmd.exe",
                 $"/k \"set PATH=%PATH%;\"{appDir}\"\"; && cd %USERPROFILE%\\Desktop && SchedulerImportTools.exe"));
+        }
+
+        private void OpenAboutHandler()
+        {
+            this.DialogManager.PopupDialog = new AboutDialogViewModel();
         }
     }
 }
