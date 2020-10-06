@@ -14,7 +14,6 @@
                    NonActiveWindowTitleBrush="{DynamicResource RibbonActiveBrush}"
                    GlowBrush="Black"
                    BorderThickness="0"
-                   
                    ShowSystemMenuOnRightClick="False"
                    Title="UAH Satellite Power Scheduler"
                    DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
@@ -64,13 +63,12 @@
 
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
-                <Fluent:RibbonGroupBox Header="Group">
-                    <Fluent:Button Header="Green"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
-                    <Fluent:Button Header="Grey"
-                                   Icon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"
-                                   LargeIcon="{StaticResource Fluent.Ribbon.Images.DefaultPlaceholder}"/>
+                <Fluent:RibbonGroupBox Header="Passes">
+                    <Fluent:Button Header="Edit Pass"
+                                   Command="{Binding EditCommand}"
+                                   IsEnabled="{Binding ElementName=passesListview, Path=SelectedItems.Count}"
+                                   Icon="{StaticResource VS2017Icons.EditLink}"
+                                   LargeIcon="{StaticResource VS2017Icons.EditLink}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem Header="Database">
@@ -112,13 +110,12 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <ListView Background="LightGray"
-                    VerticalAlignment="Stretch"
-                    ItemsSource="{Binding Passes}"
-                    SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+                <ListView VerticalAlignment="Stretch"
+                          ItemsSource="{Binding Passes}"
+                          SelectedItem="{Binding SelectedPass, Mode=TwoWay}"
+                          x:Name="passesListview">
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -130,11 +127,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-
-                <UniformGrid Grid.Row="1" Rows="1">
-                    <Button Content="Edit"  Command="{Binding EditCommand}" />
-                    <Button Content="Add" Command="{Binding AddCommand}" />
-                </UniformGrid>
             </Grid>
             
             <!--Right Body Pane-->
