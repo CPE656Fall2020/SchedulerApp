@@ -21,7 +21,7 @@
 
         <UniformGrid Rows="1">
             <TextBlock FontSize="16">
-                <Bold>Odroid / MSP432 Analysis</Bold>
+                <Bold>Odroid / MSP432 Team</Bold>
                 <LineBreak />
                 Erin Barrow
                 <LineBreak />
@@ -30,7 +30,7 @@
                 James Shultz
             </TextBlock>
             <TextBlock FontSize="16">
-                <Bold>Raspberry Pi / MSP430 Analysis</Bold>
+                <Bold>Raspberry Pi / MSP430 Team</Bold>
                 <LineBreak />
                 John Coan
                 <LineBreak />
@@ -40,9 +40,9 @@
             </TextBlock>
         </UniformGrid>
 
-        <TextBlock Text="{Binding ShortVersion, StringFormat=Application Version: {0}}" />
+        <TextBlock Text="{Binding ShortVersion, StringFormat=Application Version: {0}}" FontSize="14" Padding="0,20,0,0" />
 
-        <TextBlock Text="{Binding FullVersion, StringFormat=Build: {0}}" />
+        <TextBlock Text="{Binding FullVersion, StringFormat=Build: {0}}" FontSize="14" />
 
     </StackPanel>
 </UserControl>
