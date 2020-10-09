@@ -128,8 +128,8 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                
-                <Controls:EditDialog DataContext="{Binding EditWindowViewModel}"
+
+                <Controls:EditDialog Grid.Row="1" DataContext="{Binding EditWindowViewModel}"/>
             </Grid>
             
             <!--Right Body Pane-->
