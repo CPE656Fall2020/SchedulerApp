@@ -3,13 +3,13 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
-using SchedulerGUI.ViewModels.Controls;
 
-namespace SchedulerGUI.ViewModels
+namespace SchedulerGUI.ViewModels.Controls
 {
     /// <summary>
-    /// <see cref="EditWindowViewModel"/> provides a View-Model for the <see cref="Views.EditDialog"/>.
+    /// <see cref="EditWindowViewModel"/> provides a View-Model for the <see cref="Views.Controls.EditDialog"/>.
     /// </summary>
     public class EditWindowViewModel : ViewModelBase
     {
@@ -23,10 +23,10 @@ namespace SchedulerGUI.ViewModels
         {
             this.Pass = pass;
 
-            this.SunlightEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight).Duration);
-            this.MissionEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission).Duration);
-            this.EncryptionEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption).Duration);
-            this.DatalinkEditor = new TimeControlViewModel(this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink).Duration);
+            this.SunlightPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight);
+            this.MissionPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission);
+            this.EncryptionPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption);
+            this.DatalinkPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink);
 
             this.SaveCallback = editComplete;
             this.SaveCommand = new RelayCommand(this.SaveCommandHandler);
@@ -39,24 +39,24 @@ namespace SchedulerGUI.ViewModels
         public PassOrbit Pass { get; }
 
         /// <summary>
-        /// Gets the editor control for the sunlight phase duration.
+        /// Gets the sunlight phase.
         /// </summary>
-        public TimeControlViewModel SunlightEditor { get; }
+        public IPassPhase SunlightPhase { get; }
 
         /// <summary>
-        /// Gets the editor control for the mission phase duration.
+        /// Gets the mission phase.
         /// </summary>
-        public TimeControlViewModel MissionEditor { get; }
+        public IPassPhase MissionPhase { get; }
 
         /// <summary>
-        /// Gets the editor control for the encryption phase duration.
+        /// Gets the encryption phase.
         /// </summary>
-        public TimeControlViewModel EncryptionEditor { get; }
+        public IPassPhase EncryptionPhase { get; }
 
         /// <summary>
-        /// Gets the editor control for the datalink phase duration.
+        /// Gets the datalink phase.
         /// </summary>
-        public TimeControlViewModel DatalinkEditor { get; }
+        public IPassPhase DatalinkPhase { get; }
 
         /// <summary>
         /// Gets the command to execute to save and complete the edit operation.
@@ -72,10 +72,12 @@ namespace SchedulerGUI.ViewModels
 
         private void SaveCommandHandler()
         {
-            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight).Duration = this.SunlightEditor.SelectedDuration;
-            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission).Duration = this.MissionEditor.SelectedDuration;
-            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption).Duration = this.EncryptionEditor.SelectedDuration;
-            this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink).Duration = this.DatalinkEditor.SelectedDuration;
+            this.Pass.PassPhases.Clear();
+
+            this.Pass.PassPhases.Add(this.SunlightPhase);
+            this.Pass.PassPhases.Add(this.MissionPhase);
+            this.Pass.PassPhases.Add(this.EncryptionPhase);
+            this.Pass.PassPhases.Add(this.DatalinkPhase);
 
             this.SaveCallback(this.Pass);
         }

@@ -21,10 +21,6 @@
             -->
 
     <!--Top Level Views-->
-    <DataTemplate DataType="{x:Type vm:EditWindowViewModel}">
-        <views:EditDialog />
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:ImportToolDialogViewModel}">
         <views:ImportToolDialog />
     </DataTemplate>
@@ -38,13 +34,11 @@
         <controlviews:Popup />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type controlvms:TimeControlViewModel}">
-        <controlviews:TimeControl />
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
         <controlviews:AESGraphControl />
     </DataTemplate>
-    
-    
+
+    <DataTemplate DataType="{x:Type controlvms:EditWindowViewModel}">
+        <controlviews:EditDialog />
+    </DataTemplate>
 </ResourceDictionary>

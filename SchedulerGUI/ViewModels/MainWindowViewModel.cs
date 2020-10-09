@@ -57,6 +57,8 @@ namespace SchedulerGUI.ViewModels
             this.InitTimelineEvents();
         }
 
+        public EditWindowViewModel EditWindowViewModel { get; set; }
+
         /// <summary>
         /// Gets the passes that are currently available for scheduling or editing.
         /// </summary>
