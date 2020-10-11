@@ -7,7 +7,7 @@ namespace SchedulerGUI.Views
     /// <summary>
     /// Interaction logic for PlotWindow.xaml
     /// </summary>
-    public partial class PlotWindow : Window
+    public partial class PlotWindow
     {
         public PlotWindow()
         {

@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+
+    <System:Double x:Key="MahApps.Font.Size.Window.Title">12</System:Double>
+    <FontFamily x:Key="MahApps.Fonts.Family.Window.Title">Segoe UI</FontFamily>
+
+    <Style TargetType="{x:Type mah:MetroWindow}" BasedOn="{StaticResource {x:Type mah:MetroWindow}}"
+           x:Key="SchedulerApp.Window">
+        <Setter Property="WindowTitleBrush" Value="{DynamicResource RibbonActiveBrush}" />
+        <Setter Property="NonActiveWindowTitleBrush" Value="{DynamicResource RibbonActiveBrush}" />
+        <Setter Property="GlowBrush" Value="Black" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="TitleCharacterCasing" Value="Normal" />
+
+        <!--Make the title fade when not-active-->
+        <Setter Property="TitleForeground" Value="White" />
+        <Style.Triggers>
+            <Trigger Property="IsActive" Value="False">
+                <Setter Property="TitleForeground" Value="#A5B9D1" />
+            </Trigger>
+        </Style.Triggers>
+        
+        
+    </Style>
+</ResourceDictionary>
