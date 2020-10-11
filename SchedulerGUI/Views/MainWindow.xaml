@@ -62,15 +62,7 @@
             </Fluent:Ribbon.Menu>
 
             <!--Tabs-->
-            <Fluent:RibbonTabItem Header="Home">
-                <Fluent:RibbonGroupBox Header="Passes">
-                    <Fluent:Button Header="Edit Pass"
-                                   Command="{Binding EditCommand}"
-                                   IsEnabled="{Binding ElementName=passesListview, Path=SelectedItems.Count}"
-                                   Icon="{StaticResource VS2017Icons.EditLink}"
-                                   LargeIcon="{StaticResource VS2017Icons.EditLink}"/>
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
+            <Fluent:RibbonTabItem Header="Home" />
             <Fluent:RibbonTabItem Header="Database">
                 <Fluent:RibbonGroupBox Header="Tools">
                     <Fluent:Button Header="Plot Tool"
@@ -103,7 +95,7 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
             
             <!--Left Sidebar - Passes-->
@@ -113,27 +105,25 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <ListView VerticalAlignment="Stretch"
-                          ItemsSource="{Binding Passes}"
+                <ListView ItemsSource="{Binding Passes}"
                           SelectedItem="{Binding SelectedPass, Mode=TwoWay}"
                           x:Name="passesListview">
-
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock VerticalAlignment="Center"
-                                    FontSize="15"
-                                    Text="{Binding Name}" />
+                                <TextBlock VerticalAlignment="Center" Margin="5,0,0,0"
+                                    FontSize="18" Text="{Binding Name}" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Controls:EditDialog Grid.Row="1" DataContext="{Binding EditWindowViewModel}"/>
+                <Controls:EditControl IsEnabled="{Binding ElementName=passesListview, Path=SelectedItems.Count}"
+                  Grid.Row="1" Margin="5" DataContext="{Binding EditControlViewModel}"/>
             </Grid>
             
             <!--Right Body Pane-->
-            <Grid Grid.Column="2" Grid.Row="1">
+            <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*" />
                     <RowDefinition Height="Auto" />
@@ -166,34 +156,19 @@
 
                                 <TextBox Height="23" HorizontalAlignment="Right" Margin="5" 
                                 VerticalAlignment="Top" Width="150" Text="{Binding Path=CurrentDateTime, ElementName=timeline}" />
-
-                                <!--<Slider Width="200" Height="26" Margin="5"
-                                VerticalAlignment="Top" Maximum="36500" />
-
-                                <Label Content="Selected" Height="28" HorizontalAlignment="Right"
-                                Margin="5" VerticalAlignment="Top" />
-
-                                <Label Content="{Binding ElementName=timeline, Path=SelectedTimelineEvents.Count,NotifyOnSourceUpdated=True}"
-                                Height="25" Width="100" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top" 
-                                Target="{Binding ElementName=timeline, Path=SelectedTimelineEvents}" />-->
                             </StackPanel>
 
-                            <timeline:TimelineTray x:Name="timeline" Grid.Row="1" MinDateTime="{Binding StartTime}" 
-                                MaxDateTime="{Binding EndTime}" Events="{Binding TimelineEventPasses}" CalendarType="gregorian" HorizontalAlignment="Stretch" 
+                            <timeline:TimelineTray x:Name="timeline" Grid.Row="1" MinDateTime="{Binding StartTime}"
+                                MaxDateTime="{Binding EndTime}" Events="{Binding TimelineEventPasses}" CalendarType="gregorian"
                                 CurrentDateTime="{Binding Passes[0].StartTime}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="20" />
                                     <RowDefinition Height="*" />
-                                    <RowDefinition Height="60" />
+                                    <RowDefinition Height="20" />
                                 </Grid.RowDefinitions>
-
-                                <timeline:TimelineBand IsMainBand="True" Grid.Row="1"
-                                ItemSourceType="hours" TimelineWindowSize="20" MaxEventHeight="130" />
-
-                                <timeline:TimelineBand x:Name="minorBand" Grid.Row="2" ItemSourceType="hours" 
-                                                       TimelineWindowSize="20" MaxEventHeight="130" />
-
+                                
                                 <timeline:TimelineToolbox Height="22" />
+                                <timeline:TimelineBand IsMainBand="True" Grid.Row="1" ItemSourceType="hours" TimelineWindowSize="5"/>
                             </timeline:TimelineTray>
                         </Grid>
                     </TabItem>
@@ -207,7 +182,7 @@
 
                     <ListBox Background="LightGray">
                         <ListBoxItem>Devices:</ListBoxItem>
-                        <ListBoxItem Background="AliceBlue">MSP430</ListBoxItem>
+                        <ListBoxItem>MSP430</ListBoxItem>
                         <ListBoxItem>MSP432</ListBoxItem>
                         <ListBoxItem>ODROID</ListBoxItem>
                     </ListBox>

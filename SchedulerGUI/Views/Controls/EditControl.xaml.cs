@@ -5,11 +5,11 @@ using System.Windows.Controls;
 namespace SchedulerGUI.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for EditDialog.xaml
+    /// Interaction logic for EditControl.xaml
     /// </summary>
-    public partial class EditDialog : UserControl
+    public partial class EditControl : UserControl
     {
-        public EditDialog()
+        public EditControl()
         {
             this.InitializeComponent();
         }

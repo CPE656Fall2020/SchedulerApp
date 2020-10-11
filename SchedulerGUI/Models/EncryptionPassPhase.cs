@@ -13,6 +13,8 @@ namespace SchedulerGUI.Models
         private const double MAXPOWER = 100;
         private const int MAXBYTES = 10000;
 
+        private TimeSpan duration;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EncryptionPassPhase"/> class.
         /// </summary>

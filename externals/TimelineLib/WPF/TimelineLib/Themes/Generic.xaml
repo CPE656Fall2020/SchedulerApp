@@ -43,25 +43,19 @@
             Source="/TimelineLibrary;Component/Themes/ToolboxButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <local:NullToUnsetConverter
-        x:Key="NullToUnsetConverter"></local:NullToUnsetConverter>
+    <local:NullToUnsetConverter x:Key="NullToUnsetConverter" />
 
-    <ControlTemplate
-        x:Key="EventTooltipStyle"
-        TargetType="ToolTip">
-        
+    <ControlTemplate x:Key="EventTooltipStyle" TargetType="ToolTip">
+
         <Border
             BorderThickness="1.5"
             CornerRadius="{StaticResource TimelineEventCornerRadius}"
             BorderBrush="{Binding Source={StaticResource TimelineTooltipBorder}, Path=Brush, Mode=OneWay}"
             Background="{Binding Source={StaticResource TimelineTooltipBackground}, Path=Brush, Mode=OneWay}">
-            
-            <StackPanel
-                Margin="5"
-                MaxWidth="400">
+
+            <StackPanel  Margin="5" MaxWidth="400">
 
                 <TextBlock
-                    Margin="0,0,0,0"
                     TextWrapping="NoWrap"
                     HorizontalAlignment="Left"
                     MinWidth="{Binding EventPixelWidth}"
@@ -69,30 +63,23 @@
                     Foreground="{Binding Source={StaticResource TimelineTooltipForeground}, Path=Brush, Mode=OneWay}" />
 
                 <TextBlock
-                    Margin="0,0,0,0"
                     TextWrapping="Wrap"
                     FontStyle="italic"
                     FontSize="11"
                     HorizontalAlignment="Left"
                     Text="{Binding Event.Description, Mode=OneWay}"
                     Foreground="{Binding Source={StaticResource TimelineTooltipForeground}, Path=Brush, Mode=OneWay}" />
-                    
+
             </StackPanel>
         </Border>
-        
     </ControlTemplate>
 
-    <Style
-        TargetType="{x:Type local:TimelineBand}">
-        
-        <Setter
-            Property="DefaultShortEventTemplate">
-            
+    <Style TargetType="{x:Type local:TimelineBand}">
+        <Setter Property="DefaultShortEventTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <Grid>
                         <Rectangle
-                            Margin="0"
                             RadiusX="1.5"
                             RadiusY="1.5"
                             MinWidth="4"
@@ -104,13 +91,11 @@
                             Height="3">
 
                             <local:TooltipServiceEx.ToolTipEx>
-                                <local:ToolTipEx
-                                    HideToolTipTimeout="60" />
+                                <local:ToolTipEx HideToolTipTimeout="60" />
                             </local:TooltipServiceEx.ToolTipEx>
                             
                             <ToolTipService.ToolTip>
-                                <ToolTip
-                                    Template="{StaticResource EventTooltipStyle}" />
+                                <ToolTip Template="{StaticResource EventTooltipStyle}" />
                             </ToolTipService.ToolTip>
 
                         </Rectangle>
@@ -119,75 +104,52 @@
             </Setter.Value>
         </Setter>
 
-        <Setter
-            Property="DefaultEventTemplate">
+        <Setter Property="DefaultEventTemplate">
             <Setter.Value>
                 <DataTemplate>
-
-                    <Grid
-                        x:Name="EventTemplateRoot"
-                        MinWidth="226">
+                    <Grid x:Name="EventTemplateRoot" MinWidth="226">
                         <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="6" />
-                            <RowDefinition
-                                Height="*" />
-                            <RowDefinition
-                                Height="20000" />
+                            <RowDefinition Height="6" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="20000" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="6" />
-                            <ColumnDefinition
-                                Width="220" />
+                            <ColumnDefinition Width="6" />
+                            <ColumnDefinition Width="220" />
                         </Grid.ColumnDefinitions>
 
-                        <Canvas
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Height="6"
-                            Width="6"
-                            Margin="0">
-                            
+                        <Canvas Height="6" Width="6">
+
                             <Rectangle
                                 x:Name="EventDurationRect"
-                                Canvas.Left="0"
-                                Canvas.Top="0"
                                 Height="6"
                                 MinWidth="6"
                                 Width="{Binding EventPixelWidth, Mode=OneWay}"
                                 Fill="{Binding EventColorBrush, Mode=OneWay}"
                                 RadiusX="3"
                                 RadiusY="3">
-                                
+
                                 <local:TooltipServiceEx.ToolTipEx>
-                                    <local:ToolTipEx
-                                        HideToolTipTimeout="{StaticResource TooltipTimeout}" />
+                                    <local:ToolTipEx HideToolTipTimeout="{StaticResource TooltipTimeout}" />
                                 </local:TooltipServiceEx.ToolTipEx>
-                                
+
                                 <ToolTipService.ToolTip>
-                                    <ToolTip
-                                        Template="{StaticResource EventTooltipStyle}" />
+                                    <ToolTip Template="{StaticResource EventTooltipStyle}" />
                                 </ToolTipService.ToolTip>
-                                
                             </Rectangle>
-                            
                         </Canvas>
 
                         <Border
                             Grid.Column="1"
                             Grid.Row="1"
-                            Padding="2 2 2 2"
-                            Margin="2 2 2 2"
+                            Padding="2"
+                            Margin="2"
                             CornerRadius="{StaticResource TimelineEventCornerRadius}"
                             BorderThickness="{Binding SelectionBorder, Mode=OneWay}"
                             BorderBrush="{Binding Source={StaticResource TimelineEventBorder}, Path=Brush,  Mode=OneWay}"
                             Background="{Binding Source={StaticResource TimelineEventBackground}, Path=Brush,  Mode=OneWay}" >
 
-                            <StackPanel
-                                Margin="0"
-                                Orientation="Vertical"
-                                Width="220">
+                            <StackPanel Orientation="Vertical" Width="220">
 
                                 <Image
                                     x:Name="EventImage"
@@ -197,27 +159,19 @@
                                     Stretch="None"
                                     Margin="0 1 0 0"
                                     HorizontalAlignment="Left">
-                                    
-                                    <local:TooltipServiceEx.ToolTipEx>
-                                        <local:ToolTipEx
-                                            HideToolTipTimeout="{StaticResource TooltipTimeout}" />
-                                    </local:TooltipServiceEx.ToolTipEx>
-                                    
-                                    <ToolTipService.ToolTip>
-                                        <ToolTip
-                                            Template="{StaticResource EventTooltipStyle}" />
-                                    </ToolTipService.ToolTip>
-                                    
-                                </Image>
 
-                                <StackPanel
-                                    Margin="2 0 0 0"
-                                    Orientation="Vertical"
-                                    Width="Auto">
+                                    <local:TooltipServiceEx.ToolTipEx>
+                                        <local:ToolTipEx HideToolTipTimeout="{StaticResource TooltipTimeout}" />
+                                    </local:TooltipServiceEx.ToolTipEx>
+
+                                    <ToolTipService.ToolTip>
+                                        <ToolTip Template="{StaticResource EventTooltipStyle}" />
+                                    </ToolTipService.ToolTip>
+                                </Image>
+                                <StackPanel Margin="2 0 0 0" Orientation="Vertical" Width="Auto">
 
                                     <TextBlock
                                         x:Name="EventTitleTextBlock"
-                                        Margin="0, 0, 0, 0"
                                         Text="{Binding Event.Title, Mode=OneWay}"
                                         TextWrapping="Wrap"
                                         Foreground="{Binding Source={StaticResource TimelineEventForeground}, Path=Brush, Mode=OneWay}"
@@ -226,18 +180,15 @@
                                         Width="Auto">
                                         
                                         <local:TooltipServiceEx.ToolTipEx>
-                                            <local:ToolTipEx
-                                                HideToolTipTimeout="{StaticResource TooltipTimeout}" />
+                                            <local:ToolTipEx HideToolTipTimeout="{StaticResource TooltipTimeout}" />
                                         </local:TooltipServiceEx.ToolTipEx>
                                         <ToolTipService.ToolTip>
-                                            <ToolTip
-                                                Template="{StaticResource EventTooltipStyle}" />
+                                            <ToolTip Template="{StaticResource EventTooltipStyle}" />
                                         </ToolTipService.ToolTip>
                                     </TextBlock>
 
                                     <TextBlock
                                         x:Name="EventTeaserBlock"
-                                        Margin="0,0,0,0"
                                         Text="{Binding Teaser, Mode=OneWay}"
                                         TextWrapping="Wrap"
                                         Foreground="{Binding Source={StaticResource TimelineEventForeground}, Path=Brush, Mode=OneWay}"
@@ -247,57 +198,45 @@
                                         FontSize="9.25">
                                         
                                         <local:TooltipServiceEx.ToolTipEx>
-                                            <local:ToolTipEx
-                                                HideToolTipTimeout="{StaticResource TooltipTimeout}" />
+                                            <local:ToolTipEx HideToolTipTimeout="{StaticResource TooltipTimeout}" />
                                         </local:TooltipServiceEx.ToolTipEx>
                                         <ToolTipService.ToolTip>
-                                            <ToolTip
-                                                Template="{StaticResource EventTooltipStyle}" />
+                                            <ToolTip Template="{StaticResource EventTooltipStyle}" />
                                         </ToolTipService.ToolTip>
 
                                     </TextBlock>
 
                                     <local:Hyperlink
                                         x:Name="EventLinkTextBlock"
-                                        Margin="0,0,0,0"
                                         Visibility="{Binding MoreLinkVisibility, Mode=OneWay}"
                                         Content="{Binding LinkText, Mode=OneWay}"
                                         HorizontalAlignment="Left"
                                         FontStyle="italic"
-                                        FontSize="9.25">
-                                    </local:Hyperlink>
+                                        FontSize="9.25" />
                                 </StackPanel>
-
                             </StackPanel>
                         </Border>
 
                         <Border
                             x:Name="BorderLine"
                             Canvas.ZIndex="-1"
-                            Grid.Row="0"
                             Grid.RowSpan="3"
-                            Grid.Column="0"
                             VerticalAlignment="Stretch"
                             Width="1"
                             Tag="{Binding Source={StaticResource TimelineEventLine}, Path=Brush, Mode=OneWay}"
                             Background="{Binding EventColorBrush, Mode=OneWay}" />
 
                     </Grid>
-
                 </DataTemplate>
             </Setter.Value>
         </Setter>
 
-        <Setter
-            Property="DefaultItemTemplate">
+        <Setter Property="DefaultItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch">
+                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
-                        <Rectangle
-                            Fill="{Binding Source={StaticResource TimelineColumnBackground}, Path=Brush,  Mode=OneWay}" />
+                        <Rectangle Fill="{Binding Source={StaticResource TimelineColumnBackground}, Path=Brush, Mode=OneWay}" />
 
                         <TextBlock
                             FontFamily="Arial"
@@ -305,10 +244,10 @@
                             Margin="5.5,0,2,2"
                             VerticalAlignment="Bottom"
                             Foreground="{Binding Source={StaticResource TimelineColumnForeground}, Path=Brush,  Mode=OneWay}" >
-                            
-                                <TextBlock.Text>
-                                    <Binding />
-                                </TextBlock.Text>
+
+                            <TextBlock.Text>
+                                <Binding />
+                            </TextBlock.Text>
 
                         </TextBlock>
                         <Rectangle
@@ -321,11 +260,9 @@
             </Setter.Value>
         </Setter>
 
-        <Setter
-            Property="Template">
+        <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate
-                    TargetType="local:TimelineBand">
+                <ControlTemplate TargetType="local:TimelineBand">
 
                     <Grid
                         x:Name="MainGrid"
@@ -335,12 +272,9 @@
                         VerticalAlignment="Stretch">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="10" />
-                            <ColumnDefinition
-                                Width="*" />
-                            <ColumnDefinition
-                                Width="10" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
 
                         <Canvas
@@ -354,8 +288,7 @@
                             HorizontalAlignment="Stretch">
 
                             <Canvas.Clip>
-                                <RectangleGeometry
-                                    x:Name="ClipRect" />
+                                <RectangleGeometry x:Name="ClipRect" />
                             </Canvas.Clip>
 
                             <Rectangle
@@ -364,26 +297,20 @@
                                 RadiusX="{StaticResource TimelineVisibleWindowRadius}"
                                 RadiusY="{StaticResource TimelineVisibleWindowRadius}"
                                 x:Name="VisibleDatesPart"
-                                Canvas.Left="0"
-                                Canvas.Top="0"
                                 Fill="{Binding Source={StaticResource TimelineVisibleWindowBackground}, Path=Brush, Mode=OneWay}">
 
                             </Rectangle>
-
                         </Canvas>
 
                         <Grid
                             x:Name="NavigateLeft"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Grid.Column="0"
                             Background="Transparent">
 
                             <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="*" />
-                                <RowDefinition
-                                    Height="20" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20" />
                             </Grid.RowDefinitions>
 
                             <Button
@@ -391,7 +318,6 @@
                                 x:Name="NavigateLeftButton"
                                 Height="20"
                                 HorizontalAlignment="Center"
-                                Margin="0"
                                 Grid.Row="1"
                                 Style="{StaticResource NavigateLeftButtonStyle}"
                                 VerticalAlignment="Center"
@@ -406,12 +332,10 @@
                             VerticalAlignment="Stretch"
                             Grid.Column="2"
                             Background="Transparent">
-                            
+
                             <Grid.RowDefinitions>
-                                <RowDefinition
-                                    Height="*" />
-                                <RowDefinition
-                                    Height="20" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20" />
                             </Grid.RowDefinitions>
 
                             <Button
@@ -419,7 +343,6 @@
                                 x:Name="NavigateRightButton"
                                 Height="20"
                                 HorizontalAlignment="Center"
-                                Margin="0"
                                 Grid.Row="1"
                                 Style="{StaticResource NavigateRightButtonStype}"
                                 VerticalAlignment="Bottom"
@@ -427,39 +350,29 @@
                                 Grid.Column="1"
                                 Content="Button" />
                         </Grid>
-
                     </Grid>
-
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style
-        TargetType="{x:Type local:TimelineToolbox}">
-        <Setter
-            Property="Template">
+    <Style TargetType="{x:Type local:TimelineToolbox}">
+        <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate
-                    TargetType="{x:Type local:TimelineToolbox}">
+                <ControlTemplate TargetType="{x:Type local:TimelineToolbox}">
                     <Border
                         Background="{Binding Source={StaticResource TimelineToolboxBackground}, Path=Brush, Mode=OneWay}"
                         BorderBrush="{Binding Source={StaticResource TimelineToolboxBorder}, Path=Brush, Mode=OneWay}"
                         Height="20"
                         BorderThickness="0 0 0 1">
 
-                        <Grid
-                            x:Name="MainGrid">
+                        <Grid x:Name="MainGrid">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition
-                                    Width="*" />
-                                <ColumnDefinition
-                                    Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel
-                                Orientation="Horizontal"
-                                Grid.Column="1">
+                            <StackPanel Orientation="Horizontal" Grid.Column="1">
 
                                 <Button
                                     x:Name="zoomIn"
@@ -520,12 +433,10 @@
                                     HorizontalAlignment="Right"
                                     Content="1" />
                             </StackPanel>
-
                         </Grid>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
 </ResourceDictionary>

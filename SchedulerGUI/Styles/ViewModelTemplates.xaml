@@ -38,7 +38,7 @@
         <controlviews:AESGraphControl />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type controlvms:EditWindowViewModel}">
-        <controlviews:EditDialog />
+    <DataTemplate DataType="{x:Type controlvms:EditControlViewModel}">
+        <controlviews:EditControl />
     </DataTemplate>
 </ResourceDictionary>

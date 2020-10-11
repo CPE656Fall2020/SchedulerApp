@@ -80,7 +80,7 @@
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
-    <Compile Include="ViewModels\Controls\EditWindowViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -88,8 +88,8 @@
     <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
       <DependentUpon>AESGraphControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Controls\EditDialog.xaml.cs">
-      <DependentUpon>EditDialog.xaml</DependentUpon>
+    <Compile Include="Views\Controls\EditControl.xaml.cs">
+      <DependentUpon>EditControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
@@ -135,7 +135,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Controls\EditDialog.xaml">
+    <Page Include="Views\Controls\EditControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -163,7 +163,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\GanttRowPanel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
