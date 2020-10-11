@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                    xmlns:System="clr-namespace:System;assembly=System.Runtime">
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <System:Double x:Key="MahApps.Font.Size.Window.Title">12</System:Double>
+    <sys:Double x:Key="MahApps.Font.Size.Window.Title">12</sys:Double>
     <FontFamily x:Key="MahApps.Fonts.Family.Window.Title">Segoe UI</FontFamily>
 
     <Style TargetType="{x:Type mah:MetroWindow}" BasedOn="{StaticResource {x:Type mah:MetroWindow}}"
