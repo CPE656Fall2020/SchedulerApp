@@ -13,6 +13,11 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class EditControlViewModel : ViewModelBase
     {
+        private IPassPhase sunlightPhase;
+        private IPassPhase missionPhase;
+        private IPassPhase datalinkPhase;
+        private EncryptionPassPhase encryptionPhase;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EditControlViewModel"/> class.
         /// </summary>
@@ -36,38 +41,38 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <summary>
         /// Gets or sets the sunlight phase.
         /// </summary>
-        public IPassPhase SunlightPhase { get; set; }
-        //{
-        //    get => this.sunlightPhase;
-        //    set => this.Set(() => this.SunlightPhase, ref this.sunlightPhase, value);
-        //}
+        public IPassPhase SunlightPhase
+        {
+            get => this.sunlightPhase;
+            set => this.Set(() => this.SunlightPhase, ref this.sunlightPhase, value);
+        }
 
         /// <summary>
         /// Gets or sets the mission phase.
         /// </summary>
-        public IPassPhase MissionPhase { get; set; }
-        //{
-        //    get => this.missionPhase;
-        //    set => this.Set(() => this.MissionPhase, ref this.missionPhase, value);
-        //}
+        public IPassPhase MissionPhase
+        {
+            get => this.missionPhase;
+            set => this.Set(() => this.MissionPhase, ref this.missionPhase, value);
+        }
 
         /// <summary>
         /// Gets or sets the encryption phase.
         /// </summary>
-        public EncryptionPassPhase EncryptionPhase { get; set; }
-        //{
-        //    get => this.encryptionPhase;
-        //    set => this.Set(() => this.EncryptionPhase, ref this.encryptionPhase, value);
-        //}
+        public EncryptionPassPhase EncryptionPhase
+        {
+            get => this.encryptionPhase;
+            set => this.Set(() => this.EncryptionPhase, ref this.encryptionPhase, value);
+        }
 
         /// <summary>
         /// Gets or sets the datalink phase.
         /// </summary>
-        public IPassPhase DatalinkPhase { get; set; }
-        //{
-        //    get => this.datalinkPhase;
-        //    set => this.Set(() => this.DatalinkPhase, ref this.datalinkPhase, value);
-        //}
+        public IPassPhase DatalinkPhase
+        {
+            get => this.datalinkPhase;
+            set => this.Set(() => this.DatalinkPhase, ref this.datalinkPhase, value);
+        }
 
         /// <summary>
         /// Gets the command to execute to save and complete the edit operation.

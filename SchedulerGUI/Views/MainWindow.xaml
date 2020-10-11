@@ -104,7 +104,8 @@
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
 
-                <ListView x:Name="passesListview" ItemsSource="{Binding Passes}" SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+                <ListView x:Name="passesListView" ItemsSource="{Binding Passes}" SelectionChanged="passesListView_SelectionChanged"
+                          SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -115,7 +116,7 @@
                 </ListView>
 
                 <ScrollViewer Grid.Row="1" >
-                    <Controls:EditControl IsEnabled="{Binding ElementName=passesListview, Path=SelectedItems.Count}"
+                    <Controls:EditControl IsEnabled="{Binding ElementName=passesListView, Path=SelectedItems.Count}"
                   Margin="5,15,5,5" VerticalAlignment="Center" DataContext="{Binding EditControlViewModel}"/>
                 </ScrollViewer>
             </Grid>

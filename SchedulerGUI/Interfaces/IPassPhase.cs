@@ -9,24 +9,24 @@ namespace SchedulerGUI.Interfaces
     public interface IPassPhase
     {
         /// <summary>
-        /// Gets or sets duration of phase.
+        /// Gets duration of phase.
         /// </summary>
-        TimeSpan Duration { get; set; }
+        TimeSpan Duration { get; }
 
         /// <summary>
-        /// Gets or sets start time of phase.
+        /// Gets start time of phase.
         /// </summary>
-        DateTime StartTime { get; set; }
+        DateTime StartTime { get; }
 
         /// <summary>
-        /// Gets or sets end time of phase.
+        /// Gets end time of phase.
         /// </summary>
-        DateTime EndTime { get; set; }
+        DateTime EndTime { get; }
 
         /// <summary>
-        /// Gets or sets name of phase.
+        /// Gets name of phase.
         /// </summary>
-        PhaseType PhaseName { get; set; }
+        PhaseType PhaseName { get; }
 
         /// <summary>
         /// Gets or sets total power of phase.
@@ -37,5 +37,11 @@ namespace SchedulerGUI.Interfaces
         /// Gets or sets total energy of phase.
         /// </summary>
         double TotalEnergy { get; set; }
+
+        /// <summary>
+        /// Sets properties with randomly-generated values.
+        /// </summary>
+        /// <param name="random">Random number generator.</param>
+        void SetRandomValues(Random random);
     }
 }

@@ -11,25 +11,28 @@ namespace SchedulerGUI.Models
     /// </summary>
     public class PassOrbit
     {
+        private const double TOTALPOWER = 1000;
+        private const double TOTALENERGY = 1000;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PassOrbit"/> class.
         /// </summary>
         /// <param name="name">The pass name.</param>
         /// <param name="startTime">The beginning time of the pass.</param>
         /// <param name="endTime">The ending time of the pass.</param>
-        public PassOrbit(string name, DateTime startTime, DateTime endTime)
+        public PassOrbit(string name, DateTime startTime, DateTime endTime, Random random)
         {
             this.Name = "Pass #: " + name;
             this.StartTime = startTime;
             this.EndTime = endTime;
 
-            this.InitPhases();
+            this.InitPhases(random);
         }
 
         /// <summary>
         /// Gets the name of the pass.
         /// </summary>
-        public string Name { get; } // TODO: Alex - removed set. Add back if needed, if not, keep immutable.
+        public string Name { get; }
 
         /// <summary>
         /// Gets or sets the phases of the pass orbit.
@@ -39,44 +42,36 @@ namespace SchedulerGUI.Models
         /// <summary>
         /// Gets the starting time for this pass.
         /// </summary>
-        public DateTime StartTime { get; } = default; // TODO: Alex - removed set. Add back if needed, if not, keep immutable.
+        public DateTime StartTime { get; } = default;
 
         /// <summary>
         /// Gets the ending time for this pass.
         /// </summary>
-        public DateTime EndTime { get; } = default; // TODO: Alex - removed set. Add back if needed, if not, keep immutable.
+        public DateTime EndTime { get; } = default;
 
-        /// <summary>
-        /// Gets the midpoint time when this pass is half completed.
-        /// </summary>
-        public DateTime MidTime
-        {
-            get
-            {
-                TimeSpan ts = this.EndTime.Subtract(this.StartTime);
-                return this.StartTime.AddMinutes(ts.TotalMinutes / 2);
-            }
-        }
-
-        private void InitPhases()
+        private void InitPhases(Random random)
         {
             this.PassPhases = new List<IPassPhase>();
             DateTime startTime = this.StartTime;
-            double duration = (this.EndTime - this.StartTime).TotalSeconds / Enum.GetValues(typeof(PhaseType)).Length;
+            int numPhases = Enum.GetValues(typeof(PhaseType)).Length;
+            double duration = (this.EndTime - this.StartTime).TotalSeconds / numPhases;
 
             var enums = Enum.GetValues(typeof(PhaseType)).Cast<PhaseType>().Where(x => x != PhaseType.Encryption);
+            double phasePower = TOTALPOWER / numPhases;
+            double phaseEnergy = TOTALENERGY / numPhases;
+
             foreach (PhaseType phaseType in enums)
             {
-                this.PassPhases.Add(new PassPhase(startTime, startTime.AddSeconds(duration), phaseType));
+                PassPhase phase = new PassPhase(startTime, startTime.AddSeconds(duration), phaseType, phaseEnergy, phasePower);
+                phase.SetRandomValues(random);
+                this.PassPhases.Add(phase);
+
                 startTime = startTime.AddSeconds(duration);
             }
 
-            this.PassPhases.Add(new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption));
-
-            // randomize list order
-            Random rnd = new Random();
-            this.PassPhases = this.PassPhases.Select(x => new { value = x, order = rnd.Next() })
-                            .OrderBy(x => x.order).Select(x => x.value).ToList();
+            EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption, phaseEnergy, phasePower);
+            encryptionPhase.SetRandomValues(random);
+            this.PassPhases.Add(encryptionPhase);
         }
     }
 }

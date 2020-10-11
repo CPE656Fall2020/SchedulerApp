@@ -28,7 +28,6 @@ namespace SchedulerGUI.ViewModels
         private PassOrbit selectedPass;
         private DateTime startTime;
         private DateTime endTime;
-        private ObservableCollection<TimelineEvent> timelineEventPasses;
         private EditControlViewModel editControlVM;
 
         /// <summary>
@@ -39,9 +38,8 @@ namespace SchedulerGUI.ViewModels
             // Setup shared services like DbContext and SettingsManager for the entire application.
             this.Startup();
 
-            this.Passes = new ObservableCollection<PassOrbit>();
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
-
+            this.Passes = new ObservableCollection<PassOrbit>();
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
             this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
@@ -54,8 +52,7 @@ namespace SchedulerGUI.ViewModels
                 PopupDialog = null,
             };
 
-            this.InitPasses();
-            this.InitTimelineEvents();
+            this.Init();
         }
 
         /// <summary>
@@ -64,31 +61,17 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<PassOrbit> Passes { get; }
 
         /// <summary>
-        /// Gets or sets the passes as timeline events for viewing.
+        /// Gets the passes as timeline events for viewing.
         /// </summary>
-        public ObservableCollection<TimelineEvent> TimelineEventPasses
-        {
-            get => this.timelineEventPasses;
-            set => this.Set(() => this.TimelineEventPasses, ref this.timelineEventPasses, value);
-        }
+        public ObservableCollection<TimelineEvent> TimelineEventPasses { get; }
 
         /// <summary>
         /// Gets or sets the pass orbit that is currently selected.
-        /// Also inits the edit control for that selected pass orbit.
         /// </summary>
         public PassOrbit SelectedPass
         {
             get => this.selectedPass;
-            set
-            {
-                bool isSamePass = (value != null) && (this.selectedPass?.Name == value?.Name);
-                this.Set(() => this.SelectedPass, ref this.selectedPass, value);
-
-                if (!isSamePass)
-                {
-                    this.InitEditControl();
-                }
-            }
+            set => this.Set(() => this.SelectedPass, ref this.selectedPass, value);
         }
 
         /// <summary>
@@ -144,6 +127,20 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+        /// Initializes edit control with pass informatin from the selected pass.
+        /// </summary>
+        public void InitEditControl()
+        {
+            this.EditControlViewModel = new EditControlViewModel(this.SelectedPass, this.SaveCommand);
+        }
+
+        private void Init()
+        {
+            this.InitPasses();
+            this.InitTimelineEvents();
+        }
+
+        /// <summary>
         /// Performs application initialization.
         /// </summary>
         private void Startup()
@@ -173,12 +170,7 @@ namespace SchedulerGUI.ViewModels
             var currentIndex = this.Passes.IndexOf(this.SelectedPass);
             this.Passes[currentIndex] = passData;
 
-            this.SelectedPass = this.Passes[currentIndex];
-        }
-
-        private void InitEditControl()
-        {
-            this.EditControlViewModel = new EditControlViewModel(this.SelectedPass, this.SaveCommand);
+            this.SelectedPass = passData;
         }
 
         private void OpenSchedulerPlotterHandler()
@@ -209,10 +201,11 @@ namespace SchedulerGUI.ViewModels
         {
             DateTime startTime = DateTime.Now;
             this.StartTime = startTime;
+            Random random = new Random();
 
             for (int i = 0; i < NUMPASSES; i++)
             {
-                this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION)));
+                this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION), random));
                 startTime = startTime.AddMinutes(PASSDURATION);
             }
 
@@ -268,7 +261,6 @@ namespace SchedulerGUI.ViewModels
         private void OnEventClicked(object sender, EventArgs e)
         {
             var timelineEvent = (TimelineEvent)sender;
-
             this.SelectedPass = this.Passes.ToList().Find(x => x.Name == timelineEvent.PassParentName);
         }
     }

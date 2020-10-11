@@ -33,16 +33,16 @@
                     </Grid.RowDefinitions>
                     
                     <Label HorizontalAlignment="Right">Sunlight:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding SunlightPhase.Duration}" />
+                    <Label Grid.Column="1" Content="{Binding SunlightPhase.Duration}" />
 
                     <Label Grid.Column="2" HorizontalAlignment="Right">Mission:</Label>
-                    <TextBox Grid.Column="3" Text="{Binding MissionPhase.Duration}" />
+                    <Label Grid.Column="3" Content="{Binding MissionPhase.Duration}" />
 
                     <Label Margin="0,5,0,0" Grid.Row="1" HorizontalAlignment="Right">Encryption:</Label>
-                    <TextBox Margin="0,5,0,0" Grid.Row="1" Grid.Column="1" Text="{Binding EncryptionPhase.Duration}" />
+                    <Label Margin="0,5,0,0" Grid.Row="1" Grid.Column="1" Content="{Binding EncryptionPhase.Duration}" />
 
                     <Label Margin="0,5,0,0" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Right">Datalink:</Label>
-                    <TextBox Margin="0,5,0,0" Grid.Row="1" Grid.Column="3" Text="{Binding DatalinkPhase.Duration}" />
+                    <Label Margin="0,5,0,0" Grid.Row="1" Grid.Column="3" Content="{Binding DatalinkPhase.Duration}" />
                 </Grid>
             </GroupBox>
 
@@ -60,13 +60,13 @@
                     </Grid.RowDefinitions>
 
                     <Label HorizontalAlignment="Right">Encryption:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding EncryptionPhase.TotalPower}" />
+                    <TextBox x:Name="encryptionPowerTextBox" Grid.Column="1" Text="{Binding EncryptionPhase.TotalPower, UpdateSourceTrigger=Explicit}" />
 
                     <Label Grid.Column="2" HorizontalAlignment="Right">Datalink:</Label>
-                    <TextBox Grid.Column="3" Text="{Binding DatalinkPhase.TotalPower}" />
+                    <TextBox x:Name="datalinkPowerTextBox" Grid.Column="3" Text="{Binding DatalinkPhase.TotalPower, UpdateSourceTrigger=Explicit}" />
 
                     <Label Grid.Row="1" HorizontalAlignment="Right">Mission:</Label>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MissionPhase.TotalPower}" />
+                    <TextBox x:Name="missionPowerTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding MissionPhase.TotalPower, UpdateSourceTrigger=Explicit}" />
                 </Grid>
             </GroupBox>
 
@@ -84,13 +84,13 @@
                     </Grid.RowDefinitions>
 
                     <Label HorizontalAlignment="Right">Encryption:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding EncryptionPhase.TotalEnergy}" />
+                    <TextBox x:Name="encryptionEnergyTextBox" Grid.Column="1" Text="{Binding EncryptionPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
 
                     <Label Grid.Column="2" HorizontalAlignment="Right">Datalink:</Label>
-                    <TextBox Grid.Column="3" Text="{Binding DatalinkPhase.TotalEnergy}" />
+                    <TextBox x:Name="datalinkEnergyTextBox" Grid.Column="3" Text="{Binding DatalinkPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
 
                     <Label Grid.Row="1" HorizontalAlignment="Right">Mission:</Label>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MissionPhase.TotalEnergy}" />
+                    <TextBox x:Name="missionEnergyTextBox" Grid.Row="1" Grid.Column="1" Text="{Binding MissionPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
                 </Grid>
             </GroupBox>
 
@@ -105,18 +105,18 @@
                     </Grid.RowDefinitions>
 
                     <Label HorizontalAlignment="Right">Total Bytes:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding EncryptionPhase.BytesToEncrypt}" />
+                    <TextBox x:Name="bytesTextBox" Grid.Column="1" Text="{Binding EncryptionPhase.BytesToEncrypt, UpdateSourceTrigger=Explicit}" />
                 </Grid>
             </GroupBox>
         </Grid>
         
         <StackPanel Margin="0,10,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Content="Save"
+            <Button Content="Save" Click="saveButton_Click"
                     Command="{Binding SaveCommand}"
                     CommandParameter="{Binding Pass}"
                     Width="60" Margin="0,0,10,0" />
             
-            <Button Content="Reset" 
+            <Button Content="Cancel" 
                     Command="{Binding CancelCommand}"
                     Width="60" />
         </StackPanel>

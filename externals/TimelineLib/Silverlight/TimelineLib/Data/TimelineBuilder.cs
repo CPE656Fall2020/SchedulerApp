@@ -239,7 +239,6 @@ namespace TimelineLibrary
         public void CalculateEventPositions()
         {
             TimelineDisplayEvent pos;
-            double maxWidth = 0;
 
             Debug.Assert(AllEvents != null);
             
@@ -271,7 +270,6 @@ namespace TimelineLibrary
 
                 pos.Recalculate(false);
 
-                //maxWidth = (e.EndDate - e.StartDate);
                 ts = (e.EndDate - e.StartDate);
             }
 

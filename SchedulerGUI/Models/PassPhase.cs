@@ -9,8 +9,8 @@ namespace SchedulerGUI.Models
     /// </summary>
     public class PassPhase : IPassPhase
     {
-        private const double MAXENERGY = 100;
-        private const double MAXPOWER = 100;
+        private double maxEnergy;
+        private double maxPower;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PassPhase"/> class.
@@ -18,16 +18,17 @@ namespace SchedulerGUI.Models
         /// <param name="startTime">Start of phase.</param>
         /// <param name="endTime">End of phase.</param>
         /// <param name="name">Name of phase.</param>
-        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name)
+        /// <param name="maxEnergy">Max energy alloted for phase.</param>
+        /// <param name="maxPower">Max power allotted for phase.</param>
+        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name, double maxEnergy, double maxPower)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.PhaseName = name;
             this.Duration = endTime - startTime;
 
-            Random random = new Random();
-            this.TotalPower = random.NextDouble() * MAXPOWER;
-            this.TotalEnergy = random.NextDouble() * MAXENERGY;
+            this.maxEnergy = maxEnergy;
+            this.maxPower = maxPower;
         }
 
         /// <inheritdoc/>
@@ -40,12 +41,19 @@ namespace SchedulerGUI.Models
         public DateTime EndTime { get; set; }
 
         /// <inheritdoc/>
-        public PhaseType PhaseName { get; set; }
+        public PhaseType PhaseName { get; }
 
         /// <inheritdoc/>
         public double TotalPower { get; set; }
 
         /// <inheritdoc/>
         public double TotalEnergy { get; set; }
+
+        /// <inheritdoc/>
+        public void SetRandomValues(Random random)
+        {
+            this.TotalPower = random.NextDouble() * this.maxPower;
+            this.TotalEnergy = random.NextDouble() * this.maxEnergy;
+        }
     }
 }
