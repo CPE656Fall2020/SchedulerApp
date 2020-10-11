@@ -120,5 +120,15 @@ namespace SchedulerDatabase.Models
         /// Gets or sets an integer value representing the number of processor cores utilized during the test.
         /// </summary>
         public int NumCores { get; set; }
+
+        /// <summary>
+        /// Gets the amount of energy, in Joules, required to encrypt 1 byte of data.
+        /// </summary>
+        public double JoulesPerByte => this.TotalTestedEnergyJoules / this.TotalTestedByteSize;
+
+        /// <summary>
+        /// Gets the throughput of the encryptor, in bytes per second.
+        /// </summary>
+        public double BytesPerSecond => this.TotalTestedByteSize / this.TotalTestTime.TotalSeconds;
     }
 }

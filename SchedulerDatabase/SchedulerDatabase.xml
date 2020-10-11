@@ -121,6 +121,16 @@
             Gets or sets an integer value representing the number of processor cores utilized during the test.
             </summary>
         </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.JoulesPerByte">
+            <summary>
+            Gets the amount of energy, in Joules, required to encrypt 1 byte of data.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.BytesPerSecond">
+            <summary>
+            Gets the throughput of the encryptor, in bytes per second.
+            </summary>
+        </member>
         <member name="T:SchedulerDatabase.SchedulerContext">
             <summary>
             <see cref="T:SchedulerDatabase.SchedulerContext"/> provides a context for accessing the database of available profiles to use while scheduling a mission.

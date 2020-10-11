@@ -144,11 +144,8 @@ namespace SchedulerGUI.ViewModels.Controls
 
             foreach (var aesProfile in this.DisplayedData)
             {
-                var joulesPerByte = aesProfile.TotalTestedEnergyJoules / aesProfile.TotalTestedByteSize;
-                var bytesPerSecond = aesProfile.TotalTestedByteSize / aesProfile.TotalTestTime.TotalSeconds;
-
-                joulesPerByteSeriesData.Add(new ColumnItem() { Value = joulesPerByte });
-                bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = bytesPerSecond });
+                joulesPerByteSeriesData.Add(new ColumnItem() { Value = aesProfile.JoulesPerByte });
+                bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.BytesPerSecond });
                 categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.NumCores} core(s) {aesProfile.Author}");
             }
 
