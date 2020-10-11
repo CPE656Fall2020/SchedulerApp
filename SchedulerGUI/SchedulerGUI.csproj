@@ -78,6 +78,9 @@
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
+    <Compile Include="Solver\Algorithms\GreedyOptimizedLowPowerScheduler.cs" />
+    <Compile Include="Solver\IScheduleSolver.cs" />
+    <Compile Include="Solver\ScheduleSolution.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
