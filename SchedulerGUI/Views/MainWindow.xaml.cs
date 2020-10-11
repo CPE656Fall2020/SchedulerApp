@@ -7,6 +7,7 @@ using SchedulerGUI.ViewModels;
 using System;
 using System.Linq;
 using System.Windows;
+using TimelineLibrary;
 
 namespace SchedulerGUI.Views
 {
@@ -29,7 +30,6 @@ namespace SchedulerGUI.Views
             var dc = DataContext as MainWindowViewModel;
 
             timeline.ResetEvents(dc.TimelineEventPasses.ToList());
-            //timeline.ResetEvents(dc.TimelineEventPasses.ToList(), dc.TimelineEventPhases.ToList());
         }
 
         //https://github.com/fluentribbon/Fluent.Ribbon/blob/develop/Fluent.Ribbon.Showcase/MahMetroWindow.xaml.cs
@@ -68,11 +68,6 @@ namespace SchedulerGUI.Views
         private void MahMetroWindow_Closed(object sender, EventArgs e)
         {
             ThemeManager.Current.ThemeChanged -= this.SyncThemes;
-        }
-
-        private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            timeline.CurrentDateTime = timeline.MinDateTime + new TimeSpan((int)e.NewValue, 0, 0, 0);
         }
     }
 }

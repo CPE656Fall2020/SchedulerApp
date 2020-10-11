@@ -29,7 +29,6 @@ namespace SchedulerGUI.ViewModels
         private DateTime startTime;
         private DateTime endTime;
         private ObservableCollection<TimelineEvent> timelineEventPasses;
-        private ObservableCollection<TimelineEvent> timelineEventPhases;
         private EditControlViewModel editControlVM;
 
         /// <summary>
@@ -42,7 +41,6 @@ namespace SchedulerGUI.ViewModels
 
             this.Passes = new ObservableCollection<PassOrbit>();
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
-            this.TimelineEventPhases = new ObservableCollection<TimelineEvent>();
 
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
@@ -72,15 +70,6 @@ namespace SchedulerGUI.ViewModels
         {
             get => this.timelineEventPasses;
             set => this.Set(() => this.TimelineEventPasses, ref this.timelineEventPasses, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the phases as timeline events for viewing.
-        /// </summary>
-        public ObservableCollection<TimelineEvent> TimelineEventPhases
-        {
-            get => this.timelineEventPhases;
-            set => this.Set(() => this.TimelineEventPhases, ref this.timelineEventPhases, value);
         }
 
         /// <summary>
@@ -244,6 +233,7 @@ namespace SchedulerGUI.ViewModels
                     Title = pass.Name,
                     EventColor = "CornflowerBlue",
                     IsDuration = true,
+                    PassParentName = pass.Name,
                 });
 
                 colorIndex = 0;
@@ -257,16 +247,29 @@ namespace SchedulerGUI.ViewModels
                         IsDuration = true,
                         Title = phase.PhaseName.ToString(),
                         RowOverride = 2,
+                        PassParentName = pass.Name,
                     });
 
                     colorIndex++;
                 }
+            }
+
+            foreach (TimelineEvent e in this.TimelineEventPasses.ToList())
+            {
+                e.EventClicked += this.OnEventClicked;
             }
         }
 
         private void OpenAboutHandler()
         {
             this.DialogManager.PopupDialog = new AboutDialogViewModel();
+        }
+
+        private void OnEventClicked(object sender, EventArgs e)
+        {
+            var timelineEvent = (TimelineEvent)sender;
+
+            this.SelectedPass = this.Passes.ToList().Find(x => x.Name == timelineEvent.PassParentName);
         }
     }
 }

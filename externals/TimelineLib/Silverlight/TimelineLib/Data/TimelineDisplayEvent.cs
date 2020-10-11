@@ -48,6 +48,7 @@ namespace TimelineLibrary
         private bool                                    m_selected;
         
         public event PropertyChangedEventHandler        PropertyChanged;
+
         private double                                  m_eventDescriptionWidth;
         private double                                  m_eventDescriptionHeight;
 

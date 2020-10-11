@@ -50,10 +50,17 @@ namespace TimelineLibrary
 		private bool									m_selected;
 
         public event PropertyChangedEventHandler        PropertyChanged;
+        public event EventHandler                       EventClicked;
+
 
         protected void FirePropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        protected void FireEventClicked()
+        {
+            EventClicked?.Invoke(this, new EventArgs());
         }
 
         public string Id
@@ -216,7 +223,9 @@ namespace TimelineLibrary
             }
         }
 
-		public bool Selected
+        public string PassParentName { get; set; }
+
+        public bool Selected
 		{
 			get
 			{
@@ -226,6 +235,11 @@ namespace TimelineLibrary
 			{
 				m_selected = value;
 				FirePropertyChanged("Selected");
+
+                if (value)
+                {
+                    FireEventClicked();
+                }
 			}
 		}
 
