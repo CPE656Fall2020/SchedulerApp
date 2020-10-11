@@ -40,7 +40,7 @@ namespace SchedulerGUI.ViewModels
                 this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
                 this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
                 this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
-                this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores());
+                this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
             }
 
             this.FilterSelectionChangedCommand = new RelayCommand<SelectedItemsChangedEventArgs>(this.DropdownSelectionChangedHandler);
