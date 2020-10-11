@@ -18,20 +18,10 @@
                 </TransformGroup>
             </Label.RenderTransform>
         </Label>
-        <!--<TextBox BorderThickness="0" Panel.ZIndex="111111"  HorizontalAlignment="Left"  Background="Black" TextWrapping="Wrap" Text="{Binding yTitle}" Foreground="Black" VerticalAlignment="Center" Margin="19,135,0,49">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform />
-                    <SkewTransform />
-                    <RotateTransform Angle="-90" />
-                    <TranslateTransform />
-                </TransformGroup>
-            </TextBox.RenderTransform>
-        </TextBox>-->
         <TextBox Panel.ZIndex="111111"  BorderThickness="0"  Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="LightGray" TextWrapping="Wrap" Text="{Binding xTitle}" />
         <oxy:Plot Title="{Binding Title}" TitleFontSize="11" Background="LightGray" Foreground="ForestGreen">
             <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Points}" />
+                <oxy:ScatterSeries ItemsSource="{Binding Points}" />
             </oxy:Plot.Series>
         </oxy:Plot>
     </Grid>

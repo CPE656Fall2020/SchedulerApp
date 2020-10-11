@@ -80,6 +80,7 @@
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
+    <Compile Include="ViewModels\Controls\HistoryGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
     <Compile Include="ViewModels\Controls\TimeControlViewModel.cs" />
     <Compile Include="ViewModels\EditWindowViewModel.cs" />

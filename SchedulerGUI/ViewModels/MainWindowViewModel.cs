@@ -55,6 +55,7 @@ namespace SchedulerGUI.ViewModels
 
             this.InitPasses();
             this.InitTimelineEvents();
+            this.historyGraphViewModel = new HistoryGraphViewModel(this.Passes);
         }
 
         /// <summary>
@@ -123,6 +124,11 @@ namespace SchedulerGUI.ViewModels
         /// Gets the Dialog Manager for the main window.
         /// </summary>
         public PopupViewModel DialogManager { get; }
+
+        /// <summary>
+        /// Gets the history graph for the main window.
+        /// </summary>
+        public HistoryGraphViewModel historyGraphViewModel { get; }
 
         public DateTime StartTime
         {
