@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using OxyPlot;
+using OxyPlot.Axes;
 using OxyPlot.Series;
 using SchedulerGUI.Models;
 
@@ -26,6 +27,8 @@ namespace SchedulerGUI.ViewModels.Controls
 
         public string DataSet { get; set; }
 
+        public PlotModel data { get; set; }
+
         //public PassData selectedPass { get; set; } = new PassData("pass #1", new DateTime(2016, 7, 15, 0, 0, 0), new DateTime(2016, 7, 15, 2, 7, 59));
 
         //public IList<DataPoint> Points { get; private set; }
@@ -33,7 +36,7 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryGraphViewModel"/> class.
         /// </summary>
-        public HistoryGraphViewModel(ObservableCollection<PassOrbit> pass)
+        public HistoryGraphViewModel(ObservableCollection<PassOrbit> passes)
         {
             //this.selectedPass = pass;
             //this.Points = pass.Points;
@@ -43,15 +46,97 @@ namespace SchedulerGUI.ViewModels.Controls
             this.YTitle = "Milli-jewels Consumed";
 
             this.Points = new ObservableCollection<ScatterPoint>();
-            var r = new Random(314);
-            for (int i = 0; i < 100; i++)
+            //var r = new Random(314);
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    var x = r.NextDouble();
+            //    var y = r.NextDouble();
+            //    var size = r.Next(5, 15);
+            //    var colorValue = r.Next(100, 1000);
+            //    this.Points.Add(new ScatterPoint(x, y, 5, colorValue));
+            //}
+
+            //var random = new Random();
+            //for (int i = 0; i < 12; i++)
+            //{
+            //    Points.Add(new ScatterPoint(random.NextDouble(), random.NextDouble()));
+            //}
+            //var s1 = new LineSeries("Series 1") { StrokeThickness = 0, MarkerType = MarkerType.Square, MarkerFill = OxyColors.Blue, MarkerStrokeThickness = 0 };
+            //var random = new Random();
+            //for (int i = 0; i < n; i++)
+            //{
+            //    s1.Points.Add(new DataPoint(random.NextDouble(), random.NextDouble()));
+            //}
+            //model.Series.Add(s1);
+
+            MyModel = new PlotModel { Title = "Energy Consumtion Over time" };
+            //var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle };
+            //var r = new Random(314);
+            //for (int i = 0; i < 100; i++)
+            //{
+            int i = 1;
+            foreach (PassOrbit pass in passes)
             {
-                var x = r.NextDouble();
-                var y = r.NextDouble();
-                var size = r.Next(5, 15);
-                var colorValue = r.Next(100, 1000);
-                this.Points.Add(new ScatterPoint(x, y, size, colorValue));
+                ScatterSeries scatterSeries = new ScatterSeries { MarkerType = MarkerType.Plus };
+                scatterSeries.Title = pass.Name;
+                //pass.PassPhases
+
+                foreach (object phase in pass.PassPhases)
+                {
+                    double x = 0, y = 0;
+                    if (phase is PassPhase)
+                    {
+                        PassPhase tempPhase = (PassPhase)phase;
+                        x = tempPhase.Duration.Minutes;
+                        y = tempPhase.TotalEnergy;
+                    }
+                    else if (phase is EncryptionPassPhase)
+                    {
+                        EncryptionPassPhase tempPhase = (EncryptionPassPhase)phase;
+                        x = tempPhase.Duration.Minutes;
+                        y = tempPhase.TotalEnergy;
+                    }
+                    var size = 10;
+                    var colorValue = i * 100;
+                    scatterSeries.Points.Add(new ScatterPoint(x, y, size, colorValue));
+                }
+                MyModel.Series.Add(scatterSeries);
+
+                i++;
             }
+            //var x = r.NextDouble();\
+            //    var y = r.NextDouble();
+            //    var size = r.Next(5, 15);
+            //    var colorValue = r.Next(100, 1000);
+            //    scatterSeries.Points.Add(new ScatterPoint(x, y, size, colorValue));
+            //    scatterSeries.Title = pass[0].Name;
+            ////}
+
+            MyModel.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.Jet(200) });
+
+            //MyModel = RandomScatter(34, 256);
+            //data.
+        }
+
+        public static PlotModel RandomScatter(int n, int binsize)
+        {
+            PlotModel model = new PlotModel();
+            model.Title = string.Format("ScatterSeries (n={0})", n);
+            var s1 = new ScatterSeries()
+            {
+                Title = "Series 1",
+                MarkerType = MarkerType.Diamond,
+                MarkerStrokeThickness = 2,
+                BinSize = binsize,
+            };
+            var random = new Random();
+            for (int i = 0; i < n; i++)
+            {
+                s1.Points.Add(new ScatterPoint(random.NextDouble(), random.NextDouble()));
+            }
+
+            model.Series.Add(s1);
+            return model;
         }
 
         //public void UpdateGraph(PassData pass)
@@ -65,6 +150,7 @@ namespace SchedulerGUI.ViewModels.Controls
             get; set;
         }
 
+        public PlotModel MyModel { get; private set; }
         //        using System;
         //using System.Collections.Generic;
         //using System.Linq;
