@@ -11,9 +11,6 @@ namespace SchedulerGUI.Models
     /// </summary>
     public class PassOrbit
     {
-        private const double TOTALPOWER = 1000;
-        private const double TOTALENERGY = 1000;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PassOrbit"/> class.
         /// </summary>
@@ -26,6 +23,7 @@ namespace SchedulerGUI.Models
             this.StartTime = startTime;
             this.EndTime = endTime;
 
+            this.PassEnergy = random.Next();
             this.InitPhases(random);
         }
 
@@ -33,6 +31,11 @@ namespace SchedulerGUI.Models
         /// Gets the name of the pass.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the energy of the pass.
+        /// </summary>
+        public int PassEnergy { get; }
 
         /// <summary>
         /// Gets or sets the phases of the pass orbit.
@@ -57,20 +60,19 @@ namespace SchedulerGUI.Models
             double duration = (this.EndTime - this.StartTime).TotalSeconds / numPhases;
 
             var enums = Enum.GetValues(typeof(PhaseType)).Cast<PhaseType>().Where(x => x != PhaseType.Encryption);
-            double phasePower = TOTALPOWER / numPhases;
-            double phaseEnergy = TOTALENERGY / numPhases;
+            double phaseEnergy = this.PassEnergy / numPhases;
 
             foreach (PhaseType phaseType in enums)
             {
-                PassPhase phase = new PassPhase(startTime, startTime.AddSeconds(duration), phaseType, phaseEnergy);
-                phase.SetRandomValues(random);
+                PassPhase phase = new PassPhase(startTime, startTime.AddSeconds(duration), phaseType);
+                phase.SetRandomValues(random, phaseEnergy);
                 this.PassPhases.Add(phase);
 
                 startTime = startTime.AddSeconds(duration);
             }
 
-            EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption, phaseEnergy);
-            encryptionPhase.SetRandomValues(random);
+            EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption);
+            encryptionPhase.SetRandomValues(random, phaseEnergy, random.Next());
             this.PassPhases.Add(encryptionPhase);
         }
     }

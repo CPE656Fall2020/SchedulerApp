@@ -9,28 +9,18 @@ namespace SchedulerGUI.Models
     /// </summary>
     public class PassPhase : IPassPhase
     {
-        private double maxEnergy;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PassPhase"/> class.
         /// </summary>
         /// <param name="startTime">Start of phase.</param>
         /// <param name="endTime">End of phase.</param>
         /// <param name="name">Name of phase.</param>
-        /// <param name="maxEnergy">Max energy alloted for phase.</param>
-        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name, double maxEnergy)
+        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.PhaseName = name;
             this.Duration = endTime - startTime;
-
-            if (name == PhaseType.Sunlight)
-            {
-                maxEnergy *= -1.0;
-            }
-
-            this.maxEnergy = maxEnergy;
         }
 
         /// <inheritdoc/>
@@ -46,15 +36,24 @@ namespace SchedulerGUI.Models
         public PhaseType PhaseName { get; }
 
         /// <inheritdoc/>
-        public double Power => Math.Abs(this.TotalEnergy) / this.EndTime.Subtract(this.StartTime).TotalSeconds;
+        public double Power => Math.Round(Math.Abs(this.TotalEnergy) / this.EndTime.Subtract(this.StartTime).TotalSeconds, 3);
 
         /// <inheritdoc/>
         public double TotalEnergy { get; set; }
 
         /// <inheritdoc/>
-        public void SetRandomValues(Random random)
+        public double MaxEnergy { get; private set; }
+
+        /// <inheritdoc/>
+        public void SetRandomValues(Random random, double maxEnergy, int? maxBytes = null)
         {
-            this.TotalEnergy = random.NextDouble() * this.maxEnergy;
+            if (this.PhaseName == PhaseType.Sunlight)
+            {
+                maxEnergy *= -1.0;
+            }
+
+            this.MaxEnergy = Math.Round(maxEnergy, 3);
+            this.TotalEnergy = Math.Round(random.NextDouble() * this.MaxEnergy, 3);
         }
     }
 }
