@@ -152,14 +152,8 @@
                         <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
-                    <ListBox>
-                        <ListBoxItem>Devices:</ListBoxItem>
-                        <ListBoxItem>MSP430</ListBoxItem>
-                        <ListBoxItem>MSP432</ListBoxItem>
-                        <ListBoxItem>ODROID</ListBoxItem>
-                    </ListBox>
-
-                    <Border BorderBrush="Black" Grid.Column="1" BorderThickness="2">
+                 <!--Selection Control for devices to schedule with-->
+                 <ContentControl Content="{Binding DevicePickerViewModel}" />                    <Border BorderBrush="Black" Grid.Column="1" BorderThickness="2">
                         <Grid>
                             <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
                             <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>

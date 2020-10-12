@@ -37,8 +37,9 @@
     <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
         <controlviews:AESGraphControl />
     </DataTemplate>
-
     <DataTemplate DataType="{x:Type controlvms:EditControlViewModel}">
         <controlviews:EditControl />
     </DataTemplate>
-</ResourceDictionary>
+    <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModel}">
+        <controlviews:DevicePickerControl />
+    </DataTemplate></ResourceDictionary>

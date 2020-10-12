@@ -4,6 +4,18 @@
         <name>SchedulerDatabase</name>
     </assembly>
     <members>
+        <member name="T:SchedulerDatabase.Extensions.AcceleratorTypeExtensions">
+            <summary>
+            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> enum.
+            </summary>
+        </member>
+        <member name="M:SchedulerDatabase.Extensions.AcceleratorTypeExtensions.ToFriendlyName(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+            <summary>
+            Returns a user-friendly name for an accelerator type.
+            </summary>
+            <param name="acceleratorType">The accelerator to return a name for.</param>
+            <returns>A user friendly name.</returns>
+        </member>
         <member name="T:SchedulerDatabase.Models.AESEncyptorProfile">
             <summary>
             <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
