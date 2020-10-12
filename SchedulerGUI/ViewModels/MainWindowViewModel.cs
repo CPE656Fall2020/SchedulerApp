@@ -54,12 +54,12 @@ namespace SchedulerGUI.ViewModels
                 PopupDialog = null,
             };
 
-                    this.DevicePickerViewModel = new DevicePickerViewModel();
-
+            this.DevicePickerViewModel = new DevicePickerViewModel();
             this.ScheduleSolver = new GreedyOptimizedLowPowerScheduler();
 
             this.InitPasses();
-            this.InitTimelineEvents();        }
+            this.InitTimelineEvents();
+        }
 
         /// <summary>
         /// Gets the passes that are currently available for scheduling or editing.
@@ -112,9 +112,12 @@ namespace SchedulerGUI.ViewModels
         {
             get => this.editControlVM;
             set => this.Set(() => this.EditControlViewModel, ref this.editControlVM, value);
-        }        /// Gets the device picker control ViewModel for enabling and disabling AES devices.
+        }
+
+        /// <summary>
+        /// Gets or sets the start time of the 24-hr period in which orbits will occur.
         /// </summary>
-        public DevicePickerViewModel DevicePickerViewModel { get; }        public DateTime StartTime
+        public DateTime StartTime
         {
             get => this.startTime;
             set => this.Set(() => this.StartTime, ref this.startTime, value);
@@ -128,6 +131,11 @@ namespace SchedulerGUI.ViewModels
             get => this.endTime;
             set => this.Set(() => this.EndTime, ref this.endTime, value);
         }
+
+        /// <summary>
+        /// Gets the device picker control ViewModel for enabling and disabling AES devices.
+        /// </summary>
+        public DevicePickerViewModel DevicePickerViewModel { get; }
 
         private IScheduleSolver ScheduleSolver { get; set; }
 

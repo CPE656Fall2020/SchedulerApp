@@ -83,9 +83,9 @@
     <Compile Include="Solver\ScheduleSolution.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
-<<<<<<< .mine    <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
-=======    <Compile Include="ViewModels\Controls\DevicePickerViewModel.cs" />
->>>>>>> .theirs    <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
+    <Compile Include="ViewModels\Controls\DevicePickerViewModel.cs" />
+    <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
@@ -94,17 +94,15 @@
     </Compile>
     <Compile Include="Views\Controls\DevicePickerControl.xaml.cs">
       <DependentUpon>DevicePickerControl.xaml</DependentUpon>
-    </Compile>    <Compile Include="Views\Controls\EditControl.xaml.cs">
+    </Compile>
+    <Compile Include="Views\Controls\EditControl.xaml.cs">
       <DependentUpon>EditControl.xaml</DependentUpon>
     </Compile>
-   <Compile Include="Views\Controls\Popup.xaml.cs">
+    <Compile Include="Views\Controls\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\DevicePickerControl.xaml.cs">
-      <DependentUpon>DevicePickerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\HistoryGraph.xaml.cs">
       <DependentUpon>HistoryGraph.xaml</DependentUpon>
@@ -146,8 +144,13 @@
     </Page>
     <Page Include="Views\Controls\DevicePickerControl.xaml">
       <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Views\Controls\EditControl.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>    <Page Include="Views\Controls\Popup.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\Popup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

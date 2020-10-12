@@ -77,6 +77,7 @@ namespace SchedulerGUI.Solver.Algorithms
                     {
                         // This solution works for this part
                         solution.ViableProfiles[pass] = profile;
+                        encryptionPhase.TotalEnergy = energyRequired;
                         foundViableProfile = true;
                         break;
                     }
