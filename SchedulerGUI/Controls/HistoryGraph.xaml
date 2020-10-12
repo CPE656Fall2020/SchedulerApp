@@ -29,7 +29,7 @@
             </TextBox.RenderTransform>
         </TextBox>-->
         <TextBox Panel.ZIndex="111111"  BorderThickness="0"  Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="LightGray" TextWrapping="Wrap" Text="{Binding xTitle}" />
-        <oxy:Plot Title="{Binding Title}" TitleFontSize="11" Background="LightGray" Foreground="ForestGreen">
+        <oxy:Plot Title="{Binding Title}" TitleFontSize="11" Background="{DynamicResource ShadedBackgroundBrush}" Foreground="ForestGreen">
             <oxy:Plot.Series>
                 <oxy:LineSeries ItemsSource="{Binding Points}" />
             </oxy:Plot.Series>

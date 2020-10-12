@@ -29,19 +29,14 @@ namespace SchedulerGUI.Interfaces
         PhaseType PhaseName { get; }
 
         /// <summary>
-        /// Gets power of phase.
-        /// </summary>
-        double Power { get; }
-
-        /// <summary>
         /// Gets or sets total energy of phase.
         /// </summary>
-        double TotalEnergy { get; set; }
+        double TotalEnergyUsed { get; set; }
 
         /// <summary>
         /// Gets max energy of phase.
         /// </summary>
-        double MaxEnergy { get; }
+        double MaxEnergyUsed { get; }
 
         /// <summary>
         /// Sets properties with randomly-generated values.

@@ -35,7 +35,7 @@ namespace SchedulerGUI.Solver.Algorithms
                 {
                     if (!(phase is EncryptionPassPhase))
                     {
-                        currentCapacityJoules += phase.TotalEnergy;
+                        currentCapacityJoules += phase.TotalEnergyUsed;
 
                         if (currentCapacityJoules < 0)
                         {
@@ -77,7 +77,7 @@ namespace SchedulerGUI.Solver.Algorithms
                     {
                         // This solution works for this part
                         solution.ViableProfiles[pass] = profile;
-                        encryptionPhase.TotalEnergy = energyRequired;
+                        encryptionPhase.TotalEnergyUsed = energyRequired;
                         foundViableProfile = true;
                         break;
                     }

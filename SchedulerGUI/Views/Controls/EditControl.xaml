@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
              mc:Ignorable="d"
-             Background="WhiteSmoke">
+             Background="{DynamicResource ShadedBackgroundBrush}">
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -46,33 +46,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Margin="0,7,0,0" Header="Phase Power (J)" Grid.Row="1" Grid.ColumnSpan="2">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Label HorizontalAlignment="Right" Content="Sunlight:" />
-                    <Label Grid.Column="1" Content="{Binding SunlightPhase.Power}" />
-
-                    <Label HorizontalAlignment="Right" Grid.Row="1" Content="Encryption" />
-                    <Label Grid.Column="1" Grid.Row="1" Content="{Binding EncryptionPhase.Power}" />
-
-                    <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Content="Datalink:" />
-                    <Label Grid.Column="3" Grid.Row="1" Content="{Binding DatalinkPhase.Power}" />
-
-                    <Label Grid.Column="2" HorizontalAlignment="Right" Content="Mission:" />
-                    <Label Grid.Column="3" Content="{Binding MissionPhase.Power}" />
-                </Grid>
-            </GroupBox>
-
-            <GroupBox Margin="0,7,0,0" Header="Phase Energy Used (A)" Grid.Row="2" Grid.ColumnSpan="2">
+            <GroupBox Margin="0,7,0,0" Header="Phase Energy Used (Joules)" Grid.Row="2" Grid.ColumnSpan="2">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -87,28 +61,28 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Label HorizontalAlignment="Right" Content="Sunlight:" />
-                    <TextBox x:Name="sunlightEnergyTextBox" Grid.Column="1" Text="{Binding SunlightPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
+                    <TextBox x:Name="sunlightEnergyTextBox" Grid.Column="1" Text="{Binding SunlightPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" />
 
                     <Label FontStyle="Italic" Grid.Row="1" HorizontalAlignment="Right" Content="Max:" />
-                    <Label FontStyle="Italic" Grid.Column="1" Grid.Row="1" Content="{Binding SunlightPhase.MaxEnergy}" />
+                    <Label FontStyle="Italic" Grid.Column="1" Grid.Row="1" Content="{Binding SunlightPhase.MaxEnergyUsed}" />
 
                     <Label HorizontalAlignment="Right" Grid.Row="2" Content="Encryption" />
-                    <TextBox x:Name="encryptionEnergyTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding EncryptionPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
+                    <TextBox x:Name="encryptionEnergyTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding EncryptionPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" />
 
                     <Label FontStyle="Italic" Grid.Row="3" HorizontalAlignment="Right" Content="Max:" />
-                    <Label FontStyle="Italic" Grid.Column="1" Grid.Row="3" Content="{Binding EncryptionPhase.MaxEnergy}" />
+                    <Label FontStyle="Italic" Grid.Column="1" Grid.Row="3" Content="{Binding EncryptionPhase.MaxEnergyUsed}" />
 
                     <Label Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Content="Datalink:" />
-                    <TextBox x:Name="datalinkEnergyTextBox" Grid.Row="2" Grid.Column="3" Text="{Binding DatalinkPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
+                    <TextBox x:Name="datalinkEnergyTextBox" Grid.Row="2" Grid.Column="3" Text="{Binding DatalinkPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" />
 
                     <Label FontStyle="Italic" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right" Content="Max:" />
-                    <Label FontStyle="Italic" Grid.Column="3" Grid.Row="3" Content="{Binding DatalinkPhase.MaxEnergy}" />
+                    <Label FontStyle="Italic" Grid.Column="3" Grid.Row="3" Content="{Binding DatalinkPhase.MaxEnergyUsed}" />
                     
                     <Label Grid.Column="2" HorizontalAlignment="Right" Content="Mission:" />
-                    <TextBox x:Name="missionEnergyTextBox" Grid.Column="3" Text="{Binding MissionPhase.TotalEnergy, UpdateSourceTrigger=Explicit}" />
+                    <TextBox x:Name="missionEnergyTextBox" Grid.Column="3" Text="{Binding MissionPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" />
 
                     <Label FontStyle="Italic" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Content="Max:" />
-                    <Label FontStyle="Italic" Grid.Column="3" Grid.Row="1" Content="{Binding MissionPhase.MaxEnergy}" />
+                    <Label FontStyle="Italic" Grid.Column="3" Grid.Row="1" Content="{Binding MissionPhase.MaxEnergyUsed}" />
                 </Grid>
             </GroupBox>
 

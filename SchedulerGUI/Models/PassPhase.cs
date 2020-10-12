@@ -36,13 +36,10 @@ namespace SchedulerGUI.Models
         public PhaseType PhaseName { get; }
 
         /// <inheritdoc/>
-        public double Power => Math.Round(Math.Abs(this.TotalEnergy) / this.EndTime.Subtract(this.StartTime).TotalSeconds, 3);
+        public double TotalEnergyUsed { get; set; }
 
         /// <inheritdoc/>
-        public double TotalEnergy { get; set; }
-
-        /// <inheritdoc/>
-        public double MaxEnergy { get; private set; }
+        public double MaxEnergyUsed { get; private set; }
 
         /// <inheritdoc/>
         public void SetRandomValues(Random random, double maxEnergy, int? maxBytes = null)
@@ -52,8 +49,8 @@ namespace SchedulerGUI.Models
                 maxEnergy *= -1.0;
             }
 
-            this.MaxEnergy = Math.Round(maxEnergy, 3);
-            this.TotalEnergy = Math.Round(random.NextDouble() * this.MaxEnergy, 3);
+            this.MaxEnergyUsed = Math.Round(maxEnergy, 3);
+            this.TotalEnergyUsed = Math.Round(random.NextDouble() * this.MaxEnergyUsed, 3);
         }
     }
 }

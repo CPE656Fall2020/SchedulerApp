@@ -57,8 +57,7 @@ namespace SchedulerGUI.ViewModels
             this.DevicePickerViewModel = new DevicePickerViewModel();
             this.ScheduleSolver = new GreedyOptimizedLowPowerScheduler();
 
-            this.InitPasses();
-            this.InitTimelineEvents();
+            this.Init();
         }
 
         /// <summary>
