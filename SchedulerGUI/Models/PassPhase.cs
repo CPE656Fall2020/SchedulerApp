@@ -10,7 +10,6 @@ namespace SchedulerGUI.Models
     public class PassPhase : IPassPhase
     {
         private double maxEnergy;
-        private double maxPower;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PassPhase"/> class.
@@ -19,16 +18,19 @@ namespace SchedulerGUI.Models
         /// <param name="endTime">End of phase.</param>
         /// <param name="name">Name of phase.</param>
         /// <param name="maxEnergy">Max energy alloted for phase.</param>
-        /// <param name="maxPower">Max power allotted for phase.</param>
-        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name, double maxEnergy, double maxPower)
+        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name, double maxEnergy)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.PhaseName = name;
             this.Duration = endTime - startTime;
 
+            if (name == PhaseType.Sunlight)
+            {
+                maxEnergy *= -1.0;
+            }
+
             this.maxEnergy = maxEnergy;
-            this.maxPower = maxPower;
         }
 
         /// <inheritdoc/>
@@ -44,7 +46,7 @@ namespace SchedulerGUI.Models
         public PhaseType PhaseName { get; }
 
         /// <inheritdoc/>
-        public double TotalPower { get; set; }
+        public double Power => this.TotalEnergy / this.EndTime.Subtract(this.StartTime).TotalSeconds;
 
         /// <inheritdoc/>
         public double TotalEnergy { get; set; }
@@ -52,7 +54,6 @@ namespace SchedulerGUI.Models
         /// <inheritdoc/>
         public void SetRandomValues(Random random)
         {
-            this.TotalPower = random.NextDouble() * this.maxPower;
             this.TotalEnergy = random.NextDouble() * this.maxEnergy;
         }
     }

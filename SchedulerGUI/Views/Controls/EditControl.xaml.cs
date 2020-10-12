@@ -17,10 +17,7 @@ namespace SchedulerGUI.Views.Controls
 
         private void saveButton_Click(object sender, RoutedEventArgs e)
         {
-            missionPowerTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-            encryptionPowerTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-            datalinkPowerTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
-
+            sunlightEnergyTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             missionEnergyTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             datalinkEnergyTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             encryptionEnergyTextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();

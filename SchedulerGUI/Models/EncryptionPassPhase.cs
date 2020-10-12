@@ -10,9 +10,7 @@ namespace SchedulerGUI.Models
     public class EncryptionPassPhase : IPassPhase
     {
         private const int MAXBYTES = 10000;
-
         private double maxEnergy;
-        private double maxPower;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EncryptionPassPhase"/> class.
@@ -21,8 +19,7 @@ namespace SchedulerGUI.Models
         /// <param name="endTime">End of phase.</param>
         /// <param name="name">Name of phase.</param>
         /// <param name="maxEnergy">Max energy alloted for phase.</param>
-        /// <param name="maxPower">Max power allotted for phase.</param>
-        public EncryptionPassPhase(DateTime startTime, DateTime endTime, PhaseType name, double maxEnergy, double maxPower)
+        public EncryptionPassPhase(DateTime startTime, DateTime endTime, PhaseType name, double maxEnergy)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
@@ -30,7 +27,6 @@ namespace SchedulerGUI.Models
             this.Duration = endTime - startTime;
 
             this.maxEnergy = maxEnergy;
-            this.maxPower = maxPower;
         }
 
         /// <inheritdoc/>
@@ -46,7 +42,7 @@ namespace SchedulerGUI.Models
         public PhaseType PhaseName { get; set; }
 
         /// <inheritdoc/>
-        public double TotalPower { get; set; }
+        public double Power => this.TotalEnergy / this.EndTime.Subtract(this.StartTime).TotalSeconds;
 
         /// <inheritdoc/>
         public double TotalEnergy { get; set; }
@@ -59,7 +55,6 @@ namespace SchedulerGUI.Models
         /// <inheritdoc/>
         public void SetRandomValues(Random random)
         {
-            this.TotalPower = random.NextDouble() * this.maxPower;
             this.TotalEnergy = random.NextDouble() * this.maxEnergy;
             this.BytesToEncrypt = random.Next(0, MAXBYTES);
         }

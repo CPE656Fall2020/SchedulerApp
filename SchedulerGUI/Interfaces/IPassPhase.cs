@@ -29,9 +29,9 @@ namespace SchedulerGUI.Interfaces
         PhaseType PhaseName { get; }
 
         /// <summary>
-        /// Gets or sets total power of phase.
+        /// Gets power of phase.
         /// </summary>
-        double TotalPower { get; set; }
+        double Power { get; }
 
         /// <summary>
         /// Gets or sets total energy of phase.

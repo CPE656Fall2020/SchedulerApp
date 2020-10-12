@@ -62,14 +62,14 @@ namespace SchedulerGUI.Models
 
             foreach (PhaseType phaseType in enums)
             {
-                PassPhase phase = new PassPhase(startTime, startTime.AddSeconds(duration), phaseType, phaseEnergy, phasePower);
+                PassPhase phase = new PassPhase(startTime, startTime.AddSeconds(duration), phaseType, phaseEnergy);
                 phase.SetRandomValues(random);
                 this.PassPhases.Add(phase);
 
                 startTime = startTime.AddSeconds(duration);
             }
 
-            EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption, phaseEnergy, phasePower);
+            EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption, phaseEnergy);
             encryptionPhase.SetRandomValues(random);
             this.PassPhases.Add(encryptionPhase);
         }

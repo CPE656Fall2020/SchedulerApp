@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using TimelineLibrary;
 
 namespace SchedulerGUI.Views
 {
