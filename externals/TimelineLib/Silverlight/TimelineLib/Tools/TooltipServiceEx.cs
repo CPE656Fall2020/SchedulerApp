@@ -33,28 +33,20 @@ using System.Windows.Threading;
 
 namespace TimelineLibrary
 {
-    /// 
     /// <summary>
     /// This service extends functionality of standard ToolTipService by allowing tooltip stay on 
     /// the screen till timeout occurs</summary>
-    /// 
     public static class TooltipServiceEx
     {
         public static readonly DependencyProperty ToolTipExProperty = 
             DependencyProperty.RegisterAttached("ToolTipEx", typeof(ToolTipEx), 
             typeof(TooltipServiceEx), new PropertyMetadata(OnEventToolTipPropertyChanged));
 
+        public static ToolTipEx LastTooltip;
 
-        public static ToolTipEx                        LastTooltip;
-
-        private static void OnEventToolTipPropertyChanged(
-            DependencyObject                            d, 
-            DependencyPropertyChangedEventArgs          e
-        )
+        private static void OnEventToolTipPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            FrameworkElement                            element;
-
-            element = (FrameworkElement) d;
+            FrameworkElement element = (FrameworkElement) d;
 
             element.Loaded += OnParentLoaded;
             element.MouseLeftButtonDown += OnMouseDown;
@@ -63,75 +55,53 @@ namespace TimelineLibrary
 
         public static void HideLastTooltip()
         {
-            if (TooltipServiceEx.LastTooltip != null)
+            if (LastTooltip != null)
             {
-                TooltipServiceEx.LastTooltip.Hide();
-                TooltipServiceEx.LastTooltip = null;
+                LastTooltip.Hide();
+                LastTooltip = null;
             }
         }
 
-        static void OnMouseLeave(
-            object                                      sender, 
-            MouseEventArgs                              e
-        )
+        static void OnMouseLeave(object sender, MouseEventArgs e)
         {
             HideTooltip(sender);
         }
 
-        static void OnMouseDown(
-            object                                      sender, 
-            MouseButtonEventArgs                        e
-        )
+        static void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             HideTooltip(sender);
         }
 
-        static void HideTooltip(
-            object                                      sender
-        )
+        static void HideTooltip(object sender)
         {
-            FrameworkElement                            owner;
-            ToolTipEx                                   tooltip;
+            FrameworkElement owner = (FrameworkElement)sender;
 
-            owner = (FrameworkElement) sender;
-            tooltip = owner.GetValue(TooltipServiceEx.ToolTipExProperty) as ToolTipEx;
-
-            if (tooltip != null)
+            if (owner.GetValue(ToolTipExProperty) is ToolTipEx tooltip)
             {
                 tooltip.Hide();
             }
             LastTooltip = null;
         }
 
-        static void OnParentLoaded(
-            object                                      sender, 
-            RoutedEventArgs                             e
-        )
+        static void OnParentLoaded(object sender, RoutedEventArgs e)
         {
-            FrameworkElement                            owner;
-            ToolTipEx                                   tooltip;
-            ToolTip                                     orgTooltip;
-
-            owner = (FrameworkElement) sender;
+            FrameworkElement owner = (FrameworkElement)sender;
+            ToolTipEx tooltip;
+            ToolTip orgTooltip;
 
             owner.Loaded -= OnParentLoaded;
-            tooltip = owner.GetValue(TooltipServiceEx.ToolTipExProperty) as ToolTipEx;
+            tooltip = owner.GetValue(ToolTipExProperty) as ToolTipEx;
             orgTooltip = owner.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
 
             tooltip.Tooltip = orgTooltip;
         }
 
-        public static void SetToolTipEx(
-            DependencyObject                            o,
-            ToolTipEx                                   t
-        )
+        public static void SetToolTipEx(DependencyObject o, ToolTipEx t)
         {
             o.SetValue(ToolTipExProperty, t);
         }
 
-        public static ToolTipEx GetToolTipEx(
-            DependencyObject                            o
-        )
+        public static ToolTipEx GetToolTipEx(DependencyObject o)
         {
             return o.GetValue(ToolTipExProperty) as ToolTipEx;
         }
@@ -139,9 +109,9 @@ namespace TimelineLibrary
 
     public class ToolTipEx
     {
-        private DispatcherTimer                          m_timer;
-        private int                                      m_timeLeft;
-        private ToolTip                                  m_tooltip;
+        private DispatcherTimer m_timer;
+        private int m_timeLeft;
+        private ToolTip m_tooltip;
 
         public ToolTip Tooltip
         {
@@ -168,8 +138,7 @@ namespace TimelineLibrary
             }
         }
 
-        public void Hide(
-        )
+        public void Hide()
         {
             if (m_tooltip != null && m_tooltip.IsOpen)
             {
@@ -178,40 +147,24 @@ namespace TimelineLibrary
             }
         }
 
-        /// 
         /// <summary>
         /// Tooltip timeout interval in seconds, 0 for infinite</summary>
-        /// 
-        public int HideToolTipTimeout
-        {
-            get;
-            set;
-        }
+        public int HideToolTipTimeout { get; set; }
 
-        void OnTooltipClosed(
-            object                                      sender, 
-            RoutedEventArgs                             e
-        )
+        void OnTooltipClosed(object sender, RoutedEventArgs e)
         {
             if (m_timeLeft > 0)
             {
-#if SILVERLIGHT
-                m_tooltip.IsOpen = true;
-#else
                 TooltipServiceEx.LastTooltip = null;
-#endif
             }
             else
             {
                 StopTimer();
                 TooltipServiceEx.LastTooltip = null;
             }
-
-            
         }
 
-        private void StopTimer(
-        )
+        private void StopTimer()
         {
             if (m_timer != null)
             {
@@ -222,14 +175,12 @@ namespace TimelineLibrary
             }
         }
 
-        void OnTooltipOpened(
-            object                                      sender, 
-            RoutedEventArgs                             e
-        )
+        void OnTooltipOpened(object sender, RoutedEventArgs e)
         {
-            m_timer = new DispatcherTimer();
-            
-            m_timer.Interval = new TimeSpan(0, 0, 1);
+            m_timer = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 1)
+            };
             m_timer.Tick += OnTimerTick;
             m_timeLeft = HideToolTipTimeout;
             m_timer.Start();
@@ -238,10 +189,7 @@ namespace TimelineLibrary
             TooltipServiceEx.LastTooltip = this;
         }
 
-        void OnTimerTick(
-            object                                      sender, 
-            EventArgs                                   e
-        )
+        void OnTimerTick(object sender, EventArgs e)
         {
             --m_timeLeft;
             m_tooltip.IsOpen = m_timeLeft > 0;
