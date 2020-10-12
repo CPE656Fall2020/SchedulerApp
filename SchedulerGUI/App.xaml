@@ -7,7 +7,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Styles/ViewModelTemplates.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Styles/LocalDataTemplates.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Styles/GlobalResources.xaml" />
 
                 <!--Scalable Icon Packs-->
@@ -18,7 +17,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.FlatButton.xaml" />
 
-                <!-- Theme setting -->
+                <!--MahApps Theme setting -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
 
                 <!--Fluent Ribbon-->
@@ -26,7 +25,10 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;component/Themes/Themes/Light.Blue.Colorful.xaml" />
 
                 <!--Merge Our Colors at the END to allow for overriding-->
-                <ResourceDictionary Source="pack://application:,,,/Styles/SchedulerLight.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Styles/Themes/SchedulerLight.xaml" />
+
+                <!--Merge Our Custom Control Styles at the END to allow for overriding defaults-->
+                <ResourceDictionary Source="pack://application:,,,/Styles/WindowStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -10,10 +10,7 @@
                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                    xmlns:timeline="clr-namespace:TimelineLibrary;assembly=TimelineLibrary"
                    mc:Ignorable="d"
-                   WindowTitleBrush="{DynamicResource RibbonActiveBrush}"
-                   NonActiveWindowTitleBrush="{DynamicResource RibbonActiveBrush}"
-                   GlowBrush="Black"
-                   BorderThickness="0"
+                   Style="{StaticResource SchedulerApp.Window}"
                    ShowSystemMenuOnRightClick="False"
                    Title="UAH Satellite Power Scheduler"
                    DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
@@ -27,16 +24,6 @@
         </DataTemplate>
     </metro:MetroWindow.TitleTemplate>
 
-    <metro:MetroWindow.Style>
-        <Style TargetType="{x:Type metro:MetroWindow}">
-            <Setter Property="TitleForeground" Value="White" />
-            <Style.Triggers>
-                <Trigger Property="IsActive" Value="False">
-                    <Setter Property="TitleForeground" Value="#A5B9D1" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </metro:MetroWindow.Style>
 
     <!--Top Level Grid-->
     <Grid>
