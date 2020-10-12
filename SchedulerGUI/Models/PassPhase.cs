@@ -46,7 +46,7 @@ namespace SchedulerGUI.Models
         public PhaseType PhaseName { get; }
 
         /// <inheritdoc/>
-        public double Power => this.TotalEnergy / this.EndTime.Subtract(this.StartTime).TotalSeconds;
+        public double Power => Math.Abs(this.TotalEnergy) / this.EndTime.Subtract(this.StartTime).TotalSeconds;
 
         /// <inheritdoc/>
         public double TotalEnergy { get; set; }
