@@ -3,15 +3,15 @@
                     xmlns:views="clr-namespace:SchedulerGUI.Views"
                     xmlns:vm="clr-namespace:SchedulerGUI.ViewModels"
                     xmlns:controlviews="clr-namespace:SchedulerGUI.Views.Controls"
-                    xmlns:controlvms="clr-namespace:SchedulerGUI.ViewModels.Controls" 
+                    xmlns:controlvms="clr-namespace:SchedulerGUI.ViewModels.Controls"
                     xmlns:services="clr-namespace:SchedulerGUI.Services">
 
     <!--Use VM Locator for Top-Level Window View Resolution-->
     <services:ViewModelLocator x:Key="ViewModelLocator" />
-    
+
     <!--    We define the data templates here so we can apply them across the
             entire application.
-            
+
             The data template just says that if our data type is of a particular
             view-model type, then render the appropriate view.  The framework
             takes care of this dynamically.  Note that the DataContext for
@@ -38,7 +38,7 @@
         <controlviews:AESGraphControl />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type controlvms:EditControlViewModel}">
-        <controlviews:EditControl />
+    <DataTemplate DataType="{x:Type controlvms:HistoryGraphViewModel}">
+        <controlviews:HistoryGraph />
     </DataTemplate>
 </ResourceDictionary>

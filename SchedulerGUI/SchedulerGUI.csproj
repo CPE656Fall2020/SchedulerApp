@@ -81,6 +81,7 @@
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
+    <Compile Include="ViewModels\Controls\HistoryGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Views\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\HistoryGraph.xaml.cs">
+    <Compile Include="Views\Controls\HistoryGraph.xaml.cs">
       <DependentUpon>HistoryGraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\PassOrbit.cs" />
@@ -147,7 +148,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\HistoryGraph.xaml">
+    <Page Include="Views\Controls\HistoryGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

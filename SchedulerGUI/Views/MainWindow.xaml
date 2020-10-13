@@ -4,8 +4,7 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-                   xmlns:Fluent="urn:fluent-ribbon" 
-                   xmlns:controls="clr-namespace:SchedulerGUI.Controls"
+                   xmlns:Fluent="urn:fluent-ribbon"
                    xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                    xmlns:timeline="clr-namespace:TimelineLibrary;assembly=TimelineLibrary"
@@ -14,16 +13,15 @@
                    ShowSystemMenuOnRightClick="False"
                    Title="UAH Satellite Power Scheduler"
                    DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
-                   WindowState="Maximized" >
+                   WindowState="Maximized">
 
     <metro:MetroWindow.TitleTemplate>
         <!--https://fluentribbon.github.io/documentation/interop_with_MahApps.Metro-->
         <DataTemplate>
-            <Fluent:RibbonTitleBar x:Name="RibbonTitleBar"                                   
-                                   Header="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <Fluent:RibbonTitleBar x:Name="RibbonTitleBar"
+                                   Header="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=Window}}" />
         </DataTemplate>
     </metro:MetroWindow.TitleTemplate>
-
 
     <!--Top Level Grid-->
     <Grid>
@@ -31,7 +29,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-      
+
         <Fluent:Ribbon>
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
@@ -72,7 +70,7 @@
                     <Fluent:Button Header="About"
                                    Icon="{StaticResource VS2017Icons.StatusInformation}"
                                    LargeIcon="{StaticResource VS2017Icons.StatusInformation}"
-                                   Command="{Binding OpenAboutCommand}"/>
+                                   Command="{Binding OpenAboutCommand}" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
@@ -83,7 +81,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="4*" />
             </Grid.ColumnDefinitions>
-            
+
             <!--Left Sidebar - Passes-->
             <Grid>
                 <Grid.RowDefinitions>
@@ -102,12 +100,12 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <ScrollViewer Grid.Row="1" >
+                <ScrollViewer Grid.Row="1">
                     <Controls:EditControl IsEnabled="{Binding ElementName=passesListView, Path=SelectedItems.Count}"
-                  Margin="5,15,5,5" VerticalAlignment="Center" DataContext="{Binding EditControlViewModel}"/>
+                  Margin="5,15,5,5" VerticalAlignment="Center" DataContext="{Binding EditControlViewModel}" />
                 </ScrollViewer>
             </Grid>
-            
+
             <!--Right Body Pane-->
             <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
@@ -123,7 +121,7 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="First Pass Start Time:"/>
+                                <Label Content="First Pass Start Time:" />
                                 <Label Content="{Binding Path=MinDateTime, ElementName=timeline}" />
 
                                 <Label Margin="50,0,0,0" Content="Last Pass End Time:" />
@@ -138,14 +136,14 @@
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="20" />
                                 </Grid.RowDefinitions>
-                                
+
                                 <timeline:TimelineToolbox Height="22" />
-                                <timeline:TimelineBand IsMainBand="True" Grid.Row="1" ItemSourceType="hours" TimelineWindowSize="5"/>
+                                <timeline:TimelineBand IsMainBand="True" Grid.Row="1" ItemSourceType="hours" TimelineWindowSize="5" />
                             </timeline:TimelineTray>
                         </Grid>
                     </TabItem>
                 </TabControl>
-                
+
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -161,28 +159,7 @@
 
                     <Border BorderBrush="Black" Grid.Column="1" BorderThickness="2">
                         <Grid>
-                            <controls:Power HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="296" />
-                            <TextBlock Padding="5,0,5,0" Margin="296,10,73,166">Power Available:</TextBlock>
-                            <Label Margin="392,5,0,161" Content="7000 mJ" />
-                            <TabControl Margin="0,41,0,0">
-                                <TabItem>
-                                    <TabItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Pass #1" Foreground="Black" />
-                                        </StackPanel>
-                                    </TabItem.Header>
-                                    <controls:HistoryGraph />
-                                </TabItem>
-                                <TabItem>
-                                    <TabItem.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Pass #2" Foreground="Black" />
-                                        </StackPanel>
-                                    </TabItem.Header>
-                                    <controls:HistoryGraph />
-                                </TabItem>
-                            </TabControl>
-                            <Separator HorizontalAlignment="Left" Background="Black" Height="13" Margin="0,31,0,0" VerticalAlignment="Top" Width="465" />
+                            <Controls:HistoryGraph DataContext="{Binding HistoryGraphViewModel}" />
                         </Grid>
                     </Border>
                 </Grid>
