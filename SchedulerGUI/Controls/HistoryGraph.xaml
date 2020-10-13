@@ -7,8 +7,8 @@
              xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d"
              d:DesignHeight="200" d:DesignWidth="500">
-    <Grid Background="LightGray">
-        <Label Content="mJ Consumed" Panel.ZIndex="111111"  HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0" Margin="-23,92,0,77" Height="31" RenderTransformOrigin="0.5,0.5">
+    <Grid Background="#2D2D30">
+        <Label Content="Joules Consumed" Foreground="White" Panel.ZIndex="111111"  HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0" Margin="-32,92,0,77" Height="31" RenderTransformOrigin="0.5,0.5">
             <Label.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform />
@@ -18,7 +18,7 @@
                 </TransformGroup>
             </Label.RenderTransform>
         </Label>
-        <Label Content="Time in Mins" Panel.ZIndex="111111"  HorizontalAlignment="Center" Padding="0" VerticalAlignment="Bottom" Height="16" Margin="216,0" />
-        <oxy:PlotView  Model="{Binding MyModel}" Background="LightGray" Margin="10,0,0,5" />
+        <Label Content="Time in Mins" Foreground="White" Panel.ZIndex="111111"  HorizontalAlignment="Center" Padding="0" VerticalAlignment="Bottom" Height="16" Margin="216,0" />
+        <oxy:PlotView  Model="{Binding MyModel}" Foreground="White" Background="#2D2D30" Margin="10,0,0,5" />
     </Grid>
 </UserControl>
