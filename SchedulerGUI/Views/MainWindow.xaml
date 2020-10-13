@@ -49,6 +49,28 @@
 
             <!--Tabs-->
             <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Scheduler">
+                    <Fluent:Gallery ItemsSource="{Binding AvailableAlgorithms}"
+                                    SelectedItem="{Binding SelectedAlgorithm}">
+                        <Fluent:Gallery.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="64" Width="72">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="32" />
+                                    </Grid.RowDefinitions>
+
+                                    <Image Source="{Binding Tag}" Grid.Row="0" Height="32" />
+                                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Grid.Row="1" TextAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </Fluent:Gallery.ItemTemplate>
+                    </Fluent:Gallery>
+
+                    <Fluent:Button Header="Schedule Status"
+                                   LargeIcon="{Binding ScheduleStatusIcon}"
+                                   Command="{Binding OpenScheduleStatusCommand}" />
+                </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Database Tools">
                     <Fluent:Button Header="Plot Tool"
                                    Icon="{StaticResource VS2017Icons.AvailablityColumnChart}"

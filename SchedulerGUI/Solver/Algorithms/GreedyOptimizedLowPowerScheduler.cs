@@ -16,6 +16,12 @@ namespace SchedulerGUI.Solver.Algorithms
     public class GreedyOptimizedLowPowerScheduler : IScheduleSolver
     {
         /// <inheritdoc/>
+        public string Name => "Low Power Optimized";
+
+        /// <inheritdoc/>
+        public object Tag { get; set; }
+
+        /// <inheritdoc/>
         public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles)
         {
             var solution = new ScheduleSolution()
@@ -35,7 +41,7 @@ namespace SchedulerGUI.Solver.Algorithms
                 {
                     if (!(phase is EncryptionPassPhase))
                     {
-                        currentCapacityJoules += phase.TotalEnergyUsed;
+                        currentCapacityJoules -= phase.TotalEnergyUsed;
 
                         if (currentCapacityJoules < 0)
                         {
@@ -90,6 +96,9 @@ namespace SchedulerGUI.Solver.Algorithms
                     // so if we're out of power, there is no solution possible.
                     // If we're out of time, faster devices are needed, or the encryption phase needs lengthened.
                     solution.IsSolvable = false;
+                    solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
+                              ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
+                              $"Orbit parameters for {pass.Name} are impossible. No devices are capable of performing the encryption in the required time window."));
                     solution.ViableProfiles[pass] = null;
                 }
             }

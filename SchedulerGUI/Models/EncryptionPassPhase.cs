@@ -55,10 +55,12 @@ namespace SchedulerGUI.Models
         public void SetRandomValues(Random random, double maxEnergy, int? maxBytes = null)
         {
             this.MaxBytes = (int)maxBytes;
-            this.MaxEnergyUsed = Math.Round(maxEnergy, 3);
 
-            this.TotalEnergyUsed = Math.Round(random.NextDouble() * this.MaxEnergyUsed, 3);
             this.BytesToEncrypt = random.Next(0, this.MaxBytes);
+
+            // The energy consumption will be a factor of the fake number of bytes scheduled with the fake scheduler.
+            this.MaxEnergyUsed = 0;
+            this.TotalEnergyUsed = 0;
         }
     }
 }

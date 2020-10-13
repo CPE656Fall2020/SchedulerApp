@@ -29,6 +29,10 @@
         <views:AboutDialog />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:ScheduleViewerDialogViewModel}">
+        <views:ScheduleViewerDialog />
+    </DataTemplate>
+
     <!--VM Based Controls-->
     <DataTemplate DataType="{x:Type controlvms:PopupViewModel}">
         <controlviews:Popup />
@@ -37,9 +41,12 @@
     <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
         <controlviews:AESGraphControl />
     </DataTemplate>
+    
     <DataTemplate DataType="{x:Type controlvms:EditControlViewModel}">
         <controlviews:EditControl />
     </DataTemplate>
+    
     <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModel}">
         <controlviews:DevicePickerControl />
-    </DataTemplate></ResourceDictionary>
+    </DataTemplate>
+</ResourceDictionary>

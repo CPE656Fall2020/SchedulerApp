@@ -67,10 +67,10 @@
                     <Label FontStyle="Italic" Grid.Column="1" Grid.Row="1" Content="{Binding SunlightPhase.MaxEnergyUsed}" />
 
                     <Label HorizontalAlignment="Right" Grid.Row="2" Content="Encryption" />
-                    <TextBox x:Name="encryptionEnergyTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding EncryptionPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" />
+                    <TextBox x:Name="encryptionEnergyTextBox" Grid.Row="2" Grid.Column="1" Text="{Binding EncryptionPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" IsReadOnly="True" Background="LightGray" />
 
-                    <Label FontStyle="Italic" Grid.Row="3" HorizontalAlignment="Right" Content="Max:" />
-                    <Label FontStyle="Italic" Grid.Column="1" Grid.Row="3" Content="{Binding EncryptionPhase.MaxEnergyUsed}" />
+                    <!--<Label FontStyle="Italic" Grid.Row="3" HorizontalAlignment="Right" Content="Max:" />
+                    <Label FontStyle="Italic" Grid.Column="1" Grid.Row="3" Content="{Binding EncryptionPhase.MaxEnergyUsed}" />-->
 
                     <Label Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Content="Datalink:" />
                     <TextBox x:Name="datalinkEnergyTextBox" Grid.Row="2" Grid.Column="3" Text="{Binding DatalinkPhase.TotalEnergyUsed, UpdateSourceTrigger=Explicit}" />

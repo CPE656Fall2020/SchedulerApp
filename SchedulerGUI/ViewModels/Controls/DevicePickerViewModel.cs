@@ -34,10 +34,14 @@ namespace SchedulerGUI.ViewModels.Controls
 
                 foreach (var device in summarizedDevices)
                 {
-                    this.Devices.Add(new SelectableDevice(device)
+                    var selectableDevice = new SelectableDevice(device)
                     {
                         IsSelected = true,
-                    });
+                    };
+
+                    selectableDevice.PropertyChanged += this.Device_PropertyChanged;
+
+                    this.Devices.Add(selectableDevice);
                 }
             }
         }
@@ -45,7 +49,7 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <summary>
         /// Gets a listing of AES Profiles that are enabled.
         /// </summary>
-        public IEnumerable<AESEncyptorProfile> EnabledProfiles => this.Devices.Select(x => x.Device);
+        public IEnumerable<AESEncyptorProfile> EnabledProfiles => this.Devices.Where(x => x.IsSelected).Select(x => x.Device);
 
         /// <summary>
         /// Gets an observable sorted view of the available AES devices.
@@ -54,11 +58,18 @@ namespace SchedulerGUI.ViewModels.Controls
 
         private ObservableCollection<SelectableDevice> Devices { get; }
 
+        private void Device_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(nameof(this.Devices));
+        }
+
         /// <summary>
         /// Gets or sets an AES profile that can be enabled or disabled for scheduling purposes.
         /// </summary>
-        public class SelectableDevice
+        public class SelectableDevice : ObservableObject
         {
+            private bool isSelected;
+
             /// <summary>
             /// Initializes a new instance of the <see cref="SelectableDevice"/> class.
             /// </summary>
@@ -86,18 +97,16 @@ namespace SchedulerGUI.ViewModels.Controls
             /// <summary>
             /// Gets the complete platform description.
             /// </summary>
-            public string FullDescription =>
-                $@"Platform: {this.Device.PlatformName}" + "\n" +
-                $@"Accelerator: {this.Device.PlatformAccelerator.ToFriendlyName()}" + "\n" +
-                $@"AES Mode: {this.Device.TestedAESMode}, {this.Device.TestedAESBitLength}-bit" + "\n" +
-                $@"Provider: {this.Device.ProviderName}" + "\n" +
-                $@"Tested Frequency: {this.Device.TestedFrequency:N0} Hz" + "\n" +
-                $@"Description: {this.Device.Description}";
+            public string FullDescription => this.Device.ToFullDescription();
 
             /// <summary>
             /// Gets or sets a value indicating whether this profile is enabled.
             /// </summary>
-            public bool IsSelected { get; set; }
+            public bool IsSelected
+            {
+                get => this.isSelected;
+                set => this.Set(() => this.IsSelected, ref this.isSelected, value);
+            }
         }
     }
 }

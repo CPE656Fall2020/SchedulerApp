@@ -10,6 +10,16 @@ namespace SchedulerGUI.Solver
     public interface IScheduleSolver
     {
         /// <summary>
+        /// Gets the name of this solver.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// Gets or sets freeform user content used to tag this algorithm.
+        /// </summary>
+        object Tag { get; set; }
+
+        /// <summary>
         /// Computes a solution to the scheduling problem, and stores the final energy values in <see cref="PassOrbit"/>.
         /// </summary>
         /// <param name="passes">The orbital passes and associated constraints that need scheduled.</param>

@@ -78,6 +78,7 @@
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
+    <Compile Include="Solver\Algorithms\TrashScheduler.cs" />
     <Compile Include="Solver\Algorithms\GreedyOptimizedLowPowerScheduler.cs" />
     <Compile Include="Solver\IScheduleSolver.cs" />
     <Compile Include="Solver\ScheduleSolution.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
+    <Compile Include="ViewModels\ScheduleViewerDialogViewModel.cs" />
     <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
       <DependentUpon>AESGraphControl.xaml</DependentUpon>
     </Compile>
@@ -117,6 +119,9 @@
     </Compile>
     <Compile Include="Views\PlotWindow.xaml.cs">
       <DependentUpon>PlotWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScheduleViewerDialog.xaml.cs">
+      <DependentUpon>ScheduleViewerDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\VS2017\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +190,10 @@
     <Page Include="Views\PlotWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ScheduleViewerDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using OxyPlot.Axes;
 using SchedulerDatabase;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
+using SchedulerGUI.Properties;
 using SchedulerGUI.Services;
 using SchedulerGUI.Settings;
 using SchedulerGUI.Solver;
@@ -31,6 +36,8 @@ namespace SchedulerGUI.ViewModels
         private DateTime startTime;
         private DateTime endTime;
         private EditControlViewModel editControlVM;
+        private IScheduleSolver selectedAlgorithm;
+        private object scheduleStatusIcon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
@@ -42,6 +49,7 @@ namespace SchedulerGUI.ViewModels
 
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
             this.Passes = new ObservableCollection<PassOrbit>();
+            this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
             this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
@@ -55,9 +63,23 @@ namespace SchedulerGUI.ViewModels
             };
 
             this.DevicePickerViewModel = new DevicePickerViewModel();
-            this.ScheduleSolver = new GreedyOptimizedLowPowerScheduler();
+
+            // Make sure to re-schedule when they change the enabled profiles
+            this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
+
+            // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
+            // would be nice as opposed to providing the icon from ViewModel.
+            this.AvailableAlgorithms = new ObservableCollection<IScheduleSolver>()
+            {
+                new GreedyOptimizedLowPowerScheduler() { Tag = App.Current.Resources["VS2017Icons.VBPowerPack"] },
+                new TrashScheduler() { Tag = App.Current.Resources["VS2019Icons.Trash"] },
+            };
+
+            this.SelectedAlgorithm = this.AvailableAlgorithms.First();
 
             this.Init();
+
+            this.RunSchedule();
         }
 
         /// <summary>
@@ -71,6 +93,11 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<TimelineEvent> TimelineEventPasses { get; }
 
         /// <summary>
+        /// Gets a collection of algorithms that are available for scheduling.
+        /// </summary>
+        public ObservableCollection<IScheduleSolver> AvailableAlgorithms { get; }
+
+        /// <summary>
         /// Gets or sets the pass orbit that is currently selected.
         /// </summary>
         public PassOrbit SelectedPass
@@ -78,6 +105,24 @@ namespace SchedulerGUI.ViewModels
             get => this.selectedPass;
             set => this.Set(() => this.SelectedPass, ref this.selectedPass, value);
         }
+
+        /// <summary>
+        /// Gets or sets the schedule solving algorithm that is currently selected.
+        /// </summary>
+        public IScheduleSolver SelectedAlgorithm
+        {
+            get => this.selectedAlgorithm;
+            set
+            {
+                this.Set(() => this.SelectedAlgorithm, ref this.selectedAlgorithm, value);
+                this.RunSchedule();
+            }
+        }
+
+        /// <summary>
+        /// Gets the command to execute to view the status of a schedule.
+        /// </summary>
+        public ICommand OpenScheduleStatusCommand { get; }
 
         /// <summary>
         /// Gets the command to execute to open the Scheduler Plotter tool.
@@ -132,11 +177,20 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+        /// Gets the icon to represent the current schedule status.
+        /// </summary>
+        public object ScheduleStatusIcon
+        {
+            get => this.scheduleStatusIcon;
+            private set => this.Set(() => this.ScheduleStatusIcon, ref this.scheduleStatusIcon, value);
+        }
+
+        /// <summary>
         /// Gets the device picker control ViewModel for enabling and disabling AES devices.
         /// </summary>
         public DevicePickerViewModel DevicePickerViewModel { get; }
 
-        private IScheduleSolver ScheduleSolver { get; set; }
+        private ScheduleSolution LastSolution { get; set; }
 
         /// <summary>
         /// Initializes edit control with pass informatin from the selected pass.
@@ -183,6 +237,14 @@ namespace SchedulerGUI.ViewModels
             this.Passes[currentIndex] = passData;
 
             this.SelectedPass = passData;
+
+            this.RunSchedule();
+        }
+
+        private void OpenScheduleStatusHandler()
+        {
+            var dialog = new ScheduleViewerDialogViewModel(this.LastSolution);
+            this.DialogManager.PopupDialog = dialog;
         }
 
         private void OpenSchedulerPlotterHandler()
@@ -274,6 +336,37 @@ namespace SchedulerGUI.ViewModels
         {
             var timelineEvent = (TimelineEvent)sender;
             this.SelectedPass = this.Passes.ToList().Find(x => x.Name == timelineEvent.PassParentName);
+        }
+
+        private void RunSchedule()
+        {
+            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles);
+            var hasWarnings = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning);
+            var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
+            var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
+
+            if (hasWarnings)
+            {
+                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileWarning"];
+            }
+            else if (hasError)
+            {
+                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+            }
+            else if (hasFatal)
+            {
+                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+            }
+            else if (!this.LastSolution.IsSolvable)
+            {
+                // ??? not solvable but no errors?
+                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+            }
+            else
+            {
+                // Worked okay
+                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileOK"];
+            }
         }
     }
 }
