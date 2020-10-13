@@ -62,6 +62,7 @@ namespace SchedulerGUI.ViewModels
                 PopupDialog = null,
             };
 
+            this.HistoryGraphViewModel = new HistoryGraphViewModel();
             this.DevicePickerViewModel = new DevicePickerViewModel();
 
             // Make sure to re-schedule when they change the enabled profiles
@@ -78,7 +79,6 @@ namespace SchedulerGUI.ViewModels
             this.SelectedAlgorithm = this.AvailableAlgorithms.First();
 
             this.Init();
-
             this.RunSchedule();
         }
 
@@ -373,7 +373,7 @@ namespace SchedulerGUI.ViewModels
                 this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileOK"];
 
                 // Update the History graph with the new data
-                this.HistoryGraphViewModel = new HistoryGraphViewModel(this.Passes);
+                this.HistoryGraphViewModel.Passes = this.Passes;
             }
         }
     }

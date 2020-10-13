@@ -117,7 +117,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock Margin="5" FontSize="18" Text="{Binding Name}" />
+                                    <TextBlock Margin="5" FontSize="16" Text="{Binding Name}" />
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -178,7 +178,7 @@
                     <ContentControl Content="{Binding DevicePickerViewModel}" />
 
                     <GroupBox Grid.Column="1" Header="Power Schedule" Margin="5,0,5,0">
-                        <Controls:HistoryGraph DataContext="{Binding HistoryGraphViewModel}" />
+                        <ContentControl Content="{Binding HistoryGraphViewModel}" />
                     </GroupBox>
                 </Grid>
             </Grid>

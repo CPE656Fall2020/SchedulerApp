@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using OxyPlot;
 using OxyPlot.Series;
@@ -13,17 +13,44 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class HistoryGraphViewModel : ViewModelBase
     {
+        private IEnumerable<PassOrbit> passes;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryGraphViewModel"/> class.
         /// </summary>
-        public HistoryGraphViewModel(ObservableCollection<PassOrbit> passes)
+        public HistoryGraphViewModel()
+        {
+            this.PlotModel = new PlotModel
+            {
+                Title = "Energy Consumption Over Time",
+            };
+        }
+
+        /// <summary>
+        /// Gets the plot model for the history view.
+        /// </summary>
+        public PlotModel PlotModel { get; }
+
+        /// <summary>
+        /// Gets or sets the pass data that should be used to build the historical display.
+        /// </summary>
+        public IEnumerable<PassOrbit> Passes
+        {
+            get => this.passes;
+            set
+            {
+                this.passes = value;
+                this.GeneratePlot();
+            }
+        }
+
+        private void GeneratePlot()
         {
             Random rnd = new Random();
 
-            this.MyModel = new PlotModel { Title = "Energy Consumption Over time" };
+            this.PlotModel.Series.Clear();
 
-            int i = 1;
-            foreach (PassOrbit pass in passes)
+            foreach (PassOrbit pass in this.Passes)
             {
                 LineSeries scatterSeries = new LineSeries
                 {
@@ -41,25 +68,19 @@ namespace SchedulerGUI.ViewModels.Controls
                     y = phase.TotalEnergyUsed;
                     passCurrentRunTime = x;
 
-                    var colorValue = i * 100;
                     scatterSeries.Points.Add(new DataPoint(x, y));
                 }
 
-                this.MyModel.Series.Add(scatterSeries);
-
-                i++;
+                this.PlotModel.Series.Add(scatterSeries);
             }
 
-            this.MyModel.LegendPosition = LegendPosition.RightMiddle;
-            this.MyModel.LegendPlacement = LegendPlacement.Outside;
-            this.MyModel.PlotAreaBorderColor = OxyColor.FromRgb(255, 255, 255);
-            this.MyModel.TextColor = OxyColor.FromRgb(255, 255, 255);
-            this.MyModel.TitleColor = OxyColor.FromRgb(255, 255, 255);
-        }
+            this.PlotModel.LegendPosition = LegendPosition.RightMiddle;
+            this.PlotModel.LegendPlacement = LegendPlacement.Outside;
+            this.PlotModel.PlotAreaBorderColor = OxyColor.FromRgb(255, 255, 255);
+            this.PlotModel.TextColor = OxyColor.FromRgb(255, 255, 255);
+            this.PlotModel.TitleColor = OxyColor.FromRgb(255, 255, 255);
 
-        /// <summary>
-        /// Gets the plot model for the history view.
-        /// </summary>
-        public PlotModel MyModel { get; private set; }
+            this.PlotModel.InvalidatePlot(true);
+        }
     }
 }
