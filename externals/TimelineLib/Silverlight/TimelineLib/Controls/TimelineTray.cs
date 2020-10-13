@@ -68,7 +68,6 @@ namespace TimelineLibrary
 
         private List<TimelineBand>                      m_bands;
         private TimelineEventStore                      m_eventStore;
-        private TimelineEventStore                      m_eventStorePhases;
         private bool                                    m_changingDate;
         private DataControlNotifier                     m_notifier;   
         private string                                  m_cultureId = DateTimeConverter.DEFAULT_CULTUREID;    
@@ -133,21 +132,19 @@ namespace TimelineLibrary
 
         public static void OnCurrentDateTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            TimelineTray t= d as TimelineTray;
-
-            if (t != null && e.NewValue != e.OldValue)
+            if (d is TimelineTray t && e.NewValue != e.OldValue)
             {
-                if ((DateTime) e.NewValue < t.MinDateTime)
+                if ((DateTime)e.NewValue < t.MinDateTime)
                 {
                     t.SetValue(CurrentDateTimeProperty, t.MinDateTime);
                 }
-                else if ((DateTime) e.NewValue > t.MaxDateTime)
+                else if ((DateTime)e.NewValue > t.MaxDateTime)
                 {
                     t.SetValue(CurrentDateTimeProperty, t.MaxDateTime);
                 }
-                else 
+                else
                 {
-                    t.m_currentDateTime = (DateTime) e.NewValue;
+                    t.m_currentDateTime = (DateTime)e.NewValue;
                     if (t.MainBand != null)
                     {
                         t.MainBand.CurrentDateTime = t.m_currentDateTime;
@@ -194,15 +191,13 @@ namespace TimelineLibrary
 
         public static void OnMinDateTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            TimelineTray t= d as TimelineTray;
-
-            if (t != null && e.NewValue != e.OldValue)
+            if (d is TimelineTray t && e.NewValue != e.OldValue)
             {
-                if ((DateTime) e.NewValue >= t.MaxDateTime)
+                if ((DateTime)e.NewValue >= t.MaxDateTime)
                 {
                     throw new ArgumentOutOfRangeException("MinDateTime cannot be more then MaxDateTime");
                 }
-                else if (t.CurrentDateTime < (DateTime) e.NewValue)
+                else if (t.CurrentDateTime < (DateTime)e.NewValue)
                 {
                     t.SetValue(CurrentDateTimeProperty, e.NewValue);
                 }
@@ -211,7 +206,7 @@ namespace TimelineLibrary
                 {
                     if (b.Calculator != null && b.Calculator.Calendar != null)
                     {
-                        b.Calculator.Calendar.MinDateTime = ((DateTime) e.NewValue);
+                        b.Calculator.Calendar.MinDateTime = ((DateTime)e.NewValue);
                     }
                 }
             }
@@ -236,15 +231,13 @@ namespace TimelineLibrary
 
         public static void OnMaxDateTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            TimelineTray t = d as TimelineTray;
-
-            if (t != null && e.NewValue != e.OldValue)
+            if (d is TimelineTray t && e.NewValue != e.OldValue)
             {
-                if ((DateTime) e.NewValue < t.MinDateTime)
+                if ((DateTime)e.NewValue < t.MinDateTime)
                 {
                     throw new ArgumentOutOfRangeException("MaxDateTime cannot be less then MinDateTime");
                 }
-                else if (t.CurrentDateTime >= (DateTime) e.NewValue)
+                else if (t.CurrentDateTime >= (DateTime)e.NewValue)
                 {
                     t.SetValue(CurrentDateTimeProperty, e.NewValue);
                 }
@@ -253,7 +246,7 @@ namespace TimelineLibrary
                 {
                     if (b.Calculator != null && b.Calculator.Calendar != null)
                     {
-                        b.Calculator.Calendar.MaxDateTime = ((DateTime) e.NewValue);
+                        b.Calculator.Calendar.MaxDateTime = ((DateTime)e.NewValue);
                     }
                 }
             }
@@ -396,7 +389,9 @@ namespace TimelineLibrary
                     b.ClearEvents();
 
                     if (b.IsMainBand)
+                    {
                         b.EventStore = m_eventStore;
+                    }
                 }
 
                 MainBand.CalculateEventRows();
@@ -795,7 +790,7 @@ namespace TimelineLibrary
             TimelineReady?.Invoke(this, new EventArgs());
         }
 
-        protected virtual void Initialized()
+        protected new virtual void Initialized()
         {}
 
         /// <summary>
