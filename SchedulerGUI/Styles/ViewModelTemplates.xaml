@@ -4,8 +4,7 @@
                     xmlns:vm="clr-namespace:SchedulerGUI.ViewModels"
                     xmlns:controlviews="clr-namespace:SchedulerGUI.Views.Controls"
                     xmlns:controlvms="clr-namespace:SchedulerGUI.ViewModels.Controls"
-                    xmlns:services="clr-namespace:SchedulerGUI.Services"
-                    xmlns:controlviews1="clr-namespace:SchedulerGUI.Controls">
+                    xmlns:services="clr-namespace:SchedulerGUI.Services">
 
     <!--Use VM Locator for Top-Level Window View Resolution-->
     <services:ViewModelLocator x:Key="ViewModelLocator" />
@@ -40,6 +39,6 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type controlvms:HistoryGraphViewModel}">
-        <controlviews1:HistoryGraph />
+        <controlviews:HistoryGraph />
     </DataTemplate>
 </ResourceDictionary>

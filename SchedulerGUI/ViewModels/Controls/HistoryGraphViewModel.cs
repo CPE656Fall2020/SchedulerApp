@@ -30,20 +30,10 @@ namespace SchedulerGUI.ViewModels.Controls
                 foreach (IPassPhase phase in pass.PassPhases)
                 {
                     double x = passCurrentRunTime, y = 0;
-                    if (phase is PassPhase)
-                    {
-                        PassPhase tempPhase = (PassPhase)phase;
-                        x += tempPhase.Duration.Minutes;
-                        y = tempPhase.TotalEnergy;
-                        passCurrentRunTime = x;
-                    }
-                    else if (phase is EncryptionPassPhase)
-                    {
-                        EncryptionPassPhase tempPhase = (EncryptionPassPhase)phase;
-                        x += tempPhase.Duration.Minutes;
-                        y = tempPhase.TotalEnergy;
-                        passCurrentRunTime = x;
-                    }
+                    x += phase.Duration.Minutes;
+                    y = phase.TotalEnergy;
+                    passCurrentRunTime = x;
+
                     var size = 5;
                     var colorValue = i * 100;
                     scatterSeries.Points.Add(new DataPoint(x, y));
@@ -58,27 +48,6 @@ namespace SchedulerGUI.ViewModels.Controls
             MyModel.PlotAreaBorderColor = OxyColor.FromRgb(255, 255, 255);
             MyModel.TextColor = OxyColor.FromRgb(255, 255, 255);
             MyModel.TitleColor = OxyColor.FromRgb(255, 255, 255);
-        }
-
-        public static PlotModel RandomScatter(int n, int binsize)
-        {
-            PlotModel model = new PlotModel();
-            model.Title = string.Format("ScatterSeries (n={0})", n);
-            var s1 = new ScatterSeries()
-            {
-                Title = "Series 1",
-                MarkerType = MarkerType.Diamond,
-                MarkerStrokeThickness = 2,
-                BinSize = binsize,
-            };
-            var random = new Random();
-            for (int i = 0; i < n; i++)
-            {
-                s1.Points.Add(new ScatterPoint(random.NextDouble(), random.NextDouble()));
-            }
-
-            model.Series.Add(s1);
-            return model;
         }
 
         public PlotModel MyModel { get; private set; }

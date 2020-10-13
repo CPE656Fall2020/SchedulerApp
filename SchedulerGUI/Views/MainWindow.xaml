@@ -5,7 +5,6 @@
                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
                    xmlns:Fluent="urn:fluent-ribbon"
-                   xmlns:controls="clr-namespace:SchedulerGUI.Controls"
                    xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                    xmlns:timeline="clr-namespace:TimelineLibrary;assembly=TimelineLibrary"
@@ -160,7 +159,7 @@
 
                     <Border BorderBrush="Black" Grid.Column="1" BorderThickness="2">
                         <Grid>
-                            <controls:HistoryGraph DataContext="{Binding HistoryGraphViewModel}" />
+                            <Controls:HistoryGraph DataContext="{Binding HistoryGraphViewModel}" />
                         </Grid>
                     </Border>
                 </Grid>

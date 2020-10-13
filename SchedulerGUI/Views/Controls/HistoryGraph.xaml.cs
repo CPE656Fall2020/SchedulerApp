@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace SchedulerGUI.Controls
+namespace SchedulerGUI.Views.Controls
 {
     /// <summary>
     /// Interaction logic for HistoryGraph.xaml
