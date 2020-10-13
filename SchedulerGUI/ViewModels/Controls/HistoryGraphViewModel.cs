@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using OxyPlot;
-using OxyPlot.Axes;
 using OxyPlot.Series;
+using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 
 namespace SchedulerGUI.ViewModels.Controls
@@ -17,8 +13,6 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class HistoryGraphViewModel : ViewModelBase
     {
-        private readonly Random random = new Random();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryGraphViewModel"/> class.
         /// </summary>
@@ -32,9 +26,8 @@ namespace SchedulerGUI.ViewModels.Controls
             foreach (PassOrbit pass in passes)
             {
                 LineSeries scatterSeries = new LineSeries { MarkerType = MarkerType.Circle, MarkerSize = 5, Title = pass.Name, Color = OxyColor.FromRgb((byte)rnd.Next(256), (byte)rnd.Next(256), (byte)rnd.Next(256)) };
-                //pass.PassPhases
                 double passCurrentRunTime = 0;
-                foreach (object phase in pass.PassPhases)
+                foreach (IPassPhase phase in pass.PassPhases)
                 {
                     double x = passCurrentRunTime, y = 0;
                     if (phase is PassPhase)

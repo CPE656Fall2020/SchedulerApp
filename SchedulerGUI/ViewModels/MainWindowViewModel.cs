@@ -53,7 +53,7 @@ namespace SchedulerGUI.ViewModels
             };
 
             this.Init();
-            this.historyGraphViewModel = new HistoryGraphViewModel(this.Passes);
+            this.HistoryGraphViewModel = new HistoryGraphViewModel(this.Passes);
         }
 
         /// <summary>
@@ -110,13 +110,13 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets the start time of the 24-hr period in which orbits will occur.
-        /// </summary>
-        /// <summary>
         /// Gets the history graph for the main window.
         /// </summary>
-        public HistoryGraphViewModel historyGraphViewModel { get; }
+        public HistoryGraphViewModel HistoryGraphViewModel { get; }
 
+        /// <summary>
+        /// Gets or sets the start time of the 24-hr period in which orbits will occur.
+        /// </summary>
         public DateTime StartTime
         {
             get => this.startTime;

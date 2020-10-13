@@ -160,7 +160,7 @@
 
                     <Border BorderBrush="Black" Grid.Column="1" BorderThickness="2">
                         <Grid>
-                            <controls:HistoryGraph DataContext="{Binding historyGraphViewModel}" />
+                            <controls:HistoryGraph DataContext="{Binding HistoryGraphViewModel}" />
                         </Grid>
                     </Border>
                 </Grid>
