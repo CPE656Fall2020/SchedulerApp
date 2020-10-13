@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using SchedulerDatabase;
+using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 using SchedulerGUI.Services;
 using SchedulerGUI.Settings;
@@ -27,20 +28,18 @@ namespace SchedulerGUI.ViewModels
         private PassOrbit selectedPass;
         private DateTime startTime;
         private DateTime endTime;
-        private ObservableCollection<TimelineEvent> timelineEventPasses;
-        private ObservableCollection<TimelineEvent> timelineEventPhases;
+        private EditControlViewModel editControlVM;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
+        /// </summary>
         public MainWindowViewModel()
         {
             // Setup shared services like DbContext and SettingsManager for the entire application.
             this.Startup();
 
-            this.Passes = new ObservableCollection<PassOrbit>();
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
-            this.TimelineEventPhases = new ObservableCollection<TimelineEvent>();
-
-            this.EditCommand = new RelayCommand(this.EditClickedHandler);
-            this.AddCommand = new RelayCommand(this.AddClickedHandler);
+            this.Passes = new ObservableCollection<PassOrbit>();
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
             this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
@@ -53,8 +52,7 @@ namespace SchedulerGUI.ViewModels
                 PopupDialog = null,
             };
 
-            this.InitPasses();
-            this.InitTimelineEvents();
+            this.Init();
             this.historyGraphViewModel = new HistoryGraphViewModel(this.Passes);
         }
 
@@ -64,41 +62,18 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<PassOrbit> Passes { get; }
 
         /// <summary>
-        /// Gets or sets the passes as timeline events for viewing.
+        /// Gets the passes as timeline events for viewing.
         /// </summary>
-        public ObservableCollection<TimelineEvent> TimelineEventPasses
-        {
-            get => this.timelineEventPasses;
-            set => this.Set(() => this.TimelineEventPasses, ref this.timelineEventPasses, value);
-        }
+        public ObservableCollection<TimelineEvent> TimelineEventPasses { get; }
 
         /// <summary>
-        /// Gets or sets the phases as timeline events for viewing.
-        /// </summary>
-        public ObservableCollection<TimelineEvent> TimelineEventPhases
-        {
-            get => this.timelineEventPhases;
-            set => this.Set(() => this.TimelineEventPhases, ref this.timelineEventPhases, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the pass item that is currently selected.
+        /// Gets or sets the pass orbit that is currently selected.
         /// </summary>
         public PassOrbit SelectedPass
         {
             get => this.selectedPass;
             set => this.Set(() => this.SelectedPass, ref this.selectedPass, value);
         }
-
-        /// <summary>
-        /// Gets the command to execute when the edit button is selected.
-        /// </summary>
-        public ICommand EditCommand { get; }
-
-        /// <summary>
-        /// Gets the command to execute when the add button is selected.
-        /// </summary>
-        public ICommand AddCommand { get; }
 
         /// <summary>
         /// Gets the command to execute to open the Scheduler Plotter tool.
@@ -126,6 +101,18 @@ namespace SchedulerGUI.ViewModels
         public PopupViewModel DialogManager { get; }
 
         /// <summary>
+        /// Gets or sets the edit control view model.
+        /// </summary>
+        public EditControlViewModel EditControlViewModel
+        {
+            get => this.editControlVM;
+            set => this.Set(() => this.EditControlViewModel, ref this.editControlVM, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the start time of the 24-hr period in which orbits will occur.
+        /// </summary>
+        /// <summary>
         /// Gets the history graph for the main window.
         /// </summary>
         public HistoryGraphViewModel historyGraphViewModel { get; }
@@ -136,10 +123,27 @@ namespace SchedulerGUI.ViewModels
             set => this.Set(() => this.StartTime, ref this.startTime, value);
         }
 
+        /// <summary>
+        /// Gets or sets the end time of the 24-hr period in which orbits will occur.
+        /// </summary>
         public DateTime EndTime
         {
             get => this.endTime;
             set => this.Set(() => this.EndTime, ref this.endTime, value);
+        }
+
+        /// <summary>
+        /// Initializes edit control with pass informatin from the selected pass.
+        /// </summary>
+        public void InitEditControl()
+        {
+            this.EditControlViewModel = new EditControlViewModel(this.SelectedPass, this.SaveCommand);
+        }
+
+        private void Init()
+        {
+            this.InitPasses();
+            this.InitTimelineEvents();
         }
 
         /// <summary>
@@ -167,35 +171,12 @@ namespace SchedulerGUI.ViewModels
             Task.Run(() => SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>().AESProfiles.Count());
         }
 
-        private void EditClickedHandler()
+        private void SaveCommand(PassOrbit passData)
         {
-            void SaveCommand(PassOrbit passData)
-            {
-                var currentIndex = this.Passes.IndexOf(this.SelectedPass);
-                this.Passes[currentIndex] = passData;
-                this.DialogManager.PopupDialog = null;
+            var currentIndex = this.Passes.IndexOf(this.SelectedPass);
+            this.Passes[currentIndex] = passData;
 
-                // Restore the selected pass
-                this.SelectedPass = this.Passes[currentIndex];
-            }
-
-            void CancelCommand()
-            {
-                this.DialogManager.PopupDialog = null;
-            }
-
-            var editDialog = new EditWindowViewModel(
-                this.SelectedPass,
-                SaveCommand,
-                CancelCommand);
-
-            this.DialogManager.PopupDialog = editDialog;
-        }
-
-        private void AddClickedHandler()
-        {
-            DateTime moment = DateTime.Now;
-            this.Passes.Add(new PassOrbit((this.Passes.Count + 1).ToString(), moment, moment.AddMinutes(PASSDURATION)));
+            this.SelectedPass = passData;
         }
 
         private void OpenSchedulerPlotterHandler()
@@ -215,7 +196,7 @@ namespace SchedulerGUI.ViewModels
 
         private void OpenImportToolCLIHandler()
         {
-            var appDir = System.AppDomain.CurrentDomain.BaseDirectory;
+            var appDir = AppDomain.CurrentDomain.BaseDirectory;
 
             Process.Start(new ProcessStartInfo(
                 "cmd.exe",
@@ -226,10 +207,11 @@ namespace SchedulerGUI.ViewModels
         {
             DateTime startTime = DateTime.Now;
             this.StartTime = startTime;
+            Random random = new Random();
 
             for (int i = 0; i < NUMPASSES; i++)
             {
-                this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION)));
+                this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION), random));
                 startTime = startTime.AddMinutes(PASSDURATION);
             }
 
@@ -238,6 +220,9 @@ namespace SchedulerGUI.ViewModels
 
         private void InitTimelineEvents()
         {
+            string[] colors = { "Yellow", "Blue", "Green", "Orange" };
+            int colorIndex;
+
             foreach (PassOrbit pass in this.Passes.ToList())
             {
                 this.TimelineEventPasses.Add(new TimelineEvent
@@ -245,26 +230,44 @@ namespace SchedulerGUI.ViewModels
                     EndDate = pass.EndTime,
                     StartDate = pass.StartTime,
                     Title = pass.Name,
-                    EventColor = "red",
+                    EventColor = "CornflowerBlue",
+                    IsDuration = true,
+                    PassParentName = pass.Name,
                 });
 
-                //foreach (IPassPhase phase in pass.PassPhases.ToList())
-                //{
-                //    this.TimelineEventPhases.Add(new TimelineEvent
-                //    {
-                //        EndDate = phase.EndTime,
-                //        StartDate = phase.StartTime,
-                //        Title = phase.PhaseName.ToString(),
-                //        EventColor = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256)).Name,
-                //        Row = 1,
-                //    });
-                //}
+                colorIndex = 0;
+                foreach (IPassPhase phase in pass.PassPhases.ToList())
+                {
+                    this.TimelineEventPasses.Add(new TimelineEvent
+                    {
+                        EndDate = phase.EndTime,
+                        StartDate = phase.StartTime,
+                        EventColor = colors[colorIndex],
+                        IsDuration = true,
+                        Title = phase.PhaseName.ToString(),
+                        RowOverride = 2,
+                        PassParentName = pass.Name,
+                    });
+
+                    colorIndex++;
+                }
+            }
+
+            foreach (TimelineEvent e in this.TimelineEventPasses.ToList())
+            {
+                e.EventClicked += this.OnEventClicked;
             }
         }
 
         private void OpenAboutHandler()
         {
             this.DialogManager.PopupDialog = new AboutDialogViewModel();
+        }
+
+        private void OnEventClicked(object sender, EventArgs e)
+        {
+            var timelineEvent = (TimelineEvent)sender;
+            this.SelectedPass = this.Passes.ToList().Find(x => x.Name == timelineEvent.PassParentName);
         }
     }
 }

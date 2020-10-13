@@ -202,8 +202,6 @@ namespace TimelineLibrary
             System.Windows.Input.MouseButtonEventArgs   e
         )
         {
-            Point                                       p;
-
             if (m_manualDragging)
             {
                 m_manualDragging = false;

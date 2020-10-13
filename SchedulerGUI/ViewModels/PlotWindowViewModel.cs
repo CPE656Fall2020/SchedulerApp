@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using SchedulerDatabase;
 using SchedulerDatabase.Models;
 using SchedulerGUI.Models;
 using SchedulerGUI.ViewModels.Controls;
+using Sdl.MultiSelectComboBox.EventArgs;
+using Sdl.MultiSelectComboBox.Themes.Generic;
 
 namespace SchedulerGUI.ViewModels
 {
@@ -16,14 +21,11 @@ namespace SchedulerGUI.ViewModels
     /// </summary>
     public class PlotWindowViewModel : ViewModelBase
     {
-        private const string AllItems = "(All)";
-        private const int AllItemsInt = 0;
-
         private PlotOption selectedOption = PlotOption.Raw;
-        private string selectedAuthor = AllItems;
-        private string selectedPlatform = AllItems;
-        private string selectedAccelerator = AllItems;
-        private int selectedNumCores = AllItemsInt;
+        private IList<object> selectedAuthor;
+        private IList<object> selectedPlatform;
+        private IList<object> selectedAccelerator;
+        private IList<object> selectedNumCores;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlotWindowViewModel"/> class.
@@ -38,13 +40,10 @@ namespace SchedulerGUI.ViewModels
                 this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
                 this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
                 this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
-                this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores());
+                this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
             }
 
-            this.Authors.Insert(0, AllItems);
-            this.Platforms.Insert(0, AllItems);
-            this.Accelerators.Insert(0, AllItems);
-            this.NumCores.Insert(0, AllItemsInt);
+            this.FilterSelectionChangedCommand = new RelayCommand<SelectedItemsChangedEventArgs>(this.DropdownSelectionChangedHandler);
 
             this.GeneratePlot();
         }
@@ -70,6 +69,13 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<int> NumCores { get; }
 
         /// <summary>
+        /// Gets the command to execute when the selection of options in a filter has changed.
+        /// This really should not be necessary if SelectedItems was correctly bindable in
+        /// sdl.MultiSelectComboBox. However, this works and is decently acceptable for now.
+        /// </summary>
+        public ICommand FilterSelectionChangedCommand { get; }
+
+        /// <summary>
         /// Gets the title of the application.
         /// </summary>
         public string Title => $"CPE656 Data Plot Tool - {GlobalAssemblyInfo.InformationalVersion}";
@@ -86,7 +92,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets the selected author to display data from.
         /// </summary>
-        public string SelectedAuthor
+        public IList<object> SelectedAuthor
         {
             get => this.selectedAuthor;
             set => this.SetAndUpdatePlot(() => this.SelectedAuthor, ref this.selectedAuthor, value);
@@ -95,7 +101,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets the selected platform to display data for.
         /// </summary>
-        public string SelectedPlatform
+        public IList<object> SelectedPlatform
         {
             get => this.selectedPlatform;
             set => this.SetAndUpdatePlot(() => this.SelectedPlatform, ref this.selectedPlatform, value);
@@ -104,7 +110,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets the selected accelerator type to display data for.
         /// </summary>
-        public string SelectedAccelerator
+        public IList<object> SelectedAccelerator
         {
             get => this.selectedAccelerator;
             set => this.SetAndUpdatePlot(() => this.SelectedAccelerator, ref this.selectedAccelerator, value);
@@ -113,7 +119,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets the selected number of cores to display data for.
         /// </summary>
-        public int SelectedNumCores
+        public IList<object> SelectedNumCores
         {
             get => this.selectedNumCores;
             set => this.SetAndUpdatePlot(() => this.SelectedNumCores, ref this.selectedNumCores, value);
@@ -135,35 +141,34 @@ namespace SchedulerGUI.ViewModels
             using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
                 var summarizer = new SchedulingSummarizer(context);
-                var rawData = context.AESProfiles.AsQueryable();
+                var rawData = context.AESProfiles.AsEnumerable();
 
                 // Include platform filters
-                if (this.SelectedPlatform != AllItems)
+                if (this.SelectedPlatform?.Count > 0)
                 {
                     rawData = rawData
-                        .Where(a => a.PlatformName == this.SelectedPlatform);
+                         .Where(a => this.SelectedPlatform.Contains(a.PlatformName));
                 }
 
                 // Include author filters
-                if (this.SelectedAuthor != AllItems)
+                if (this.SelectedAuthor?.Count > 0)
                 {
                     rawData = rawData
-                        .Where(a => a.Author == this.SelectedAuthor);
+                      .Where(a => this.SelectedAuthor.Contains(a.Author));
                 }
 
                 // Include accelerator filters
-                if (this.SelectedAccelerator != AllItems)
+                if (this.SelectedAccelerator?.Count > 0)
                 {
-                    var accelerator = (AESEncyptorProfile.AcceleratorType)Enum.Parse(typeof(AESEncyptorProfile.AcceleratorType), this.SelectedAccelerator);
                     rawData = rawData
-                        .Where(a => a.PlatformAccelerator == accelerator);
+                     .Where(a => this.SelectedAccelerator.Contains(a.PlatformAccelerator.ToString()));
                 }
 
-                // Include author filters
-                if (this.SelectedNumCores != AllItemsInt)
+                // Include core count filters
+                if (this.SelectedNumCores?.Count > 0)
                 {
                     rawData = rawData
-                        .Where(a => a.NumCores == this.SelectedNumCores);
+                    .Where(a => this.SelectedNumCores.Contains(a.NumCores));
                 }
 
                 switch (this.SelectedOption)
@@ -177,6 +182,15 @@ namespace SchedulerGUI.ViewModels
                         break;
                 }
             }
+        }
+
+        private void DropdownSelectionChangedHandler(SelectedItemsChangedEventArgs e)
+        {
+            // See https://github.com/sdl/Multiselect-ComboBox/issues/38
+            // This control really does not work well for general cases,
+            // but this work-around is close enough.
+            var selected = new List<object>(e.Selected.Cast<object>());
+            (e.Source as MultiSelectComboBox).SelectedItems = selected;
         }
     }
 }

@@ -332,7 +332,6 @@ namespace TimelineLibrary
 		/// </summary>
 		/// <param name="events">The events to reset the UI with.</param>
         public void ResetEvents(List<TimelineEvent> passEvents, bool fixDates = true)
-        //public void ResetEvents(List<TimelineEvent> passEvents, List<TimelineEvent> phaseEvents, bool fixDates = true)
         {
             // fix event dates
             if (fixDates)
@@ -344,18 +343,9 @@ namespace TimelineLibrary
                         e.EndDate = e.StartDate;
                     }
                 }
-
-                //foreach (TimelineEvent e in phaseEvents)
-                //{
-                //    if (!e.IsDuration)
-                //    {
-                //        e.EndDate = e.StartDate;
-                //    }
-                //}
             }
 
             m_eventStore = new TimelineEventStore(passEvents);
-            //m_eventStorePhases = new TimelineEventStore(phaseEvents);
 
             ClearSelection();
             RefreshEvents();
@@ -407,8 +397,6 @@ namespace TimelineLibrary
 
                     if (b.IsMainBand)
                         b.EventStore = m_eventStore;
-                    //else
-                    //    b.EventStore = m_eventStorePhases;
                 }
 
                 MainBand.CalculateEventRows();

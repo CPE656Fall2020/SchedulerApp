@@ -80,24 +80,23 @@
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
     <Compile Include="ViewModels\Controls\HistoryGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
-    <Compile Include="ViewModels\Controls\TimeControlViewModel.cs" />
-    <Compile Include="ViewModels\EditWindowViewModel.cs" />
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
     <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
       <DependentUpon>AESGraphControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\EditControl.xaml.cs">
+      <DependentUpon>EditControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditDialog.xaml.cs">
-      <DependentUpon>EditDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\HistoryGraph.xaml.cs">
       <DependentUpon>HistoryGraph.xaml</DependentUpon>
@@ -106,9 +105,6 @@
     <Compile Include="Models\PassPhase.cs" />
     <Compile Include="Controls\Power.xaml.cs">
       <DependentUpon>Power.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Controls\TimeControl.xaml.cs">
-      <DependentUpon>TimeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ImportToolDialog.xaml.cs">
       <DependentUpon>ImportToolDialog.xaml</DependentUpon>
@@ -120,7 +116,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\SchedulerLight.xaml">
+    <Page Include="Styles\Themes\SchedulerLight.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -132,11 +128,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\LocalDataTemplates.xaml">
+    <Page Include="Styles\WindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\AESGraphControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\EditControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -147,10 +147,6 @@
     <Page Include="Views\AboutDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\EditDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\HistoryGraph.xaml">
       <SubType>Designer</SubType>
@@ -168,16 +164,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\GanttRowPanel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Controls\Power.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Controls\TimeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -243,6 +234,9 @@
     </PackageReference>
     <PackageReference Include="OxyPlot.Wpf">
       <Version>2.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Sdl.MultiSelectComboBox">
+      <Version>1.0.17</Version>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.118</Version>

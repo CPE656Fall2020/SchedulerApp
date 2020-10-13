@@ -7,6 +7,7 @@ using SchedulerGUI.ViewModels;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace SchedulerGUI.Views
 {
@@ -27,9 +28,7 @@ namespace SchedulerGUI.Views
             this.Closed += this.MahMetroWindow_Closed;
 
             var dc = DataContext as MainWindowViewModel;
-
             timeline.ResetEvents(dc.TimelineEventPasses.ToList());
-            //timeline.ResetEvents(dc.TimelineEventPasses.ToList(), dc.TimelineEventPhases.ToList());
         }
 
         //https://github.com/fluentribbon/Fluent.Ribbon/blob/develop/Fluent.Ribbon.Showcase/MahMetroWindow.xaml.cs
@@ -70,9 +69,13 @@ namespace SchedulerGUI.Views
             ThemeManager.Current.ThemeChanged -= this.SyncThemes;
         }
 
-        private void slider1_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void passesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            timeline.CurrentDateTime = timeline.MinDateTime + new TimeSpan((int)e.NewValue, 0, 0, 0);
+            if (passesListView.SelectedItem != null)
+            {
+                var dc = (MainWindowViewModel)DataContext;
+                dc.InitEditControl();
+            }
         }
     }
 }
