@@ -87,9 +87,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsmInfo.cs">
-      <Link>Properties\AsmInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\Silverlight\TimelineLib\Compatibility.cs">
       <Link>Compatibility.cs</Link>
     </Compile>
