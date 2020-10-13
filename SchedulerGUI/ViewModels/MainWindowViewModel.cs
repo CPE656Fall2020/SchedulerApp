@@ -159,6 +159,11 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the history graph for the scheduled passes.
+        /// </summary>
+        public HistoryGraphViewModel HistoryGraphViewModel { get; set; }
+
+        /// <summary>
         /// Gets or sets the start time of the 24-hr period in which orbits will occur.
         /// </summary>
         public DateTime StartTime
@@ -366,6 +371,9 @@ namespace SchedulerGUI.ViewModels
             {
                 // Worked okay
                 this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileOK"];
+
+                // Update the History graph with the new data
+                this.HistoryGraphViewModel = new HistoryGraphViewModel(this.Passes);
             }
         }
     }
