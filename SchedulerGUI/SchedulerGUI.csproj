@@ -112,9 +112,6 @@
     </Compile>
     <Compile Include="Models\PassOrbit.cs" />
     <Compile Include="Models\PassPhase.cs" />
-    <Compile Include="Controls\Power.xaml.cs">
-      <DependentUpon>Power.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ImportToolDialog.xaml.cs">
       <DependentUpon>ImportToolDialog.xaml</DependentUpon>
     </Compile>
@@ -184,10 +181,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\Power.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\PlotWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
