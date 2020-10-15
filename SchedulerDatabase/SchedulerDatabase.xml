@@ -15,6 +15,8 @@
             </summary>
             <param name="acceleratorType">The accelerator to return a name for.</param>
             <returns>A user friendly name.</returns>
+            <remarks>
+            Adapted from https://codereview.stackexchange.com/questions/157871/method-that-returns-description-attribute-of-enum-value.</remarks>
         </member>
         <member name="T:SchedulerDatabase.Extensions.AESEncryptorProfileExtensions">
             <summary>

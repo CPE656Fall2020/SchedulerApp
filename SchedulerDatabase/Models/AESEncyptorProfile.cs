@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace SchedulerDatabase.Models
 {
@@ -36,11 +37,13 @@ namespace SchedulerDatabase.Models
             /// <summary>
             /// No accelerator is used.
             /// </summary>
+            [Description("SW-Only")]
             None,
 
             /// <summary>
             /// CPU-provided Hardware acceleration is used.
             /// </summary>
+            [Description("Hardware")]
             CpuHardware,
         }
 
