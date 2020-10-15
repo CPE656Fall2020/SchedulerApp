@@ -30,6 +30,12 @@ namespace SchedulerGUI.Solver.Algorithms
                 },
             };
 
+            // Put a placeholder energy value.
+            foreach (var pass in passes)
+            {
+                pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption).TotalEnergyUsed = 0;
+            }
+
             return solution;
         }
     }

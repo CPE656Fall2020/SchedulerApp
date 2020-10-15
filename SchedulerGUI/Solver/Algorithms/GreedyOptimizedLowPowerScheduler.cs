@@ -31,6 +31,14 @@ namespace SchedulerGUI.Solver.Algorithms
                 Problems = new List<ScheduleSolution.SchedulerProblem>(),
             };
 
+            // Zero out all the energies used before calculation.
+            // That way, if the scheduler fails, the only values that will be set
+            // are the passes that were completed successfully.
+            foreach (var pass in passes)
+            {
+                pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption).TotalEnergyUsed = 0;
+            }
+
             var optimizationMap = this.BuildOptimizationMap(availableProfiles, solution);
 
             double currentCapacityJoules = 0;
