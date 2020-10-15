@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SchedulerDatabase;
 using SchedulerDatabase.Models;
 using SchedulerGUI.Models;
 
