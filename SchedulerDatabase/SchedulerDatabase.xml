@@ -4,6 +4,32 @@
         <name>SchedulerDatabase</name>
     </assembly>
     <members>
+        <member name="T:SchedulerDatabase.Extensions.AcceleratorTypeExtensions">
+            <summary>
+            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> enum.
+            </summary>
+        </member>
+        <member name="M:SchedulerDatabase.Extensions.AcceleratorTypeExtensions.ToFriendlyName(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+            <summary>
+            Returns a user-friendly name for an accelerator type.
+            </summary>
+            <param name="acceleratorType">The accelerator to return a name for.</param>
+            <returns>A user friendly name.</returns>
+            <remarks>
+            Adapted from https://codereview.stackexchange.com/questions/157871/method-that-returns-description-attribute-of-enum-value.</remarks>
+        </member>
+        <member name="T:SchedulerDatabase.Extensions.AESEncryptorProfileExtensions">
+            <summary>
+            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> type.
+            </summary>
+        </member>
+        <member name="M:SchedulerDatabase.Extensions.AESEncryptorProfileExtensions.ToFullDescription(SchedulerDatabase.Models.AESEncyptorProfile)">
+            <summary>
+            Returns a complete description string for the profile.
+            </summary>
+            <param name="profile">The profile to describe.</param>
+            <returns>The complete description string.</returns>
+        </member>
         <member name="T:SchedulerDatabase.Models.AESEncyptorProfile">
             <summary>
             <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
@@ -119,6 +145,16 @@
         <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.NumCores">
             <summary>
             Gets or sets an integer value representing the number of processor cores utilized during the test.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.JoulesPerByte">
+            <summary>
+            Gets the amount of energy, in Joules, required to encrypt 1 byte of data.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.BytesPerSecond">
+            <summary>
+            Gets the throughput of the encryptor, in bytes per second.
             </summary>
         </member>
         <member name="T:SchedulerDatabase.SchedulerContext">

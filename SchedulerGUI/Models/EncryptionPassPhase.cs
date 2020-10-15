@@ -36,13 +36,10 @@ namespace SchedulerGUI.Models
         public PhaseType PhaseName { get; set; }
 
         /// <inheritdoc/>
-        public double Power => Math.Round(Math.Abs(this.TotalEnergy) / this.EndTime.Subtract(this.StartTime).TotalSeconds, 3);
+        public double TotalEnergyUsed { get; set; }
 
         /// <inheritdoc/>
-        public double TotalEnergy { get; set; }
-
-        /// <inheritdoc/>
-        public double MaxEnergy { get; private set; }
+        public double MaxEnergyUsed { get; private set; }
 
         /// <summary>
         /// Gets max number of bytes to encrypt during phase.
@@ -58,10 +55,12 @@ namespace SchedulerGUI.Models
         public void SetRandomValues(Random random, double maxEnergy, int? maxBytes = null)
         {
             this.MaxBytes = (int)maxBytes;
-            this.MaxEnergy = Math.Round(maxEnergy, 3);
 
-            this.TotalEnergy = Math.Round(random.NextDouble() * this.MaxEnergy, 3);
             this.BytesToEncrypt = random.Next(0, this.MaxBytes);
+
+            // The energy consumption will be a factor of the fake number of bytes scheduled with the fake scheduler.
+            this.MaxEnergyUsed = 0;
+            this.TotalEnergyUsed = 0;
         }
     }
 }

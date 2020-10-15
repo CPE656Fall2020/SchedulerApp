@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using OxyPlot;
 using OxyPlot.Series;
@@ -9,47 +9,78 @@ using SchedulerGUI.Models;
 namespace SchedulerGUI.ViewModels.Controls
 {
     /// <summary>
-    /// <see cref="AboutDialogViewModel"/> provides a View-Model for the <see cref="Views.HistoryGraph"/> view.
+    /// <see cref="HistoryGraphViewModel"/> provides a View-Model for the <see cref="Views.HistoryGraph"/> view.
     /// </summary>
     public class HistoryGraphViewModel : ViewModelBase
     {
+        private IEnumerable<PassOrbit> passes;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryGraphViewModel"/> class.
         /// </summary>
-        public HistoryGraphViewModel(ObservableCollection<PassOrbit> passes)
+        public HistoryGraphViewModel()
+        {
+            this.PlotModel = new PlotModel
+            {
+                Title = "Energy Consumption Over Time",
+            };
+        }
+
+        /// <summary>
+        /// Gets the plot model for the history view.
+        /// </summary>
+        public PlotModel PlotModel { get; }
+
+        /// <summary>
+        /// Gets or sets the pass data that should be used to build the historical display.
+        /// </summary>
+        public IEnumerable<PassOrbit> Passes
+        {
+            get => this.passes;
+            set
+            {
+                this.passes = value;
+                this.GeneratePlot();
+            }
+        }
+
+        private void GeneratePlot()
         {
             Random rnd = new Random();
 
-            MyModel = new PlotModel { Title = "Energy Consumtion Over time" };
+            this.PlotModel.Series.Clear();
 
-            int i = 1;
-            foreach (PassOrbit pass in passes)
+            foreach (PassOrbit pass in this.Passes)
             {
-                LineSeries scatterSeries = new LineSeries { MarkerType = MarkerType.Circle, MarkerSize = 5, Title = pass.Name, Color = OxyColor.FromRgb((byte)rnd.Next(256), (byte)rnd.Next(256), (byte)rnd.Next(256)) };
+                LineSeries scatterSeries = new LineSeries
+                {
+                    MarkerType = MarkerType.Circle,
+                    MarkerSize = 5,
+                    Title = pass.Name,
+                    Color = OxyColor.FromRgb((byte)rnd.Next(256), (byte)rnd.Next(256), (byte)rnd.Next(256)),
+                };
+
                 double passCurrentRunTime = 0;
                 foreach (IPassPhase phase in pass.PassPhases)
                 {
                     double x = passCurrentRunTime, y = 0;
                     x += phase.Duration.Minutes;
-                    y = phase.TotalEnergy;
+                    y = phase.TotalEnergyUsed;
                     passCurrentRunTime = x;
 
-                    var size = 5;
-                    var colorValue = i * 100;
                     scatterSeries.Points.Add(new DataPoint(x, y));
                 }
-                MyModel.Series.Add(scatterSeries);
 
-                i++;
+                this.PlotModel.Series.Add(scatterSeries);
             }
 
-            MyModel.LegendPosition = LegendPosition.RightMiddle;
-            MyModel.LegendPlacement = LegendPlacement.Outside;
-            MyModel.PlotAreaBorderColor = OxyColor.FromRgb(255, 255, 255);
-            MyModel.TextColor = OxyColor.FromRgb(255, 255, 255);
-            MyModel.TitleColor = OxyColor.FromRgb(255, 255, 255);
-        }
+            this.PlotModel.LegendPosition = LegendPosition.RightMiddle;
+            this.PlotModel.LegendPlacement = LegendPlacement.Outside;
+            this.PlotModel.PlotAreaBorderColor = OxyColor.FromRgb(255, 255, 255);
+            this.PlotModel.TextColor = OxyColor.FromRgb(255, 255, 255);
+            this.PlotModel.TitleColor = OxyColor.FromRgb(255, 255, 255);
 
-        public PlotModel MyModel { get; private set; }
+            this.PlotModel.InvalidatePlot(true);
+        }
     }
 }

@@ -19,6 +19,6 @@
             </Label.RenderTransform>
         </Label>
         <Label Content="Time in Mins" Foreground="White" Panel.ZIndex="111111"  HorizontalAlignment="Center" Padding="0" VerticalAlignment="Bottom" Height="16" Margin="216,0" />
-        <oxy:PlotView  Model="{Binding MyModel}" Foreground="White" Background="#2D2D30" Margin="10,0,0,5" />
+        <oxy:PlotView  Model="{Binding PlotModel}" Foreground="White" Background="#2D2D30" Margin="10,0,0,5" />
     </Grid>
 </UserControl>

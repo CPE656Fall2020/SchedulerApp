@@ -47,8 +47,30 @@
             </Fluent:Ribbon.Menu>
 
             <!--Tabs-->
-            <Fluent:RibbonTabItem Header="Database">
-                <Fluent:RibbonGroupBox Header="Tools">
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Scheduler">
+                    <Fluent:Gallery ItemsSource="{Binding AvailableAlgorithms}"
+                                    SelectedItem="{Binding SelectedAlgorithm}">
+                        <Fluent:Gallery.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="64" Width="72">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="32" />
+                                    </Grid.RowDefinitions>
+
+                                    <Image Source="{Binding Tag}" Grid.Row="0" Height="32" />
+                                    <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Grid.Row="1" TextAlignment="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </Fluent:Gallery.ItemTemplate>
+                    </Fluent:Gallery>
+
+                    <Fluent:Button Header="Schedule Status"
+                                   LargeIcon="{Binding ScheduleStatusIcon}"
+                                   Command="{Binding OpenScheduleStatusCommand}" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Database Tools">
                     <Fluent:Button Header="Plot Tool"
                                    Icon="{StaticResource VS2017Icons.AvailablityColumnChart}"
                                    LargeIcon="{StaticResource VS2017Icons.AvailablityColumnChart}"
@@ -86,24 +108,26 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <ListView x:Name="passesListView" ItemsSource="{Binding Passes}" SelectionChanged="passesListView_SelectionChanged"
+                <GroupBox Header="All Passes">
+                    <ListView x:Name="passesListView" ItemsSource="{Binding Passes}" SelectionChanged="passesListView_SelectionChanged"
                           SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <TextBlock Margin="5" FontSize="18" Text="{Binding Name}" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Margin="5" FontSize="16" Text="{Binding Name}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </GroupBox>
 
-                <ScrollViewer Grid.Row="1">
-                    <Controls:EditControl IsEnabled="{Binding ElementName=passesListView, Path=SelectedItems.Count}"
-                  Margin="5,15,5,5" VerticalAlignment="Center" DataContext="{Binding EditControlViewModel}" />
-                </ScrollViewer>
+                <Controls:EditControl IsEnabled="{Binding ElementName=passesListView, Path=SelectedItems.Count}"
+                                      Grid.Row="1"
+                                      Margin="5,15,5,5" VerticalAlignment="Center" DataContext="{Binding EditControlViewModel}"/>
+
             </Grid>
 
             <!--Right Body Pane-->
@@ -113,7 +137,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TabControl>
-                    <TabItem x:Name="tiTimeLine" Header="TimeLine">
+                    <TabItem x:Name="tiTimeLine" Header="Orbital Timeline">
                         <Grid x:Name="grdTimeLine">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -146,22 +170,17 @@
 
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
-                    <ListBox>
-                        <ListBoxItem>Devices:</ListBoxItem>
-                        <ListBoxItem>MSP430</ListBoxItem>
-                        <ListBoxItem>MSP432</ListBoxItem>
-                        <ListBoxItem>ODROID</ListBoxItem>
-                    </ListBox>
+                    <!--Selection Control for devices to schedule with-->
+                    <ContentControl Content="{Binding DevicePickerViewModel}" />
 
-                    <Border BorderBrush="Black" Grid.Column="1" BorderThickness="2">
-                        <Grid>
-                            <Controls:HistoryGraph DataContext="{Binding HistoryGraphViewModel}" />
-                        </Grid>
-                    </Border>
+                    <!--Historical Graph-->
+                    <GroupBox Grid.Column="1" Header="Power Schedule" Margin="5,0,5,0">
+                        <ContentControl Content="{Binding HistoryGraphViewModel}" />
+                    </GroupBox>
                 </Grid>
             </Grid>
         </Grid>
