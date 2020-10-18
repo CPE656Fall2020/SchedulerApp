@@ -112,8 +112,8 @@
                 </Grid.RowDefinitions>
 
                 <GroupBox Header="All Passes">
-                    <ListView x:Name="passesListView" ItemsSource="{Binding Passes}" SelectionChanged="passesListView_SelectionChanged"
-                          SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+                    <ListView x:Name="passesListView" ItemsSource="{Binding Passes}"
+                              SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>

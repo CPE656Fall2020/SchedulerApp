@@ -7,7 +7,6 @@ using SchedulerGUI.ViewModels;
 using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace SchedulerGUI.Views
 {
@@ -67,15 +66,6 @@ namespace SchedulerGUI.Views
         private void MahMetroWindow_Closed(object sender, EventArgs e)
         {
             ThemeManager.Current.ThemeChanged -= this.SyncThemes;
-        }
-
-        private void passesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (passesListView.SelectedItem != null)
-            {
-                var dc = (MainWindowViewModel)DataContext;
-                dc.InitEditControl();
-            }
         }
     }
 }

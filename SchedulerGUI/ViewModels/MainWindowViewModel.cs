@@ -98,7 +98,16 @@ namespace SchedulerGUI.ViewModels
         public PassOrbit SelectedPass
         {
             get => this.selectedPass;
-            set => this.Set(() => this.SelectedPass, ref this.selectedPass, value);
+            set
+            {
+                this.Set(() => this.SelectedPass, ref this.selectedPass, value);
+
+                // Update the editor pane to show information for this pass.
+                if (this.SelectedPass != null)
+                {
+                    this.InitEditControl();
+                }
+            }
         }
 
         /// <summary>
@@ -193,7 +202,7 @@ namespace SchedulerGUI.ViewModels
         private ScheduleSolution LastSolution { get; set; }
 
         /// <summary>
-        /// Initializes edit control with pass informatin from the selected pass.
+        /// Initializes edit control with pass information from the selected pass.
         /// </summary>
         public void InitEditControl()
         {
