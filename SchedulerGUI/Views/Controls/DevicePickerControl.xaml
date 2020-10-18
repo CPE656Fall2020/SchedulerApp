@@ -25,6 +25,8 @@
                         </Grid.ColumnDefinitions>
                         
                         <CheckBox FontSize="14" Content="{Binding DeviceDescription}" IsChecked="{Binding IsSelected}"
+                                  metro:CheckBoxHelper.CheckGlyphForegroundChecked="White"
+                                  metro:CheckBoxHelper.CheckGlyphForegroundCheckedMouseOver="White"
                                   metro:CheckBoxHelper.ForegroundChecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"
                                   metro:CheckBoxHelper.ForegroundUnchecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"
                                   metro:CheckBoxHelper.ForegroundCheckedMouseOver="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"
