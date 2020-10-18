@@ -32,6 +32,7 @@ namespace SchedulerGUI.ViewModels
         private DateTime endTime;
         private EditControlViewModel editControlVM;
         private IScheduleSolver selectedAlgorithm;
+        private ScheduleSolution lastSolution;
         private object scheduleStatusIcon;
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace SchedulerGUI.ViewModels
         public MainWindowViewModel()
         {
             // Setup shared services like DbContext and SettingsManager for the entire application.
-            this.Startup();
+            this.StartupAppServices();
 
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
             this.Passes = new ObservableCollection<PassOrbit>();
@@ -53,7 +54,7 @@ namespace SchedulerGUI.ViewModels
             this.DialogManager = new PopupViewModel()
             {
                 ClosePopup = new RelayCommand(() => this.DialogManager.PopupDialog = null, true),
-                EasyClosePopup = null, // Leave EasyClose off for now,
+                EasyClosePopup = null,
                 PopupDialog = null,
             };
 
@@ -154,12 +155,12 @@ namespace SchedulerGUI.ViewModels
         public PopupViewModel DialogManager { get; }
 
         /// <summary>
-        /// Gets or sets the edit control view model.
+        /// Gets the edit control view model.
         /// </summary>
         public EditControlViewModel EditControlViewModel
         {
             get => this.editControlVM;
-            set => this.Set(() => this.EditControlViewModel, ref this.editControlVM, value);
+            private set => this.Set(() => this.EditControlViewModel, ref this.editControlVM, value);
         }
 
         /// <summary>
@@ -199,7 +200,14 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public DevicePickerViewModel DevicePickerViewModel { get; }
 
-        private ScheduleSolution LastSolution { get; set; }
+        /// <summary>
+        /// Gets the last solved scheduling solution.
+        /// </summary>
+        public ScheduleSolution LastSolution
+        {
+            get => this.lastSolution;
+            private set => this.Set(() => this.LastSolution, ref this.lastSolution, value);
+        }
 
         /// <summary>
         /// Initializes edit control with pass information from the selected pass.
@@ -218,7 +226,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Performs application initialization.
         /// </summary>
-        private void Startup()
+        private void StartupAppServices()
         {
             // Setup the SettingsManager
             const string SettingsFileName = "settings.json";

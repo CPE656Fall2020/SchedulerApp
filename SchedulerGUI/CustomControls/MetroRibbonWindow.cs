@@ -10,7 +10,7 @@ namespace SchedulerGUI.CustomControls
     /// <see cref="MetroRibbonWindow"/> is a MahApps Metro window with support for the Fluent Ribbon control.
     /// </summary>
     /// <remarks>
-    /// Adapted from https://github.com/fluentribbon/Fluent.Ribbon/blob/develop/Fluent.Ribbon.Showcase/MahMetroWindow.xaml.cs</remarks>
+    /// Adapted from https://github.com/fluentribbon/Fluent.Ribbon/blob/develop/Fluent.Ribbon.Showcase/MahMetroWindow.xaml.cs.</remarks>
     public class MetroRibbonWindow : MetroWindow
     {
         private static readonly DependencyPropertyKey TitleBarPropertyKey =
