@@ -23,7 +23,14 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <StackPanel.Resources>
-                <Style TargetType="TextBlock">
+                <!--Style for the custom data template for the dropdowns-->
+                <Style TargetType="{x:Type TextBlock}" x:Key="dropdownOption">
+                    <Setter Property="FontSize" Value="12" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+
+                <!--Generic TextBlock style applied to all the others (the filter captions)-->
+                <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="Margin" Value="20,0,10,0" />
                 </Style>
@@ -73,15 +80,16 @@
                                          sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
                                          IsEditable="True"
                                          SelectionMode="Multiple"
+                                         EnableAutoComplete="False"
                                          Grid.Column="5">
                     <sdl:MultiSelectComboBox.DropdownItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" Style="{StaticResource dropdownOption}"/>
                         </DataTemplate>
                     </sdl:MultiSelectComboBox.DropdownItemTemplate>
                     <sdl:MultiSelectComboBox.SelectedItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" Style="{StaticResource dropdownOption}" />
                         </DataTemplate>
                     </sdl:MultiSelectComboBox.SelectedItemTemplate>
                 </sdl:MultiSelectComboBox>
@@ -92,15 +100,16 @@
                                          sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
                                          IsEditable="True"
                                          SelectionMode="Multiple"
+                                         EnableAutoComplete="False"
                                          Grid.Column="7">
                     <sdl:MultiSelectComboBox.DropdownItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource hzToStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={StaticResource hzToStringConverter}}" Style="{StaticResource dropdownOption}" />
                         </DataTemplate>
                     </sdl:MultiSelectComboBox.DropdownItemTemplate>
                     <sdl:MultiSelectComboBox.SelectedItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource hzToStringConverter}}" />
+                            <TextBlock Text="{Binding Converter={StaticResource hzToStringConverter}}" Style="{StaticResource dropdownOption}" />
                         </DataTemplate>
                     </sdl:MultiSelectComboBox.SelectedItemTemplate>
                 </sdl:MultiSelectComboBox>
