@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="SchedulerGUI.Views.ScheduleViewerDialog"
+﻿<UserControl x:Class="SchedulerGUI.Views.Controls.ScheduleViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -57,7 +57,7 @@
                                         <ColumnDefinition Width="350" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding Key.Name}" Grid.Column="0" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Key.Name}" TextWrapping="Wrap" />
                                     <TextBlock Text="{Binding Value}" Grid.Column="1" TextWrapping="Wrap" />
                                 </Grid>
                             </DataTemplate>

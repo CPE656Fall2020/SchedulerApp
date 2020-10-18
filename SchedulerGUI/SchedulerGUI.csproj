@@ -92,7 +92,7 @@
     <Compile Include="ViewModels\ImportToolDialogViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
-    <Compile Include="ViewModels\ScheduleViewerDialogViewModel.cs" />
+    <Compile Include="ViewModels\Controls\ScheduleViewerViewModel.cs" />
     <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
       <DependentUpon>AESGraphControl.xaml</DependentUpon>
     </Compile>
@@ -119,8 +119,8 @@
     <Compile Include="Views\PlotWindow.xaml.cs">
       <DependentUpon>PlotWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ScheduleViewerDialog.xaml.cs">
-      <DependentUpon>ScheduleViewerDialog.xaml</DependentUpon>
+    <Compile Include="Views\Controls\ScheduleViewer.xaml.cs">
+      <DependentUpon>ScheduleViewer.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\VS2017\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -186,7 +186,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ScheduleViewerDialog.xaml">
+    <Page Include="Views\Controls\ScheduleViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

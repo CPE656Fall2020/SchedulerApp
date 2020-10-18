@@ -34,6 +34,8 @@ namespace SchedulerGUI.ViewModels
         private IScheduleSolver selectedAlgorithm;
         private ScheduleSolution lastSolution;
         private object scheduleStatusIcon;
+        private ScheduleViewerViewModel scheduleViewerViewModel;
+        private DevicePickerViewModel devicePickerViewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
@@ -73,7 +75,6 @@ namespace SchedulerGUI.ViewModels
             };
 
             this.SelectedAlgorithm = this.AvailableAlgorithms.First();
-
             this.Init();
             this.RunSchedule();
         }
@@ -209,6 +210,8 @@ namespace SchedulerGUI.ViewModels
             private set => this.Set(() => this.LastSolution, ref this.lastSolution, value);
         }
 
+        public ScheduleViewerViewModel ScheduleViewerViewModel { get; set; }
+
         /// <summary>
         /// Initializes edit control with pass information from the selected pass.
         /// </summary>
@@ -260,8 +263,7 @@ namespace SchedulerGUI.ViewModels
 
         private void OpenScheduleStatusHandler()
         {
-            var dialog = new ScheduleViewerDialogViewModel(this.LastSolution);
-            this.DialogManager.PopupDialog = dialog;
+            this.RunSchedule();
         }
 
         private void OpenSchedulerPlotterHandler()
@@ -377,17 +379,8 @@ namespace SchedulerGUI.ViewModels
             {
                 this.ScheduleStatusIcon = warningIcon;
             }
-            else if (hasError)
+            else if (hasError || hasFatal || !this.LastSolution.IsSolvable)
             {
-                this.ScheduleStatusIcon = failedIcon;
-            }
-            else if (hasFatal)
-            {
-                this.ScheduleStatusIcon = failedIcon;
-            }
-            else if (!this.LastSolution.IsSolvable)
-            {
-                // ??? not solvable but no errors?
                 this.ScheduleStatusIcon = failedIcon;
             }
             else
@@ -398,6 +391,8 @@ namespace SchedulerGUI.ViewModels
                 // Update the History graph with the new data
                 this.HistoryGraphViewModel.Passes = this.Passes;
             }
+
+            this.ScheduleViewerViewModel = new ScheduleViewerViewModel(this.LastSolution);
         }
     }
 }
