@@ -23,6 +23,16 @@
         </DataTemplate>
     </metro:MetroWindow.TitleTemplate>
 
+    <metro:MetroWindow.Flyouts>
+        <metro:FlyoutsControl>
+            <metro:Flyout Header="Available Devices" Position="Right" Width="420" IsOpen="{Binding IsDeviceSelectionVisible}" Theme="Accent">
+                <!--Selection Control for devices to schedule with-->
+                <ContentControl Content="{Binding DevicePickerViewModel}" 
+                                Foreground="White" />
+            </metro:Flyout>
+        </metro:FlyoutsControl>
+    </metro:MetroWindow.Flyouts>
+
     <!--Top Level Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -69,7 +79,7 @@
                     <Fluent:Button Header="Edit Available Devices"
                                    Icon="{StaticResource VS2017Icons.CustomActionEditor}"
                                    LargeIcon="{StaticResource VS2017Icons.CustomActionEditor}"
-                                   Command="{Binding OpenSchedulerPlotterCommand}" />
+                                   Command="{Binding ToggleDeviceSelectionVisibilityCommand}"/>
 
                     <Fluent:Button Header="Schedule Status"
                                    LargeIcon="{Binding ScheduleStatusIcon}"
@@ -174,20 +184,10 @@
                     </TabItem>
                 </TabControl>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <!--Selection Control for devices to schedule with-->
-                    <ContentControl Content="{Binding DevicePickerViewModel}" />
-
-                    <!--Historical Graph-->
-                    <GroupBox Grid.Column="1" Header="Power Schedule" Margin="5,0,5,0">
-                        <ContentControl Content="{Binding HistoryGraphViewModel}" />
-                    </GroupBox>
-                </Grid>
+                <!--Historical Graph-->
+                <GroupBox Grid.Row="2" Header="Power Schedule" Margin="5,0,5,0">
+                    <ContentControl Content="{Binding HistoryGraphViewModel}" />
+                </GroupBox>
             </Grid>
         </Grid>
 
