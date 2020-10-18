@@ -28,10 +28,10 @@ namespace SchedulerGUI.Converters
         }
 
         /// <summary>
-        /// Converts a number of bytes to a human-readable size representation.
+        /// Converts a clock speed in Hz to a human-readable size representation.
         /// </summary>
-        /// <param name="hz">The number of hz.</param>
-        /// <returns>A human-readable size string.</returns>
+        /// <param name="hz">The frequency in Hz.</param>
+        /// <returns>A human-readable clockrate string.</returns>
         /// <remarks>
         /// Adapted from https://stackoverflow.com/a/4975942.
         /// </remarks>
