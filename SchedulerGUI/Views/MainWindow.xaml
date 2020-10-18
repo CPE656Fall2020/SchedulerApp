@@ -1,27 +1,28 @@
-﻿<metro:MetroWindow x:Class="SchedulerGUI.Views.MainWindow"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                   xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
-                   xmlns:Fluent="urn:fluent-ribbon"
-                   xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
-                   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                   xmlns:timeline="clr-namespace:TimelineLibrary;assembly=TimelineLibrary"
-                   mc:Ignorable="d"
-                   Style="{StaticResource SchedulerApp.Window}"
-                   ShowSystemMenuOnRightClick="False"
-                   Title="UAH Satellite Power Scheduler"
-                   DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
-                   WindowState="Maximized">
+﻿<cc:MetroRibbonWindow x:Class="SchedulerGUI.Views.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:cc="clr-namespace:SchedulerGUI.CustomControls"
+                      xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:Fluent="urn:fluent-ribbon"
+                      xmlns:Controls="clr-namespace:SchedulerGUI.Views.Controls"
+                      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                      xmlns:timeline="clr-namespace:TimelineLibrary;assembly=TimelineLibrary"
+                      mc:Ignorable="d"
+                      Style="{StaticResource SchedulerApp.Window}"
+                      ShowSystemMenuOnRightClick="False"
+                      Title="UAH Satellite Power Scheduler"
+                      DataContext="{Binding MainWindow, Source={StaticResource ViewModelLocator}}"
+                      WindowState="Maximized">
 
-    <metro:MetroWindow.TitleTemplate>
+    <cc:MetroRibbonWindow.TitleTemplate>
         <!--https://fluentribbon.github.io/documentation/interop_with_MahApps.Metro-->
         <DataTemplate>
             <Fluent:RibbonTitleBar x:Name="RibbonTitleBar"
                                    Header="{Binding Path=Title, RelativeSource={RelativeSource AncestorType=Window}}" />
         </DataTemplate>
-    </metro:MetroWindow.TitleTemplate>
+    </cc:MetroRibbonWindow.TitleTemplate>
 
     <!--Top Level Grid-->
     <Grid>
@@ -112,12 +113,32 @@
                 </Grid.RowDefinitions>
 
                 <GroupBox Header="All Passes">
-                    <ListView x:Name="passesListView" ItemsSource="{Binding Passes}" SelectionChanged="passesListView_SelectionChanged"
-                          SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
+                    <ListView x:Name="passesListView" ItemsSource="{Binding Passes}"
+                              SelectedItem="{Binding SelectedPass, Mode=TwoWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock Margin="5" FontSize="16" Text="{Binding Name}" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Image>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsScheduledSuccessfully}" Value="True">
+                                                        <Setter Property="Source" Value="{StaticResource VS2017Icons.TestCoveringPassed}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsScheduledSuccessfully}" Value="False">
+                                                        <Setter Property="Source" Value="{StaticResource VS2017Icons.TestCoveringFailed}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    
+                                    <TextBlock Margin="5" FontSize="16" Text="{Binding Name}" Grid.Column="1" />
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -188,4 +209,4 @@
         <!--Top Most Dialog Popup-->
         <Controls:Popup Grid.RowSpan="2" Grid.ColumnSpan="3" DataContext="{Binding DialogManager}" />
     </Grid>
-</metro:MetroWindow>
+</cc:MetroRibbonWindow>

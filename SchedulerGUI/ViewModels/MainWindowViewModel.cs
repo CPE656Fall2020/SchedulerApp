@@ -32,6 +32,7 @@ namespace SchedulerGUI.ViewModels
         private DateTime endTime;
         private EditControlViewModel editControlVM;
         private IScheduleSolver selectedAlgorithm;
+        private ScheduleSolution lastSolution;
         private object scheduleStatusIcon;
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace SchedulerGUI.ViewModels
         public MainWindowViewModel()
         {
             // Setup shared services like DbContext and SettingsManager for the entire application.
-            this.Startup();
+            this.StartupAppServices();
 
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
             this.Passes = new ObservableCollection<PassOrbit>();
@@ -53,7 +54,7 @@ namespace SchedulerGUI.ViewModels
             this.DialogManager = new PopupViewModel()
             {
                 ClosePopup = new RelayCommand(() => this.DialogManager.PopupDialog = null, true),
-                EasyClosePopup = null, // Leave EasyClose off for now,
+                EasyClosePopup = null,
                 PopupDialog = null,
             };
 
@@ -98,7 +99,16 @@ namespace SchedulerGUI.ViewModels
         public PassOrbit SelectedPass
         {
             get => this.selectedPass;
-            set => this.Set(() => this.SelectedPass, ref this.selectedPass, value);
+            set
+            {
+                this.Set(() => this.SelectedPass, ref this.selectedPass, value);
+
+                // Update the editor pane to show information for this pass.
+                if (this.SelectedPass != null)
+                {
+                    this.InitEditControl();
+                }
+            }
         }
 
         /// <summary>
@@ -145,12 +155,12 @@ namespace SchedulerGUI.ViewModels
         public PopupViewModel DialogManager { get; }
 
         /// <summary>
-        /// Gets or sets the edit control view model.
+        /// Gets the edit control view model.
         /// </summary>
         public EditControlViewModel EditControlViewModel
         {
             get => this.editControlVM;
-            set => this.Set(() => this.EditControlViewModel, ref this.editControlVM, value);
+            private set => this.Set(() => this.EditControlViewModel, ref this.editControlVM, value);
         }
 
         /// <summary>
@@ -190,10 +200,17 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public DevicePickerViewModel DevicePickerViewModel { get; }
 
-        private ScheduleSolution LastSolution { get; set; }
+        /// <summary>
+        /// Gets the last solved scheduling solution.
+        /// </summary>
+        public ScheduleSolution LastSolution
+        {
+            get => this.lastSolution;
+            private set => this.Set(() => this.LastSolution, ref this.lastSolution, value);
+        }
 
         /// <summary>
-        /// Initializes edit control with pass informatin from the selected pass.
+        /// Initializes edit control with pass information from the selected pass.
         /// </summary>
         public void InitEditControl()
         {
@@ -209,7 +226,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Performs application initialization.
         /// </summary>
-        private void Startup()
+        private void StartupAppServices()
         {
             // Setup the SettingsManager
             const string SettingsFileName = "settings.json";
@@ -341,31 +358,42 @@ namespace SchedulerGUI.ViewModels
         private void RunSchedule()
         {
             this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles);
+
+            // Make sure the sidebar updates with new status icons
+            // PassOrbit and its phases don't use INotifyPropChanged to bubble up notifications
+            // and since this is the only place it will ever change, just re-render the entire
+            // list at once instead of piecemeal anyways.
+            System.Windows.Data.CollectionViewSource.GetDefaultView(this.Passes).Refresh();
+
             var hasWarnings = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning);
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
             var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
 
+            var warningIcon = App.Current.Resources["VS2017Icons.StatusWarning"];
+            var failedIcon = App.Current.Resources["VS2017Icons.TestCoveringFailed"];
+            var successIcon = App.Current.Resources["VS2017Icons.TestCoveringPassed"];
+
             if (hasWarnings)
             {
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileWarning"];
+                this.ScheduleStatusIcon = warningIcon;
             }
             else if (hasError)
             {
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+                this.ScheduleStatusIcon = failedIcon;
             }
             else if (hasFatal)
             {
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+                this.ScheduleStatusIcon = failedIcon;
             }
             else if (!this.LastSolution.IsSolvable)
             {
                 // ??? not solvable but no errors?
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+                this.ScheduleStatusIcon = failedIcon;
             }
             else
             {
                 // Worked okay
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileOK"];
+                this.ScheduleStatusIcon = successIcon;
 
                 // Update the History graph with the new data
                 this.HistoryGraphViewModel.Passes = this.Passes;
