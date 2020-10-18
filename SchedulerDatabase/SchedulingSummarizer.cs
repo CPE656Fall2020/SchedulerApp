@@ -45,6 +45,17 @@ namespace SchedulerDatabase
         }
 
         /// <summary>
+        /// Gets a listing of all the providers which have test results included in the database.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of provider names.</returns>
+        public IQueryable<string> GetAllTestedProviders()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.ProviderName)
+                .Distinct();
+        }
+
+        /// <summary>
         /// Gets a listing of test profiles for all experiments conducted using a specific accelerator device.
         /// </summary>
         /// <param name="acceleratorType">The specific accelerator type to query for.</param>
@@ -63,6 +74,17 @@ namespace SchedulerDatabase
         {
             return this.Context.AESProfiles
                 .Select(a => a.NumCores)
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Gets a listing of the different clock speeds for the available platforms.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of clock speeds, in Hz.</returns>
+        public IQueryable<int> GetAllClockSpeeds()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.TestedFrequency)
                 .Distinct();
         }
 

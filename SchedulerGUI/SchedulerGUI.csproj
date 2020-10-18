@@ -68,6 +68,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\EnumBindingSourceExtension.cs" />
+    <Compile Include="Converters\HzToStringConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="GlobalAssemblyInfo.cs" />
