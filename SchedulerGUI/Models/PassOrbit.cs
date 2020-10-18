@@ -52,6 +52,11 @@ namespace SchedulerGUI.Models
         /// </summary>
         public DateTime EndTime { get; } = default;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this pass has been scheduled successfully.
+        /// </summary>
+        public bool IsScheduledSuccessfully { get; set; } = false;
+
         private void InitPhases(Random random)
         {
             this.PassPhases = new List<IPassPhase>();

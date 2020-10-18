@@ -118,7 +118,27 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <TextBlock Margin="5" FontSize="16" Text="{Binding Name}" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Image>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsScheduledSuccessfully}" Value="True">
+                                                        <Setter Property="Source" Value="{StaticResource VS2017Icons.TestCoveringPassed}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsScheduledSuccessfully}" Value="False">
+                                                        <Setter Property="Source" Value="{StaticResource VS2017Icons.TestCoveringFailed}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    
+                                    <TextBlock Margin="5" FontSize="16" Text="{Binding Name}" Grid.Column="1" />
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

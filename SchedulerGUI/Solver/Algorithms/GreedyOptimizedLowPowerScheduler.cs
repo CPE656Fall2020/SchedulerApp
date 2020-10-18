@@ -37,6 +37,7 @@ namespace SchedulerGUI.Solver.Algorithms
             foreach (var pass in passes)
             {
                 pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption).TotalEnergyUsed = 0;
+                pass.IsScheduledSuccessfully = false;
             }
 
             var optimizationMap = this.BuildOptimizationMap(availableProfiles, solution);
@@ -92,6 +93,7 @@ namespace SchedulerGUI.Solver.Algorithms
                         // This solution works for this part
                         solution.ViableProfiles[pass] = profile;
                         encryptionPhase.TotalEnergyUsed = energyRequired;
+                        pass.IsScheduledSuccessfully = true;
                         foundViableProfile = true;
                         break;
                     }
