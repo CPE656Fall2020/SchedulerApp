@@ -369,27 +369,31 @@ namespace SchedulerGUI.ViewModels
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
             var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
 
+            var warningIcon = App.Current.Resources["VS2017Icons.StatusWarning"];
+            var failedIcon = App.Current.Resources["VS2017Icons.TestCoveringFailed"];
+            var successIcon = App.Current.Resources["VS2017Icons.TestCoveringPassed"];
+
             if (hasWarnings)
             {
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileWarning"];
+                this.ScheduleStatusIcon = warningIcon;
             }
             else if (hasError)
             {
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+                this.ScheduleStatusIcon = failedIcon;
             }
             else if (hasFatal)
             {
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+                this.ScheduleStatusIcon = failedIcon;
             }
             else if (!this.LastSolution.IsSolvable)
             {
                 // ??? not solvable but no errors?
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileError"];
+                this.ScheduleStatusIcon = failedIcon;
             }
             else
             {
                 // Worked okay
-                this.ScheduleStatusIcon = App.Current.Resources["VS2017Icons.FileOK"];
+                this.ScheduleStatusIcon = successIcon;
 
                 // Update the History graph with the new data
                 this.HistoryGraphViewModel.Passes = this.Passes;
