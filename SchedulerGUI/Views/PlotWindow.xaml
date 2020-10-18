@@ -29,6 +29,7 @@
                 </Style>
 
                 <converters:HzToStringConverter x:Key="hzToStringConverter" />
+                <converters:AcceleratorToStringConverter x:Key="acceleratorToStringConverter" />
             </StackPanel.Resources>
             
             <!--Row 1 - Filter Options for Device-->
@@ -72,7 +73,18 @@
                                          sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
                                          IsEditable="True"
                                          SelectionMode="Multiple"
-                                         Grid.Column="5"/>
+                                         Grid.Column="5">
+                    <sdl:MultiSelectComboBox.DropdownItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" />
+                        </DataTemplate>
+                    </sdl:MultiSelectComboBox.DropdownItemTemplate>
+                    <sdl:MultiSelectComboBox.SelectedItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" />
+                        </DataTemplate>
+                    </sdl:MultiSelectComboBox.SelectedItemTemplate>
+                </sdl:MultiSelectComboBox>
 
                 <TextBlock Text="Speed" Grid.Column="6" />
                 <sdl:MultiSelectComboBox ItemsSource="{Binding ClockSpeeds, Mode=OneWay}"
