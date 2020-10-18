@@ -358,6 +358,13 @@ namespace SchedulerGUI.ViewModels
         private void RunSchedule()
         {
             this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles);
+
+            // Make sure the sidebar updates with new status icons
+            // PassOrbit and its phases don't use INotifyPropChanged to bubble up notifications
+            // and since this is the only place it will ever change, just re-render the entire
+            // list at once instead of piecemeal anyways.
+            System.Windows.Data.CollectionViewSource.GetDefaultView(this.Passes).Refresh();
+
             var hasWarnings = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning);
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
             var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
