@@ -66,10 +66,16 @@
                         </Fluent:Gallery.ItemTemplate>
                     </Fluent:Gallery>
 
+                    <Fluent:Button Header="Edit Available Devices"
+                                   Icon="{StaticResource VS2017Icons.CustomActionEditor}"
+                                   LargeIcon="{StaticResource VS2017Icons.CustomActionEditor}"
+                                   Command="{Binding OpenSchedulerPlotterCommand}" />
+
                     <Fluent:Button Header="Schedule Status"
                                    LargeIcon="{Binding ScheduleStatusIcon}"
                                    Command="{Binding OpenScheduleStatusCommand}" />
                 </Fluent:RibbonGroupBox>
+
                 <Fluent:RibbonGroupBox Header="Database Tools">
                     <Fluent:Button Header="Plot Tool"
                                    Icon="{StaticResource VS2017Icons.AvailablityColumnChart}"
