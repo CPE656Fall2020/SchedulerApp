@@ -209,6 +209,12 @@
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of platform names.</returns>
         </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllTestedProviders">
+            <summary>
+            Gets a listing of all the providers which have test results included in the database.
+            </summary>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of provider names.</returns>
+        </member>
         <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllResultsForAccelerator(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
             <summary>
             Gets a listing of test profiles for all experiments conducted using a specific accelerator device.
@@ -221,6 +227,12 @@
             Gets a listing of the different numbers of cores available for the available platforms.
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of platform core counts.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllClockSpeeds">
+            <summary>
+            Gets a listing of the different clock speeds for the available platforms.
+            </summary>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of clock speeds, in Hz.</returns>
         </member>
         <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncyptorProfile})">
             <summary>

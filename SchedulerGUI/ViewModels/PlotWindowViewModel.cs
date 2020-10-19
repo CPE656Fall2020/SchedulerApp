@@ -24,7 +24,9 @@ namespace SchedulerGUI.ViewModels
         private PlotOption selectedOption = PlotOption.Raw;
         private IList<object> selectedAuthor;
         private IList<object> selectedPlatform;
+        private IList<object> selectedProvider;
         private IList<object> selectedAccelerator;
+        private IList<object> selectedClockSpeed;
         private IList<object> selectedNumCores;
 
         /// <summary>
@@ -39,7 +41,9 @@ namespace SchedulerGUI.ViewModels
                 var summarizer = new SchedulingSummarizer(context);
                 this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
                 this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
+                this.Providers = new ObservableCollection<string>(summarizer.GetAllTestedProviders());
                 this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
+                this.ClockSpeeds = new ObservableCollection<int>(summarizer.GetAllClockSpeeds().OrderBy(x => x));
                 this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
             }
 
@@ -54,6 +58,11 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<string> Authors { get; }
 
         /// <summary>
+        /// Gets a listing of available providers.
+        /// </summary>
+        public ObservableCollection<string> Providers { get; }
+
+        /// <summary>
         /// Gets a listing of available platforms.
         /// </summary>
         public ObservableCollection<string> Platforms { get; }
@@ -62,6 +71,11 @@ namespace SchedulerGUI.ViewModels
         /// Gets a listing of available accelerators.
         /// </summary>
         public ObservableCollection<string> Accelerators { get; }
+
+        /// <summary>
+        /// Gets a listing of available clock speeds.
+        /// </summary>
+        public ObservableCollection<int> ClockSpeeds { get; }
 
         /// <summary>
         /// Gets a listing of available number of cores.
@@ -108,12 +122,30 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets the selected provider to display data for.
+        /// </summary>
+        public IList<object> SelectedProvider
+        {
+            get => this.selectedProvider;
+            set => this.SetAndUpdatePlot(() => this.SelectedProvider, ref this.selectedProvider, value);
+        }
+
+        /// <summary>
         /// Gets or sets the selected accelerator type to display data for.
         /// </summary>
         public IList<object> SelectedAccelerator
         {
             get => this.selectedAccelerator;
             set => this.SetAndUpdatePlot(() => this.SelectedAccelerator, ref this.selectedAccelerator, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the selected processor clock speed to display data for.
+        /// </summary>
+        public IList<object> SelectedClockSpeed
+        {
+            get => this.selectedClockSpeed;
+            set => this.SetAndUpdatePlot(() => this.SelectedClockSpeed, ref this.selectedClockSpeed, value);
         }
 
         /// <summary>
@@ -147,28 +179,42 @@ namespace SchedulerGUI.ViewModels
                 if (this.SelectedPlatform?.Count > 0)
                 {
                     rawData = rawData
-                         .Where(a => this.SelectedPlatform.Contains(a.PlatformName));
+                        .Where(a => this.SelectedPlatform.Contains(a.PlatformName));
+                }
+
+                // Include provider filters
+                if (this.SelectedProvider?.Count > 0)
+                {
+                    rawData = rawData
+                        .Where(a => this.SelectedProvider.Contains(a.ProviderName));
                 }
 
                 // Include author filters
                 if (this.SelectedAuthor?.Count > 0)
                 {
                     rawData = rawData
-                      .Where(a => this.SelectedAuthor.Contains(a.Author));
+                        .Where(a => this.SelectedAuthor.Contains(a.Author));
                 }
 
                 // Include accelerator filters
                 if (this.SelectedAccelerator?.Count > 0)
                 {
                     rawData = rawData
-                     .Where(a => this.SelectedAccelerator.Contains(a.PlatformAccelerator.ToString()));
+                        .Where(a => this.SelectedAccelerator.Contains(a.PlatformAccelerator.ToString()));
+                }
+
+                // Include speed filters
+                if (this.SelectedClockSpeed?.Count > 0)
+                {
+                    rawData = rawData
+                        .Where(a => this.SelectedClockSpeed.Contains(a.TestedFrequency));
                 }
 
                 // Include core count filters
                 if (this.SelectedNumCores?.Count > 0)
                 {
                     rawData = rawData
-                    .Where(a => this.SelectedNumCores.Contains(a.NumCores));
+                        .Where(a => this.SelectedNumCores.Contains(a.NumCores));
                 }
 
                 switch (this.SelectedOption)

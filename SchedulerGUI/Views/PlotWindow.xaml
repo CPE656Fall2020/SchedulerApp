@@ -5,7 +5,9 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:converters="clr-namespace:SchedulerGUI.Converters"
-                 xmlns:models="clr-namespace:SchedulerGUI.Models" xmlns:sdl="http://schemas.sdl.com/xaml" xmlns:Fluent="urn:fluent-ribbon"
+                 xmlns:models="clr-namespace:SchedulerGUI.Models" 
+                 xmlns:sdl="http://schemas.sdl.com/xaml" 
+                 IconScalingMode="ScaleDownLargerFrame"
                  Style="{StaticResource SchedulerApp.Window}"
                  mc:Ignorable="d"
                  Title="AES Test Data Plot Tool" Height="450" Width="937.731">
@@ -19,78 +21,142 @@
         <ContentControl Content="{Binding Plot}"
                         Grid.Row="0"/>
 
-        <!--Row 1 - Filter Options-->
-        <Grid Margin="0,0,5,0"  Grid.Row="1" Height="50">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="0.6*" />
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <StackPanel.Resources>
+                <!--Style for the custom data template for the dropdowns-->
+                <Style TargetType="{x:Type TextBlock}" x:Key="dropdownOption">
+                    <Setter Property="FontSize" Value="12" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
 
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="1.2*" />
-
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="0.8*" />
-
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="0.4*" />
-
-     			<ColumnDefinition Width="140" />
-                <ColumnDefinition Width="150" />            
-            </Grid.ColumnDefinitions>
-
-            <Grid.Resources>
-                <Style TargetType="TextBlock">
+                <!--Generic TextBlock style applied to all the others (the filter captions)-->
+                <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="VerticalAlignment" Value="Center" />
                     <Setter Property="Margin" Value="20,0,10,0" />
                 </Style>
-            </Grid.Resources>
 
-            <TextBlock Text="Plot Type" Grid.Column="0" />
-            <ComboBox ItemsSource="{Binding Source={converters:EnumBindingSource {x:Type models:PlotOption}}}"
-                      SelectedValue="{Binding SelectedOption}"
-                      Grid.Column="1" />
+                <converters:HzToStringConverter x:Key="hzToStringConverter" />
+                <converters:AcceleratorToStringConverter x:Key="acceleratorToStringConverter" />
+            </StackPanel.Resources>
+            
+            <!--Row 1 - Filter Options for Device-->
+            <Grid Margin="0,0,5,0" Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1.2*" />
 
-            <TextBlock Text="Author" Grid.Column="2"/>
-            <sdl:MultiSelectComboBox ItemsSource="{Binding Authors, Mode=OneWay}"
-                                     SelectedItems="{Binding SelectedAuthor, Mode=OneWayToSource}"
-                                     sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
-                                     IsEditable="True"
-                                     SelectionMode="Multiple"
-                                     Grid.Column="3"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
 
-            <TextBlock Text="Device" Grid.Column="4" />
-            <sdl:MultiSelectComboBox ItemsSource="{Binding Platforms, Mode=OneWay}"
-                                     SelectedItems="{Binding SelectedPlatform, Mode=OneWayToSource}"
-                                     sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
-                                     IsEditable="True"
-                                     SelectionMode="Multiple"
-                                     Grid.Column="5"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="0.8*" />
 
-            <TextBlock Text="Accelerator Type" Grid.Column="6" />
-            <sdl:MultiSelectComboBox ItemsSource="{Binding Accelerators, Mode=OneWay}"
-                                     SelectedItems="{Binding SelectedAccelerator, Mode=OneWayToSource}"
-                                     sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
-                                     IsEditable="True"
-                                     SelectionMode="Multiple"
-                                     Grid.Column="7"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="0.4*" />
 
-            <TextBlock Text="Number of Cores" Grid.Column="8" />
-            <sdl:MultiSelectComboBox ItemsSource="{Binding NumCores, Mode=OneWay}"
-                                     SelectedItems="{Binding SelectedNumCores, Mode=OneWayToSource}"
-                                     sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
-                                     IsEditable="True"
-                                     SelectionMode="Multiple"
-                                     Grid.Column="9"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="0.4*" />
+                </Grid.ColumnDefinitions>
 
-            <CheckBox IsChecked="{Binding Plot.ShowEnergyLogarithmic}" Grid.Column="10" Padding="0" Margin="10,0,0,0">
-                <TextBlock Text="Show Energy as Logarithmic" TextWrapping="Wrap" />
-            </CheckBox>
-            <CheckBox IsChecked="{Binding Plot.ShowThroughputLogarithmic}" Grid.Column="11" Padding="0">
-                <TextBlock Text="Show Throughput as Logarithmic" TextWrapping="Wrap" />
-            </CheckBox>
-        </Grid>
+                <TextBlock Text="Device" Grid.Column="0" />
+                <sdl:MultiSelectComboBox ItemsSource="{Binding Platforms, Mode=OneWay}"
+                                         SelectedItems="{Binding SelectedPlatform, Mode=OneWayToSource}"
+                                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
+                                         IsEditable="True"
+                                         SelectionMode="Multiple"
+                                         Grid.Column="1"/>
+
+                <TextBlock Text="Provider" Grid.Column="2" />
+                <sdl:MultiSelectComboBox ItemsSource="{Binding Providers, Mode=OneWay}"
+                                         SelectedItems="{Binding SelectedProvider, Mode=OneWayToSource}"
+                                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
+                                         IsEditable="True"
+                                         SelectionMode="Multiple"
+                                         Grid.Column="3"/>
+
+                <TextBlock Text="Accelerator" Grid.Column="4" />
+                <sdl:MultiSelectComboBox ItemsSource="{Binding Accelerators, Mode=OneWay}"
+                                         SelectedItems="{Binding SelectedAccelerator, Mode=OneWayToSource}"
+                                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
+                                         IsEditable="True"
+                                         SelectionMode="Multiple"
+                                         EnableAutoComplete="False"
+                                         Grid.Column="5">
+                    <sdl:MultiSelectComboBox.DropdownItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" Style="{StaticResource dropdownOption}"/>
+                        </DataTemplate>
+                    </sdl:MultiSelectComboBox.DropdownItemTemplate>
+                    <sdl:MultiSelectComboBox.SelectedItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" Style="{StaticResource dropdownOption}" />
+                        </DataTemplate>
+                    </sdl:MultiSelectComboBox.SelectedItemTemplate>
+                </sdl:MultiSelectComboBox>
+
+                <TextBlock Text="Speed" Grid.Column="6" />
+                <sdl:MultiSelectComboBox ItemsSource="{Binding ClockSpeeds, Mode=OneWay}"
+                                         SelectedItems="{Binding SelectedClockSpeed, Mode=OneWayToSource}"
+                                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
+                                         IsEditable="True"
+                                         SelectionMode="Multiple"
+                                         EnableAutoComplete="False"
+                                         Grid.Column="7">
+                    <sdl:MultiSelectComboBox.DropdownItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource hzToStringConverter}}" Style="{StaticResource dropdownOption}" />
+                        </DataTemplate>
+                    </sdl:MultiSelectComboBox.DropdownItemTemplate>
+                    <sdl:MultiSelectComboBox.SelectedItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource hzToStringConverter}}" Style="{StaticResource dropdownOption}" />
+                        </DataTemplate>
+                    </sdl:MultiSelectComboBox.SelectedItemTemplate>
+                </sdl:MultiSelectComboBox>
+
+                <TextBlock Text="Cores" Grid.Column="8" />
+                <sdl:MultiSelectComboBox ItemsSource="{Binding NumCores, Mode=OneWay}"
+                                         SelectedItems="{Binding SelectedNumCores, Mode=OneWayToSource}"
+                                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
+                                         IsEditable="True"
+                                         SelectionMode="Multiple"
+                                         Grid.Column="9"/>
+            </Grid>
+
+            <!--Row 2 - Display Options for Plot-->
+            <Grid Height="40" Margin="5" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="450" />
+                    
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Author" Grid.Column="0"/>
+                <sdl:MultiSelectComboBox ItemsSource="{Binding Authors, Mode=OneWay}"
+                                         SelectedItems="{Binding SelectedAuthor, Mode=OneWayToSource}"
+                                         sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
+                                         IsEditable="True"
+                                         SelectionMode="Multiple"
+                                         Grid.Column="1"/>
+
+                <TextBlock Text="Plot Type" Grid.Column="2" />
+                <ComboBox ItemsSource="{Binding Source={converters:EnumBindingSource {x:Type models:PlotOption}}}"
+                          SelectedValue="{Binding SelectedOption}"
+                          Grid.Column="3" />
+
+                <CheckBox IsChecked="{Binding Plot.ShowEnergyLogarithmic}" Grid.Column="4" Padding="0" Margin="10,0,0,0">
+                    <TextBlock Text="Show Energy as Logarithmic" TextWrapping="Wrap" />
+                </CheckBox>
+                
+                <CheckBox IsChecked="{Binding Plot.ShowThroughputLogarithmic}" Grid.Column="5" Padding="0">
+                    <TextBlock Text="Show Throughput as Logarithmic" TextWrapping="Wrap" />
+                </CheckBox>
+            </Grid>
+        </StackPanel>
     </Grid>
 </mah:MetroWindow>
