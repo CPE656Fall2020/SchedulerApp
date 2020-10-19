@@ -34,6 +34,7 @@ namespace SchedulerGUI.ViewModels
         private IScheduleSolver selectedAlgorithm;
         private ScheduleSolution lastSolution;
         private object scheduleStatusIcon;
+        private bool isDeviceSelectionVisible;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
@@ -45,6 +46,8 @@ namespace SchedulerGUI.ViewModels
 
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
             this.Passes = new ObservableCollection<PassOrbit>();
+
+            this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
             this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
@@ -125,6 +128,11 @@ namespace SchedulerGUI.ViewModels
         }
 
         /// <summary>
+        /// Gets the command to execute to toggle the visibilty of the device selection flyout.
+        /// </summary>
+        public ICommand ToggleDeviceSelectionVisibilityCommand { get; }
+
+        /// <summary>
         /// Gets the command to execute to view the status of a schedule.
         /// </summary>
         public ICommand OpenScheduleStatusCommand { get; }
@@ -193,6 +201,15 @@ namespace SchedulerGUI.ViewModels
         {
             get => this.scheduleStatusIcon;
             private set => this.Set(() => this.ScheduleStatusIcon, ref this.scheduleStatusIcon, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the device selection flyout is visible.
+        /// </summary>
+        public bool IsDeviceSelectionVisible
+        {
+            get => this.isDeviceSelectionVisible;
+            set => this.Set(() => this.IsDeviceSelectionVisible, ref this.isDeviceSelectionVisible, value);
         }
 
         /// <summary>

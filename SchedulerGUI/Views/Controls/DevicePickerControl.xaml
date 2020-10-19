@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <GroupBox Header="Available AES Profiles">
-        <ListView ItemsSource="{Binding DevicesView}">
+        <ListView ItemsSource="{Binding DevicesView}"
+                  Foreground="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}">
             <ListView.Resources>
                 <Style x:Key="{x:Type ListBoxItem}" TargetType="{x:Type ListBoxItem}">
                     <Setter Property="Focusable" Value="False" />
@@ -22,7 +24,14 @@
                             <ColumnDefinition Width="20" />
                         </Grid.ColumnDefinitions>
                         
-                        <CheckBox FontSize="14" Content="{Binding DeviceDescription}" IsChecked="{Binding IsSelected}" />
+                        <CheckBox FontSize="14" Content="{Binding DeviceDescription}" IsChecked="{Binding IsSelected}"
+                                  metro:CheckBoxHelper.CheckGlyphForegroundChecked="White"
+                                  metro:CheckBoxHelper.CheckGlyphForegroundCheckedMouseOver="White"
+                                  metro:CheckBoxHelper.ForegroundChecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"
+                                  metro:CheckBoxHelper.ForegroundUnchecked="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"
+                                  metro:CheckBoxHelper.ForegroundCheckedMouseOver="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"
+                                  metro:CheckBoxHelper.ForegroundUncheckedMouseOver="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"/>
+                        
                         <iconPacks:PackIconOcticons Kind="Question" 
                                                     Grid.Column="1"
                                                     Width="13"
