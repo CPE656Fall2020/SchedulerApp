@@ -59,6 +59,8 @@ namespace SchedulerGUI.Models
 
         private void InitPhases(Random random)
         {
+            // TODO: Fix this to not be so hardcoded - but this will work for now to make the history graph not look bad
+
             this.PassPhases = new List<IPassPhase>();
             DateTime startTime = this.StartTime;
             int numPhases = Enum.GetValues(typeof(PhaseType)).Length;
@@ -67,18 +69,29 @@ namespace SchedulerGUI.Models
             var enums = Enum.GetValues(typeof(PhaseType)).Cast<PhaseType>().Where(x => x != PhaseType.Encryption);
             double phaseEnergy = this.PassEnergy / numPhases;
 
-            foreach (PhaseType phaseType in enums)
-            {
-                PassPhase phase = new PassPhase(startTime, startTime.AddSeconds(duration), phaseType);
-                phase.SetRandomValues(random, phaseEnergy);
-                this.PassPhases.Add(phase);
+            // Do sunlight
+            var sunlight = new PassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Sunlight);
+            sunlight.SetRandomValues(random, phaseEnergy);
+            startTime = startTime.AddSeconds(duration);
+            this.PassPhases.Add(sunlight);
 
-                startTime = startTime.AddSeconds(duration);
-            }
+            // Do mission
+            var mission = new PassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Mission);
+            mission.SetRandomValues(random, phaseEnergy);
+            startTime = startTime.AddSeconds(duration);
+            this.PassPhases.Add(mission);
 
+            // Do encyrption
             EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption);
             encryptionPhase.SetRandomValues(random, phaseEnergy, random.Next());
+            startTime = startTime.AddSeconds(duration);
             this.PassPhases.Add(encryptionPhase);
+
+            // Do datalink
+            var datalink = new PassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Datalink);
+            datalink.SetRandomValues(random, phaseEnergy);
+            startTime = startTime.AddSeconds(duration);
+            this.PassPhases.Add(datalink);
         }
     }
 }
