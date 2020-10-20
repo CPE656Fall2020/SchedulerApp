@@ -6,6 +6,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using SchedulerDatabase.Models;
+using SchedulerGUI.Converters;
 
 namespace SchedulerGUI.ViewModels.Controls
 {
@@ -146,7 +147,9 @@ namespace SchedulerGUI.ViewModels.Controls
             {
                 joulesPerByteSeriesData.Add(new ColumnItem() { Value = aesProfile.JoulesPerByte });
                 bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.BytesPerSecond });
-                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{aesProfile.NumCores} core(s) {aesProfile.Author}");
+
+                var clockSpeed = HzToStringConverter.HzToString(aesProfile.TestedFrequency);
+                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}\n{clockSpeed} {aesProfile.NumCores} core(s) {aesProfile.Author}");
             }
 
             this.Plot.Axes.Clear();
