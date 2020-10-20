@@ -149,7 +149,7 @@ namespace SchedulerGUI.ViewModels.Controls
                 bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.BytesPerSecond });
 
                 var clockSpeed = HzToStringConverter.HzToString(aesProfile.TestedFrequency);
-                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName}{aesProfile.AdditionalUniqueInfo}\n{clockSpeed} {aesProfile.NumCores} core(s) {aesProfile.Author}");
+                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName} {aesProfile.AdditionalUniqueInfo}\n{clockSpeed} {aesProfile.NumCores} core(s) {aesProfile.Author}");
             }
 
             this.Plot.Axes.Clear();
