@@ -101,7 +101,7 @@ namespace SchedulerDatabase
             foreach (var profile in profiles)
             {
                 // For two profiles to be considered different iterations of the same test case, they have to match on the following criteria:
-                var id = $"{profile.PlatformName}{profile.PlatformAccelerator}{profile.ProviderName}{profile.TestedAESBitLength}{profile.TestedAESMode}{profile.TestedFrequency}{profile.NumCores}";
+                var id = $"{profile.PlatformName}{profile.PlatformAccelerator}{profile.ProviderName}{profile.TestedAESBitLength}{profile.TestedAESMode}{profile.TestedFrequency}{profile.NumCores}{profile.AdditionalUniqueInfo}";
 
                 if (!buckets.ContainsKey(id))
                 {
@@ -141,6 +141,7 @@ namespace SchedulerDatabase
                     TestedAESMode = bucket.Value.First().TestedAESMode,
                     TestedFrequency = bucket.Value.First().TestedFrequency,
                     NumCores = bucket.Value.First().NumCores,
+                    AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
 
                     /* Averaged results */
                     AverageCurrent = summation.AverageCurrent / count,

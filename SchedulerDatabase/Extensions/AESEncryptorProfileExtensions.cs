@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using SchedulerDatabase.Models;
 
 namespace SchedulerDatabase.Extensions
@@ -17,9 +15,16 @@ namespace SchedulerDatabase.Extensions
         /// <returns>The complete description string.</returns>
         public static string ToFullDescription(this AESEncyptorProfile profile)
         {
+            var additional = string.Empty;
+            if (!string.IsNullOrEmpty(profile.AdditionalUniqueInfo))
+            {
+                additional = $@"Additional : {profile.AdditionalUniqueInfo}" + "\n";
+            }
+
             return
                 $@"Platform: {profile.PlatformName}" + "\n" +
                 $@"Accelerator: {profile.PlatformAccelerator.ToFriendlyName()}" + "\n" +
+                additional +
                 $@"AES Mode: {profile.TestedAESMode}, {profile.TestedAESBitLength}-bit" + "\n" +
                 $@"Provider: {profile.ProviderName}" + "\n" +
                 $@"Tested Frequency: {profile.TestedFrequency:N0} Hz" + "\n" +

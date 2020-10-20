@@ -97,6 +97,11 @@
             For hardware-accelerated implementations, this value is typically not used.
             </summary>
         </member>
+        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AdditionalUniqueInfo">
+            <summary>
+            Gets or sets any additional information that is required to uniquely identify this profile.
+            </summary>
+        </member>
         <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformAccelerator">
             <summary>
              Gets or sets the type of AES Accelerator that is used on this platform.

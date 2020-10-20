@@ -75,6 +75,11 @@ namespace SchedulerDatabase.Models
         public string ProviderName { get; set; }
 
         /// <summary>
+        /// Gets or sets any additional information that is required to uniquely identify this profile.
+        /// </summary>
+        public string AdditionalUniqueInfo { get; set; }
+
+        /// <summary>
         ///  Gets or sets the type of AES Accelerator that is used on this platform.
         /// </summary>
         public AcceleratorType PlatformAccelerator { get; set; }
