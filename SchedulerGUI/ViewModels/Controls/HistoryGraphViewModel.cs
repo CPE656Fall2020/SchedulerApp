@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Configuration;
 using GalaSoft.MvvmLight;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using SchedulerGUI.Models;
@@ -33,6 +35,16 @@ namespace SchedulerGUI.ViewModels.Controls
             {
                 StringFormat = "hh:mm:ss tt",
             });
+
+            this.PlotModel.Annotations.Add(new RectangleAnnotation
+            {
+                MinimumY = -1e10,
+                MaximumY = 0,
+                ClipByXAxis = false,
+                ClipByYAxis = true,
+                Fill = OxyColor.FromAColor(50, OxyColors.Red),
+            });
+
         }
 
         /// <summary>
@@ -91,6 +103,7 @@ namespace SchedulerGUI.ViewModels.Controls
                 }
             }
 
+      
             this.PlotModel.InvalidatePlot(true);
         }
     }
