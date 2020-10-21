@@ -72,6 +72,7 @@ namespace SchedulerGUI.ViewModels.Controls
                         MarkerSize = 5,
                         Title = pass.Name,
                         Color = colors[colorIndex],
+                        TrackerFormatString = $"{{0}}\n{{2}}\n{phase.PhaseName} Phase\n{{4}} Joules",
                     };
 
                     scatterSeries.Points.Add(new DataPoint(
