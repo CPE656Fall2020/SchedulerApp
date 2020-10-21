@@ -60,7 +60,6 @@ namespace SchedulerGUI.Models
         private void InitPhases(Random random)
         {
             // TODO: Fix this to not be so hardcoded - but this will work for now to make the history graph not look bad
-
             this.PassPhases = new List<IPassPhase>();
             DateTime startTime = this.StartTime;
             int numPhases = Enum.GetValues(typeof(PhaseType)).Length;

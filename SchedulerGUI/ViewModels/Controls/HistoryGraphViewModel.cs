@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Configuration;
 using GalaSoft.MvvmLight;
 using OxyPlot;
 using OxyPlot.Annotations;
@@ -44,7 +43,6 @@ namespace SchedulerGUI.ViewModels.Controls
                 ClipByYAxis = true,
                 Fill = OxyColor.FromAColor(50, OxyColors.Red),
             });
-
         }
 
         /// <summary>
@@ -103,7 +101,6 @@ namespace SchedulerGUI.ViewModels.Controls
                 }
             }
 
-      
             this.PlotModel.InvalidatePlot(true);
         }
     }
