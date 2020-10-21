@@ -26,7 +26,7 @@
 
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl>
-            <metro:Flyout Header="Available Devices" Position="Right" Width="420" IsOpen="{Binding IsDeviceSelectionVisible}" Theme="Accent">
+            <metro:Flyout Header="Available Devices" Position="Right" Width="440" IsOpen="{Binding IsDeviceSelectionVisible}" Theme="Accent">
                 <!--Selection Control for devices to schedule with-->
                 <ContentControl Content="{Binding DevicePickerViewModel}" 
                                 Foreground="White" />
