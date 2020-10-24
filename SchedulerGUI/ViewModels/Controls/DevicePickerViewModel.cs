@@ -92,7 +92,7 @@ namespace SchedulerGUI.ViewModels.Controls
             /// <summary>
             /// Gets the short description string for this profile.
             /// </summary>
-            public string DeviceDescription => $"{this.Device.PlatformAccelerator.ToFriendlyName()}, {this.Device.NumCores} Cores, {this.Device.ProviderName}";
+            public string DeviceDescription => $"{this.Device.PlatformAccelerator.ToFriendlyName()}, {this.Device.AdditionalUniqueInfo} {Converters.HzToStringConverter.HzToString(this.Device.TestedFrequency)} {this.Device.NumCores} Cores, {this.Device.ProviderName}";
 
             /// <summary>
             /// Gets the complete platform description.

@@ -411,10 +411,10 @@ namespace SchedulerGUI.ViewModels
             {
                 // Worked okay
                 this.ScheduleStatusIcon = successIcon;
-
-                // Update the History graph with the new data
-                this.HistoryGraphViewModel.Passes = this.Passes;
             }
+
+            // Update the History graph with the new data, even if the schedule failed
+            this.HistoryGraphViewModel.Passes = this.Passes;
         }
     }
 }

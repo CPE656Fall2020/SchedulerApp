@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using OxyPlot;
+using OxyPlot.Annotations;
+using OxyPlot.Axes;
 using OxyPlot.Series;
-using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 
 namespace SchedulerGUI.ViewModels.Controls
@@ -22,8 +23,26 @@ namespace SchedulerGUI.ViewModels.Controls
         {
             this.PlotModel = new PlotModel
             {
-                Title = "Energy Consumption Over Time",
+                Title = "Battery Capacity",
+                IsLegendVisible = false,
+                TextColor = OxyColors.White,
+                TitleColor = OxyColors.White,
+                PlotAreaBorderColor = OxyColors.White,
             };
+
+            this.PlotModel.Axes.Add(new DateTimeAxis()
+            {
+                StringFormat = "hh:mm:ss tt",
+            });
+
+            this.PlotModel.Annotations.Add(new RectangleAnnotation
+            {
+                MinimumY = -1e10,
+                MaximumY = 0,
+                ClipByXAxis = false,
+                ClipByYAxis = true,
+                Fill = OxyColor.FromAColor(50, OxyColors.Red),
+            });
         }
 
         /// <summary>
@@ -46,39 +65,41 @@ namespace SchedulerGUI.ViewModels.Controls
 
         private void GeneratePlot()
         {
-            Random rnd = new Random();
+            OxyColor[] colors = { OxyColors.Yellow, OxyColors.Blue, OxyColors.Green, OxyColors.Orange };
+            int colorIndex = 0;
 
             this.PlotModel.Series.Clear();
 
-            foreach (PassOrbit pass in this.Passes)
+            var cumulativeEnergy = 0D;
+
+            foreach (var pass in this.Passes)
             {
-                LineSeries scatterSeries = new LineSeries
+                foreach (var phase in pass.PassPhases)
                 {
-                    MarkerType = MarkerType.Circle,
-                    MarkerSize = 5,
-                    Title = pass.Name,
-                    Color = OxyColor.FromRgb((byte)rnd.Next(256), (byte)rnd.Next(256), (byte)rnd.Next(256)),
-                };
+                    var scatterSeries = new LineSeries
+                    {
+                        MarkerType = MarkerType.Circle,
+                        MarkerSize = 5,
+                        Title = pass.Name,
+                        Color = colors[colorIndex],
+                        TrackerFormatString = $"{{0}}\n{{2}}\n{phase.PhaseName} Phase\n{{4}} Joules",
+                    };
 
-                double passCurrentRunTime = 0;
-                foreach (IPassPhase phase in pass.PassPhases)
-                {
-                    double x = passCurrentRunTime, y = 0;
-                    x += phase.Duration.Minutes;
-                    y = phase.TotalEnergyUsed;
-                    passCurrentRunTime = x;
+                    scatterSeries.Points.Add(new DataPoint(
+                        DateTimeAxis.ToDouble(phase.StartTime),
+                        cumulativeEnergy));
 
-                    scatterSeries.Points.Add(new DataPoint(x, y));
+                    cumulativeEnergy += -1 * phase.TotalEnergyUsed;
+
+                    scatterSeries.Points.Add(new DataPoint(
+                        DateTimeAxis.ToDouble(phase.EndTime),
+                        cumulativeEnergy));
+
+                    this.PlotModel.Series.Add(scatterSeries);
+
+                    colorIndex = (colorIndex + 1) % colors.Length;
                 }
-
-                this.PlotModel.Series.Add(scatterSeries);
             }
-
-            this.PlotModel.LegendPosition = LegendPosition.RightMiddle;
-            this.PlotModel.LegendPlacement = LegendPlacement.Outside;
-            this.PlotModel.PlotAreaBorderColor = OxyColor.FromRgb(255, 255, 255);
-            this.PlotModel.TextColor = OxyColor.FromRgb(255, 255, 255);
-            this.PlotModel.TitleColor = OxyColor.FromRgb(255, 255, 255);
 
             this.PlotModel.InvalidatePlot(true);
         }

@@ -124,13 +124,13 @@
             </Grid>
 
             <!--Row 2 - Display Options for Plot-->
-            <Grid Height="40" Margin="5" HorizontalAlignment="Center">
+            <Grid Height="40" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="450" />
+                    <ColumnDefinition Width="*" />
                     
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
                     
                     <ColumnDefinition Width="140" />
                     <ColumnDefinition Width="150" />
