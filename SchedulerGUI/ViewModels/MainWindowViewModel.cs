@@ -1,19 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Xps.Packaging;
+using System.Windows.Xps.Serialization;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SchedulerDatabase;
-using SchedulerDatabase.Models;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 using SchedulerGUI.Services;
@@ -455,9 +457,9 @@ namespace SchedulerGUI.ViewModels
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
             var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
 
-            var warningIcon = App.Current.Resources["VS2017Icons.StatusWarning"];
-            var failedIcon = App.Current.Resources["VS2017Icons.TestCoveringFailed"];
-            var successIcon = App.Current.Resources["VS2017Icons.TestCoveringPassed"];
+            var warningIcon = Application.Current.Resources["VS2017Icons.StatusWarning"];
+            var failedIcon = Application.Current.Resources["VS2017Icons.TestCoveringFailed"];
+            var successIcon = Application.Current.Resources["VS2017Icons.TestCoveringPassed"];
 
             if (hasError)
             {
@@ -505,7 +507,7 @@ namespace SchedulerGUI.ViewModels
                 };
 
                 var result = JsonConvert.SerializeObject(data, settings);
-                System.IO.File.WriteAllText(saveFileDialog.FileName, result);
+                File.WriteAllText(saveFileDialog.FileName, result);
             }
         }
 
@@ -521,7 +523,7 @@ namespace SchedulerGUI.ViewModels
                     TypeNameHandling = TypeNameHandling.Auto,
                 };
 
-                var result = JsonConvert.DeserializeObject<SavedSchedule>(System.IO.File.ReadAllText(openFileDialog.FileName), settings);
+                var result = JsonConvert.DeserializeObject<SavedSchedule>(File.ReadAllText(openFileDialog.FileName), settings);
 
                 this.Passes.Clear();
                 foreach (var pass in result.Passes)
@@ -535,7 +537,90 @@ namespace SchedulerGUI.ViewModels
 
         private void ExportReportHandler()
         {
+            var report = new FlowDocument()
+            {
+                PagePadding = new Thickness(100),
+            };
 
+            report.Blocks.Add(MakeTitle("Scheduler App Report"));
+
+            report.Blocks.Add(MakeHeader1("Pass Configuration"));
+
+            var passesList = new List();
+            foreach (var pass in this.Passes)
+            {
+                var passDescription = new Paragraph();
+                passDescription.Inlines.Add(new Bold(new Run(pass.Name)));
+                passDescription.Inlines.Add(new LineBreak());
+                passDescription.Inlines.Add(new Run($"Starting Time: {pass.StartTime:MM/dd/yyyy hh:mm:ss tt}"));
+                passDescription.Inlines.Add(new LineBreak());
+                passDescription.Inlines.Add(new Run($"Ending Time: {pass.EndTime:MM/dd/yyyy hh:mm:ss tt}"));
+                passDescription.Inlines.Add(new LineBreak());
+
+                var phasesList = new List();
+                foreach (var phase in pass.PassPhases)
+                {
+                    var phaseDescription = new Paragraph();
+                    phaseDescription.Inlines.Add(new Run($"Phase: {phase.PhaseName}"));
+                    phaseDescription.Inlines.Add(new LineBreak());
+                    phaseDescription.Inlines.Add(new Run($"Energy Used: {phase.TotalEnergyUsed} J"));
+                    phaseDescription.Inlines.Add(new LineBreak());
+                    phaseDescription.Inlines.Add(new Run($"Start Time: {phase.StartTime:hh:mm:ss tt}"));
+                    phaseDescription.Inlines.Add(new LineBreak());
+                    phaseDescription.Inlines.Add(new Run($"End Time: {phase.EndTime:hh:mm:ss tt}"));
+                    phaseDescription.Inlines.Add(new LineBreak());
+
+                    phasesList.ListItems.Add(new ListItem(phaseDescription));
+                }
+
+                var passListItem = new ListItem(passDescription);
+                passListItem.Blocks.Add(phasesList);
+
+                passesList.ListItems.Add(passListItem);
+            }
+
+            report.Blocks.Add(passesList);
+
+            SaveAsXps("report.xps", report);
+        }
+
+        private static Section MakeTitle(string text)
+        {
+            var title = new Section();
+            var runText = new Run(text);
+            runText.FontFamily = new System.Windows.Media.FontFamily("Calibri Light");
+            runText.FontSize = 36;
+
+            title.Blocks.Add(new Paragraph() { Inlines = { runText } });
+            return title;
+        }
+
+        private static Section MakeHeader1(string text)
+        {
+            var title = new Section();
+            var runText = new Run(text);
+            runText.FontFamily = new System.Windows.Media.FontFamily("Calibri Light");
+            runText.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(47, 84, 150));
+            runText.FontSize = 22;
+
+            title.Blocks.Add(new Paragraph() { Inlines = { runText } });
+            return title;
+        }
+
+        public static void SaveAsXps(string path, FlowDocument document)
+        {
+            using (Package package = Package.Open(path, FileMode.Create))
+            {
+                using (var xpsDoc = new XpsDocument(
+                    package, System.IO.Packaging.CompressionOption.Maximum))
+                {
+                    var xpsSm = new XpsSerializationManager(
+                        new XpsPackagingPolicy(xpsDoc), false);
+                    DocumentPaginator dp =
+                        ((IDocumentPaginatorSource)document).DocumentPaginator;
+                    xpsSm.SaveAsXaml(dp);
+                }
+            }
         }
 
         private void ExportDatabaseHandler()
@@ -546,7 +631,7 @@ namespace SchedulerGUI.ViewModels
             if (saveFileDialog.ShowDialog() == true)
             {
                 var settings = SimpleIoc.Default.GetInstance<SettingsManager>();
-                System.IO.File.Copy(settings.CoreSettings.DatabaseLocation, saveFileDialog.FileName);
+                File.Copy(settings.CoreSettings.DatabaseLocation, saveFileDialog.FileName);
             }
         }
 
@@ -558,8 +643,8 @@ namespace SchedulerGUI.ViewModels
             if (openFileDialog.ShowDialog() == true)
             {
                 var settings = SimpleIoc.Default.GetInstance<SettingsManager>();
-                System.IO.File.Delete(settings.CoreSettings.DatabaseLocation);
-                System.IO.File.Copy(openFileDialog.FileName, settings.CoreSettings.DatabaseLocation);
+                File.Delete(settings.CoreSettings.DatabaseLocation);
+                File.Copy(openFileDialog.FileName, settings.CoreSettings.DatabaseLocation);
 
                 MessageBox.Show("Database Import Completed. Please Reboot To Reload New Data!", "Scheduler Application", MessageBoxButton.OK, MessageBoxImage.Information);
             }
