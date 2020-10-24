@@ -17,6 +17,7 @@ namespace SchedulerGUI.Models
         /// <param name="name">The pass name.</param>
         /// <param name="startTime">The beginning time of the pass.</param>
         /// <param name="endTime">The ending time of the pass.</param>
+        /// <param name="random">A random number generator for initial values.</param>
         public PassOrbit(string name, DateTime startTime, DateTime endTime, Random random)
         {
             this.Name = "Pass #: " + name;

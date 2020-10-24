@@ -68,7 +68,6 @@ namespace SchedulerGUI.ViewModels.Controls
                 // A 3rd degree poly regression was calculated over the 12V SLA battery options
                 // on the ratio of pounds to Amp-hours.
                 // y = -3E-6x^3 + .0005x2 - 0.0178x + 0.9745
-
                 var x = this.CapacitymAh / 1000.0; // mAh -> Ah
                 var ratio = (-3e-6 * Math.Pow(x, 3)) + (0.0005 * Math.Pow(x, 2)) - (0.0178 * x) + 0.9745;
 
