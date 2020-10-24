@@ -23,7 +23,11 @@ namespace SchedulerGUI.Models
             this.StartTime = startTime;
             this.EndTime = endTime;
 
-            this.PassEnergy = random.Next();
+            // 30 watts for 2 hours is 216,000 Joules.
+            // That's in the ballpark of running a fairly decent (eg laptop) computer equipment
+            // and seems to be a reasonable default max for the random values.
+            // 15,000 Joules is around a 4.2 watt minimum.
+            this.PassEnergy = random.Next(minValue: 15000, maxValue: 216000);
             this.InitPhases(random);
         }
 
