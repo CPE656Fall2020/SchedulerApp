@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SchedulerDatabase;
+using SchedulerDatabase.Models;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 using SchedulerGUI.Services;
@@ -47,6 +53,11 @@ namespace SchedulerGUI.ViewModels
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
             this.Passes = new ObservableCollection<PassOrbit>();
 
+            this.SaveScheduleCommand = new RelayCommand(this.SaveScheduleHandler);
+            this.OpenScheduleCommand = new RelayCommand(this.OpenScheduleHandler);
+            this.ExportReportCommand = new RelayCommand(this.ExportReportHandler);
+            this.ImportDatabaseCommand = new RelayCommand(this.ImportDatabaseHandler);
+            this.ExportDatabaseCommand = new RelayCommand(this.ExportDatabaseHandler);
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
             this.OpenBatteryEditorCommand = new RelayCommand(this.OpenBatteryEditorHandler);
             this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);           
@@ -144,6 +155,16 @@ namespace SchedulerGUI.ViewModels
                 this.RunSchedule();
             }
         }
+
+        public ICommand SaveScheduleCommand { get; }
+
+        public ICommand OpenScheduleCommand { get; }
+
+        public ICommand ExportReportCommand { get; }
+
+        public ICommand ImportDatabaseCommand { get; }
+
+        public ICommand ExportDatabaseCommand { get; }
 
         /// <summary>
         /// Gets the command to execute to toggle the visibilty of the device selection flyout.
@@ -361,7 +382,7 @@ namespace SchedulerGUI.ViewModels
 
             for (int i = 0; i < NUMPASSES; i++)
             {
-                this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION), random));
+                this.Passes.Add(new PassOrbit($"Pass #{i + 1}", startTime, startTime.AddMinutes(PASSDURATION), random));
                 startTime = startTime.AddMinutes(PASSDURATION);
             }
 
@@ -464,6 +485,84 @@ namespace SchedulerGUI.ViewModels
             // Update the History graph with the new data, even if the schedule failed
             this.HistoryGraphViewModel.Battery = this.BatteryEditorViewModel.Battery;
             this.HistoryGraphViewModel.Passes = this.Passes;
+        }
+
+        private void SaveScheduleHandler()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Scheduler Json Documents|*.sjn";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var data = new SavedSchedule()
+                {
+                    Passes = this.Passes,
+                };
+
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                };
+
+                var result = JsonConvert.SerializeObject(data, settings);
+                System.IO.File.WriteAllText(saveFileDialog.FileName, result);
+            }
+        }
+
+        private void OpenScheduleHandler()
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Scheduler Json Documents|*.sjn";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                };
+
+                var result = JsonConvert.DeserializeObject<SavedSchedule>(System.IO.File.ReadAllText(openFileDialog.FileName), settings);
+
+                this.Passes.Clear();
+                foreach (var pass in result.Passes)
+                {
+                    this.Passes.Add(pass);
+                }
+
+                this.RunSchedule();
+            }
+        }
+
+        private void ExportReportHandler()
+        {
+
+        }
+
+        private void ExportDatabaseHandler()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Database|*.db";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var settings = SimpleIoc.Default.GetInstance<SettingsManager>();
+                System.IO.File.Copy(settings.CoreSettings.DatabaseLocation, saveFileDialog.FileName);
+            }
+        }
+
+        private void ImportDatabaseHandler()
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Database|*.db";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var settings = SimpleIoc.Default.GetInstance<SettingsManager>();
+                System.IO.File.Delete(settings.CoreSettings.DatabaseLocation);
+                System.IO.File.Copy(openFileDialog.FileName, settings.CoreSettings.DatabaseLocation);
+
+                MessageBox.Show("Database Import Completed. Please Reboot To Reload New Data!", "Scheduler Application", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

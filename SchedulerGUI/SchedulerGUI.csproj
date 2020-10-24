@@ -78,8 +78,8 @@
     <Compile Include="Models\Battery.cs" />
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
-    <Compile Include="Models\SolarPanel.cs" />
-    <Compile Include="Services\WindowService.cs" />
+    <Compile Include="Models\SavedSchedule.cs" />
+    <Compile Include="Models\SolarPanel.cs" />    <Compile Include="Services\WindowService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />

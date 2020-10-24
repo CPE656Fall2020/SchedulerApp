@@ -46,6 +46,32 @@
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>
                     <Fluent:BackstageTabControl>
+                        <Fluent:Button Header="Save Schedule"
+                                       Command="{Binding SaveScheduleCommand}"
+                                       Icon="{StaticResource VS2017Icons.Save}"/>
+
+                        <Fluent:Button Header="Open Schedule"
+                                       Command="{Binding OpenScheduleCommand}"
+                                       Icon="{StaticResource VS2017Icons.FolderOpen}"/>
+
+                        <Fluent:SeparatorTabItem />
+
+                        <Fluent:Button Header="Export Report"
+                                       Command="{Binding ExportReportCommand}"
+                                       Icon="{StaticResource VS2017Icons.VBReport}"/>
+
+                        <Fluent:SeparatorTabItem />
+
+                        <Fluent:Button Header="Export Database"
+                                       Command="{Binding ExportDatabaseCommand}"
+                                       Icon="{StaticResource VS2017Icons.CompareTargetDatabase}"/>
+
+                        <Fluent:Button Header="Import Database"
+                                       Command="{Binding ImportDatabaseCommand}"
+                                       Icon="{StaticResource VS2017Icons.AddDatabase}"/>
+
+                        <Fluent:SeparatorTabItem />
+
                         <Fluent:Button Header="Exit">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
