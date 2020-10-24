@@ -53,8 +53,8 @@
     <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModel}">
         <controlviews:DevicePickerControl />
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type controlvms:EditSolarCellControlViewModel}">
+    <DataTemplate DataType="{x:Type controlvms:EditBatteryControlViewModel}">
+        <controlviews:EditBatteryControl />
+    </DataTemplate>    <DataTemplate DataType="{x:Type controlvms:EditSolarCellControlViewModel}">
         <controlviews:EditSolarCellControl />
-    </DataTemplate>
-</ResourceDictionary>
+    </DataTemplate></ResourceDictionary>

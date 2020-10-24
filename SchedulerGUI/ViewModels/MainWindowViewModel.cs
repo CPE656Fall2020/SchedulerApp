@@ -48,8 +48,8 @@ namespace SchedulerGUI.ViewModels
             this.Passes = new ObservableCollection<PassOrbit>();
 
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
-            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);
-            this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
+            this.OpenBatteryEditorCommand = new RelayCommand(this.OpenBatteryEditorHandler);
+            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);            this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
             this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
@@ -64,24 +64,22 @@ namespace SchedulerGUI.ViewModels
 
             this.HistoryGraphViewModel = new HistoryGraphViewModel();
             this.DevicePickerViewModel = new DevicePickerViewModel();
+            this.BatteryEditorViewModel = new EditBatteryControlViewModel();
             this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
-
-            // Make sure to re-schedule when they change the enabled profiles
+            // Update the schedules when the parameters are changed
             this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
-            this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
+            this.BatteryEditorViewModel.PropertyChanged += (s, e) => this.RunSchedule();            this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(this.Passes))
                 {
                     this.RunSchedule();
                 }
             };
-
             // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
             // would be nice as opposed to providing the icon from ViewModel.
             this.AvailableAlgorithms = new ObservableCollection<IScheduleSolver>()
             {
                 new GreedyOptimizedLowPowerScheduler() { Tag = App.Current.Resources["VS2017Icons.VBPowerPack"] },
-                new TrashScheduler() { Tag = App.Current.Resources["VS2019Icons.Trash"] },
             };
 
             this.SelectedAlgorithm = this.AvailableAlgorithms.First();
@@ -142,12 +140,12 @@ namespace SchedulerGUI.ViewModels
         public ICommand ToggleDeviceSelectionVisibilityCommand { get; }
 
         /// <summary>
-        /// Gets the command to execute to open the solar cell parameters editor.
+        /// Gets the command to execute to open the battery parameters editor.
         /// </summary>
-        public ICommand OpenSolarCellEditorCommand { get; }
-
-        /// <summary>
-        /// Gets the command to execute to view the status of a schedule.
+        public ICommand OpenBatteryEditorCommand { get; }
+                /// <summary>
+        /// Gets the command to execute to open the solar cell parameters editor.
+        /// </summary>        public ICommand OpenSolarCellEditorCommand { get; }        /// <summary>        /// Gets the command to execute to view the status of a schedule.
         /// </summary>
         public ICommand OpenScheduleStatusCommand { get; }
 
@@ -231,12 +229,11 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public DevicePickerViewModel DevicePickerViewModel { get; }
 
-        /// <summary>
-        /// Gets the solar cell editor ViewModel.
+        /// <summary>        /// Gets the battery editor ViewModel.
         /// </summary>
+        public EditBatteryControlViewModel BatteryEditorViewModel { get; }
+        /// <summary>        /// Gets the solar cell editor ViewModel.        /// </summary>
         public EditSolarCellControlViewModel SolarCellEditorViewModel { get; }
-
-        /// <summary>
         /// Gets the last solved scheduling solution.
         /// </summary>
         public ScheduleSolution LastSolution
@@ -292,6 +289,12 @@ namespace SchedulerGUI.ViewModels
             this.SelectedPass = passData;
 
             this.RunSchedule();
+        }
+
+
+        private void OpenBatteryEditorHandler()
+        {
+            this.DialogManager.PopupDialog = this.BatteryEditorViewModel;
         }
 
         private void OpenSolarCellEditorHandler()
@@ -398,7 +401,7 @@ namespace SchedulerGUI.ViewModels
 
         private void RunSchedule()
         {
-            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles);
+            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles, this.BatteryEditorViewModel.EffectiveCapacityJ);
 
             // Make sure the sidebar updates with new status icons
             // PassOrbit and its phases don't use INotifyPropChanged to bubble up notifications
@@ -414,11 +417,7 @@ namespace SchedulerGUI.ViewModels
             var failedIcon = App.Current.Resources["VS2017Icons.TestCoveringFailed"];
             var successIcon = App.Current.Resources["VS2017Icons.TestCoveringPassed"];
 
-            if (hasWarnings)
-            {
-                this.ScheduleStatusIcon = warningIcon;
-            }
-            else if (hasError)
+            if (hasError)
             {
                 this.ScheduleStatusIcon = failedIcon;
             }
@@ -431,6 +430,10 @@ namespace SchedulerGUI.ViewModels
                 // ??? not solvable but no errors?
                 this.ScheduleStatusIcon = failedIcon;
             }
+            else if (hasWarnings)
+            {
+                this.ScheduleStatusIcon = warningIcon;
+            }
             else
             {
                 // Worked okay
@@ -438,6 +441,7 @@ namespace SchedulerGUI.ViewModels
             }
 
             // Update the History graph with the new data, even if the schedule failed
+            this.HistoryGraphViewModel.BatteryCapacityJ = this.BatteryEditorViewModel.EffectiveCapacityJ;
             this.HistoryGraphViewModel.Passes = this.Passes;
         }
     }

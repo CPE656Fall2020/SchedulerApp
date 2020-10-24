@@ -51,6 +51,11 @@ namespace SchedulerGUI.ViewModels.Controls
         public PlotModel PlotModel { get; }
 
         /// <summary>
+        /// Gets or sets the battery capacity to limit the display to.
+        /// </summary>
+        public double BatteryCapacityJ { get; set; }
+
+        /// <summary>
         /// Gets or sets the pass data that should be used to build the historical display.
         /// </summary>
         public IEnumerable<PassOrbit> Passes
@@ -90,6 +95,7 @@ namespace SchedulerGUI.ViewModels.Controls
                         cumulativeEnergy));
 
                     cumulativeEnergy += -1 * phase.TotalEnergyUsed;
+                    cumulativeEnergy = Math.Min(cumulativeEnergy, this.BatteryCapacityJ);
 
                     scatterSeries.Points.Add(new DataPoint(
                         DateTimeAxis.ToDouble(phase.EndTime),
