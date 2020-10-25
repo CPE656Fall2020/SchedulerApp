@@ -15,7 +15,7 @@ namespace SchedulerGUI.Models
         /// <summary>
         /// Gets or sets the nominal terminal voltage of the battery.
         /// </summary>
-        public double Voltage { get; set; } = 5.0;
+        public double Voltage { get; set; } = 3.7;
 
         /// <summary>
         /// Gets or sets the multiplicative scale factor used to derate the battery's capacity.
@@ -25,7 +25,10 @@ namespace SchedulerGUI.Models
         /// <summary>
         /// Gets the max theoretical capacity of the battery in Joules.
         /// </summary>
-        public double CapacityJ => this.CapacitymAh * this.Voltage;
+        /// <remarks>
+        /// See https://www.rc-electronics-usa.com/battery-electronics-101.html.
+        /// </remarks>
+        public double CapacityJ => this.CapacitymAh * this.Voltage * 3.6;
 
         /// <summary>
         /// Gets the effective capacity (with derating) of the battery in milliamp-hours.
@@ -35,6 +38,6 @@ namespace SchedulerGUI.Models
         /// <summary>
         /// Gets the effective capacity (with derating) of the battery in Joules.
         /// </summary>
-        public double EffectiveCapacityJ => this.EffectiveCapacitymAh * this.Voltage;
+        public double EffectiveCapacityJ => this.CapacityJ * (this.DeratedPct / 100.0);
     }
 }
