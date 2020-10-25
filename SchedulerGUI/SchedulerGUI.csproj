@@ -75,6 +75,7 @@
     <Compile Include="CustomControls\MetroRibbonWindow.cs" />
     <Compile Include="GlobalAssemblyInfo.cs" />
     <Compile Include="Interfaces\IPassPhase.cs" />
+    <Compile Include="Models\Battery.cs" />
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
     <Compile Include="Models\SolarPanel.cs" />

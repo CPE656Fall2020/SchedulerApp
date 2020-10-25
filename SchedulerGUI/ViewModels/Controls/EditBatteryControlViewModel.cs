@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
+using SchedulerGUI.Models;
 
 namespace SchedulerGUI.ViewModels.Controls
 {
@@ -10,18 +10,19 @@ namespace SchedulerGUI.ViewModels.Controls
     public class EditBatteryControlViewModel : ViewModelBase
     {
         private const double GramsToPounds = 0.00220462262185;
-
-        private double capacitymAh = 20000;
-        private double voltage = 5.0;
-        private int deratedPct = 100;
+        private Battery battery = new Battery();
 
         /// <summary>
         /// Gets or sets the capacity of the battery in milliamp-hours.
         /// </summary>
         public double CapacitymAh
         {
-            get => this.capacitymAh;
-            set => this.SetAndRecalculate(() => this.CapacitymAh, ref this.capacitymAh, value);
+            get => this.Battery.CapacitymAh;
+            set
+            {
+                this.Battery.CapacitymAh = value;
+                this.RaisePropertyChanged(string.Empty);
+            }
         }
 
         /// <summary>
@@ -29,8 +30,12 @@ namespace SchedulerGUI.ViewModels.Controls
         /// </summary>
         public double Voltage
         {
-            get => this.voltage;
-            set => this.SetAndRecalculate(() => this.Voltage, ref this.voltage, value);
+            get => this.Battery.Voltage;
+            set
+            {
+                this.Battery.Voltage = value;
+                this.RaisePropertyChanged(string.Empty);
+            }
         }
 
         /// <summary>
@@ -38,24 +43,22 @@ namespace SchedulerGUI.ViewModels.Controls
         /// </summary>
         public int Derating
         {
-            get => this.deratedPct;
-            set => this.SetAndRecalculate(() => this.Derating, ref this.deratedPct, value);
+            get => this.Battery.DeratedPct;
+            set
+            {
+                this.Battery.DeratedPct = value;
+                this.RaisePropertyChanged(string.Empty);
+            }
         }
 
         /// <summary>
-        /// Gets the max theoretical capacity of the battery in Joules.
+        /// Gets or sets the battery being modeled.
         /// </summary>
-        public double CapacityJ => this.CapacitymAh * this.Voltage;
-
-        /// <summary>
-        /// Gets the effective capacity (with derating) of the battery in milliamp-hours.
-        /// </summary>
-        public double EffectiveCapacitymAh => this.CapacitymAh * (this.Derating / 100.0);
-
-        /// <summary>
-        /// Gets the effective capacity (with derating) of the battery in Joules.
-        /// </summary>
-        public double EffectiveCapacityJ => this.EffectiveCapacitymAh * this.Voltage;
+        public Battery Battery
+        {
+            get => this.battery;
+            set => this.Set(() => this.Battery, ref this.battery, value);
+        }
 
         /// <summary>
         /// Gets an estimated weight for this battery cell, in pounds, using Sealed Lead Acid.
@@ -110,14 +113,6 @@ namespace SchedulerGUI.ViewModels.Controls
                 var weight = numCellsNeeded * 36;
                 return weight * GramsToPounds;
             }
-        }
-
-        private void SetAndRecalculate<T>(Expression<Func<T>> propertyName, ref T field, T newValue)
-        {
-            this.Set(propertyName, ref field, newValue);
-
-            // Every value ends up being recomputed every time anyways
-            this.RaisePropertyChanged(string.Empty);
         }
     }
 }

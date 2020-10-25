@@ -48,9 +48,9 @@
                     <TextBlock Text="{Binding Derating}"  Grid.Row="4" Grid.Column="1" />
 
                     <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0">
-                        <Bold>Peak Capacity (Joules): </Bold> <Run Text="{Binding CapacityJ, Mode=OneWay}" /><LineBreak />
-                        <Bold>Effective Capacity: </Bold> <Run Text="{Binding EffectiveCapacitymAh, Mode=OneWay}" /> mAh<LineBreak />
-                        <Bold>Effective Capacity: </Bold> <Run Text="{Binding EffectiveCapacityJ, Mode=OneWay}" /> J<LineBreak />
+                        <Bold>Peak Capacity (Joules): </Bold> <Run Text="{Binding Battery.CapacityJ, Mode=OneWay}" /><LineBreak />
+                        <Bold>Effective Capacity: </Bold> <Run Text="{Binding Battery.EffectiveCapacitymAh, Mode=OneWay}" /> mAh<LineBreak />
+                        <Bold>Effective Capacity: </Bold> <Run Text="{Binding Battery.EffectiveCapacityJ, Mode=OneWay}" /> J<LineBreak />
                     </TextBlock>
                 </Grid>
             </GroupBox>

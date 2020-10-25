@@ -401,7 +401,7 @@ namespace SchedulerGUI.ViewModels
 
         private void RunSchedule()
         {
-            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles, this.BatteryEditorViewModel.EffectiveCapacityJ);
+            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles, this.BatteryEditorViewModel.Battery);
 
             // Make sure the sidebar updates with new status icons
             // PassOrbit and its phases don't use INotifyPropChanged to bubble up notifications
@@ -441,7 +441,7 @@ namespace SchedulerGUI.ViewModels
             }
 
             // Update the History graph with the new data, even if the schedule failed
-            this.HistoryGraphViewModel.BatteryCapacityJ = this.BatteryEditorViewModel.EffectiveCapacityJ;
+            this.HistoryGraphViewModel.Battery = this.BatteryEditorViewModel.Battery;
             this.HistoryGraphViewModel.Passes = this.Passes;
         }
     }
