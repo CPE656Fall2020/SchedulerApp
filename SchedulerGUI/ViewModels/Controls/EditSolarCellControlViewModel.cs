@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using GalaSoft.MvvmLight;
+using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 
 namespace SchedulerGUI.ViewModels.Controls
@@ -24,15 +25,20 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.passes = value;
-                this.InitDefaultSolarData();
+                this.UpdatePassData();
             }
         }
 
         /// <summary>
-        /// Modifies the initial passes based on the defaults of the edit solar control vm.
+        /// Modifies the passes based on the values in the solar panel class.
         /// </summary>
-        private void InitDefaultSolarData()
+        private void UpdatePassData()
         {
+            foreach (PassOrbit pass in passes)
+            {
+                IPassPhase sunlightPhase = pass.PassPhases[0];
+                sunlightPhase.TotalEnergyUsed = -1 * solarPanel.EffectivePowerW * sunlightPhase.Duration.TotalSeconds;
+            }
         }
 
         /// <summary>
@@ -44,6 +50,7 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.DeratedPct = value;
+                this.UpdatePassData();
                 this.RaisePropertyChanged(string.Empty);
             }
         }
@@ -57,6 +64,7 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.Current = value;
+                this.UpdatePassData();
                 this.RaisePropertyChanged(string.Empty);
             }
         }
@@ -70,6 +78,7 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.Voltage = value;
+                this.UpdatePassData();
                 this.RaisePropertyChanged(string.Empty);
             }
         }

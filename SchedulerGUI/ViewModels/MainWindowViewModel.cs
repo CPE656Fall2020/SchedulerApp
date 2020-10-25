@@ -432,6 +432,7 @@ namespace SchedulerGUI.ViewModels
 
             // Update the History graph with the new data, even if the schedule failed
             this.HistoryGraphViewModel.Passes = this.Passes;
+            this.SolarCellEditorViewModel.Passes = this.Passes;
         }
     }
 }
