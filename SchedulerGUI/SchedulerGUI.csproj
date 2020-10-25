@@ -77,6 +77,7 @@
     <Compile Include="Interfaces\IPassPhase.cs" />
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
+    <Compile Include="Models\SolarPanel.cs" />
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />

@@ -55,14 +55,6 @@
                     </TextBlock>
                 </Grid>
             </GroupBox>
-
-            <GroupBox Header="Estimated Weight" Margin="10" Grid.Column="2">
-                <TextBlock VerticalAlignment="Top">
-                    <Bold>SLA: </Bold> <Run Text="{Binding WeightSLA, Mode=OneWay, StringFormat=0.0000}" /> lbs<LineBreak />
-                    <Bold>Li-Ion: </Bold> <Run Text="{Binding WeightLiion, Mode=OneWay, StringFormat=0.0000}" /> lbs<LineBreak />
-                    <Bold>Ni-MH: </Bold> <Run Text="{Binding WeightNimh, Mode=OneWay, StringFormat=0.0000}" /> lbs<LineBreak />
-                </TextBlock>
-            </GroupBox>
         </Grid>
     </GroupBox>
 </UserControl>
