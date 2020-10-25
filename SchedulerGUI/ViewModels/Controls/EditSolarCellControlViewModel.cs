@@ -49,6 +49,32 @@ namespace SchedulerGUI.ViewModels.Controls
         }
 
         /// <summary>
+        /// Gets or sets the current of the solar panel.
+        /// </summary>
+        public double Current
+        {
+            get => this.SolarPanel.Current;
+            set
+            {
+                this.SolarPanel.Current = value;
+                this.RaisePropertyChanged(string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the nominal terminal voltage of the battery.
+        /// </summary>
+        public double Voltage
+        {
+            get => this.SolarPanel.Voltage;
+            set
+            {
+                this.SolarPanel.Voltage = value;
+                this.RaisePropertyChanged(string.Empty);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the SolarPannel being modeled.
         /// </summary>
         public SolarPanel SolarPanel
