@@ -9,5 +9,11 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class EditSolarCellControlViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditSolarCellControlViewModel"/> class.
+        /// </summary>
+        public EditSolarCellControlViewModel()
+        {
+        }
     }
 }
