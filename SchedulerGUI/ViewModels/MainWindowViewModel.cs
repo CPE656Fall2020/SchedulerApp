@@ -2,14 +2,10 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Xps.Packaging;
-using System.Windows.Xps.Serialization;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
@@ -29,7 +25,7 @@ using TimelineLibrary;
 namespace SchedulerGUI.ViewModels
 {
     /// <summary>
-    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and bound to the <see cref="Views.MainWindow"/> view.
+    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and bound to the <see cref="MainWindow"/> view.
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
@@ -103,7 +99,7 @@ namespace SchedulerGUI.ViewModels
             // would be nice as opposed to providing the icon from ViewModel.
             this.AvailableAlgorithms = new ObservableCollection<IScheduleSolver>()
             {
-                new GreedyOptimizedLowPowerScheduler() { Tag = App.Current.Resources["VS2017Icons.VBPowerPack"] },
+                new GreedyOptimizedLowPowerScheduler() { Tag = Application.Current.Resources["VS2017Icons.VBPowerPack"] },
             };
 
             this.SelectedAlgorithm = this.AvailableAlgorithms.First();
@@ -537,90 +533,9 @@ namespace SchedulerGUI.ViewModels
 
         private void ExportReportHandler()
         {
-            var report = new FlowDocument()
-            {
-                PagePadding = new Thickness(100),
-            };
+            var report = Reporting.ReportGenerator.GenerateReport(this.Passes, this.BatteryEditorViewModel.Battery, this.LastSolution);
 
-            report.Blocks.Add(MakeTitle("Scheduler App Report"));
-
-            report.Blocks.Add(MakeHeader1("Pass Configuration"));
-
-            var passesList = new List();
-            foreach (var pass in this.Passes)
-            {
-                var passDescription = new Paragraph();
-                passDescription.Inlines.Add(new Bold(new Run(pass.Name)));
-                passDescription.Inlines.Add(new LineBreak());
-                passDescription.Inlines.Add(new Run($"Starting Time: {pass.StartTime:MM/dd/yyyy hh:mm:ss tt}"));
-                passDescription.Inlines.Add(new LineBreak());
-                passDescription.Inlines.Add(new Run($"Ending Time: {pass.EndTime:MM/dd/yyyy hh:mm:ss tt}"));
-                passDescription.Inlines.Add(new LineBreak());
-
-                var phasesList = new List();
-                foreach (var phase in pass.PassPhases)
-                {
-                    var phaseDescription = new Paragraph();
-                    phaseDescription.Inlines.Add(new Run($"Phase: {phase.PhaseName}"));
-                    phaseDescription.Inlines.Add(new LineBreak());
-                    phaseDescription.Inlines.Add(new Run($"Energy Used: {phase.TotalEnergyUsed} J"));
-                    phaseDescription.Inlines.Add(new LineBreak());
-                    phaseDescription.Inlines.Add(new Run($"Start Time: {phase.StartTime:hh:mm:ss tt}"));
-                    phaseDescription.Inlines.Add(new LineBreak());
-                    phaseDescription.Inlines.Add(new Run($"End Time: {phase.EndTime:hh:mm:ss tt}"));
-                    phaseDescription.Inlines.Add(new LineBreak());
-
-                    phasesList.ListItems.Add(new ListItem(phaseDescription));
-                }
-
-                var passListItem = new ListItem(passDescription);
-                passListItem.Blocks.Add(phasesList);
-
-                passesList.ListItems.Add(passListItem);
-            }
-
-            report.Blocks.Add(passesList);
-
-            SaveAsXps("report.xps", report);
-        }
-
-        private static Section MakeTitle(string text)
-        {
-            var title = new Section();
-            var runText = new Run(text);
-            runText.FontFamily = new System.Windows.Media.FontFamily("Calibri Light");
-            runText.FontSize = 36;
-
-            title.Blocks.Add(new Paragraph() { Inlines = { runText } });
-            return title;
-        }
-
-        private static Section MakeHeader1(string text)
-        {
-            var title = new Section();
-            var runText = new Run(text);
-            runText.FontFamily = new System.Windows.Media.FontFamily("Calibri Light");
-            runText.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(47, 84, 150));
-            runText.FontSize = 22;
-
-            title.Blocks.Add(new Paragraph() { Inlines = { runText } });
-            return title;
-        }
-
-        public static void SaveAsXps(string path, FlowDocument document)
-        {
-            using (Package package = Package.Open(path, FileMode.Create))
-            {
-                using (var xpsDoc = new XpsDocument(
-                    package, System.IO.Packaging.CompressionOption.Maximum))
-                {
-                    var xpsSm = new XpsSerializationManager(
-                        new XpsPackagingPolicy(xpsDoc), false);
-                    DocumentPaginator dp =
-                        ((IDocumentPaginatorSource)document).DocumentPaginator;
-                    xpsSm.SaveAsXaml(dp);
-                }
-            }
+            Reporting.ReportIO.SaveAsXps("report.xps", report);
         }
 
         private void ExportDatabaseHandler()

@@ -70,6 +70,7 @@
     <Compile Include="Converters\EnumBindingSourceExtension.cs" />
     <Compile Include="Converters\AcceleratorToStringConverter.cs" />
     <Compile Include="Converters\HzToStringConverter.cs" />
+    <Compile Include="Converters\ImageUtils.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="CustomControls\MetroRibbonWindow.cs" />
@@ -79,8 +80,9 @@
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
     <Compile Include="Models\SavedSchedule.cs" />
-    <Compile Include="Models\SolarPanel.cs" />    <Compile Include="Services\WindowService.cs" />
-    <Compile Include="Settings\CoreSettings.cs" />
+    <Compile Include="Reporting\ReportGenerator.cs" />    <Compile Include="Reporting\ReportIO.cs" />
+    <Compile Include="Reporting\ReportTheme.cs" />
+    <Compile Include="Services\WindowService.cs" />    <Compile Include="Models\SolarPanel.cs" />    <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="Solver\Algorithms\GreedyOptimizedLowPowerScheduler.cs" />
