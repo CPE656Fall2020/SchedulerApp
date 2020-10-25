@@ -49,8 +49,12 @@
     <DataTemplate DataType="{x:Type controlvms:HistoryGraphViewModel}">
         <controlviews:HistoryGraph />
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModel}">
         <controlviews:DevicePickerControl />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type controlvms:EditSolarCellControlViewModel}">
+        <controlviews:EditSolarCellControl />
     </DataTemplate>
 </ResourceDictionary>
