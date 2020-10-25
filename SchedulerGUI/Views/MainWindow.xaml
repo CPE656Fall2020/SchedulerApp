@@ -82,7 +82,7 @@
                                    LargeIcon="{StaticResource VS2017Icons.CustomActionEditor}"
                                    Command="{Binding ToggleDeviceSelectionVisibilityCommand}"/>
 
-                    <Fluent:Button Header="Edit Solar Cell Parameters"
+                    <Fluent:Button Header="Edit Solar Panel Parameters"
                                    Icon="{StaticResource VS2019Icons.Brightness}"
                                    LargeIcon="{StaticResource VS2019Icons.Brightness}"
                                    Command="{Binding OpenSolarCellEditorCommand}"/>

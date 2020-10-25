@@ -6,7 +6,7 @@
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              Background="{DynamicResource MahApps.Brushes.Control.Background}"
-             Width="470" Height="300">
+             Width="570" Height="300">
     <GroupBox Header="Solar Panel Parameters">
         <GroupBox.Resources>
             <Style TargetType="TextBlock">
@@ -17,12 +17,11 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="63*" />
-                <ColumnDefinition Width="197*"/>
-                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <GroupBox Header="Charging Parameters" Margin="10" Grid.Column="0" Grid.ColumnSpan="2">
+            <GroupBox Header="Charging Parameters" Margin="10" Grid.Column="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -49,11 +48,16 @@
                     <TextBlock Text="{Binding Derating}"  Grid.Row="4" Grid.Column="1" />
 
                     <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0">
-                        <Bold>Peak Charge Energy (Joules): </Bold> <Run Text="{Binding CapacityJ, Mode=OneWay}" /><LineBreak />
-                        <Bold>Effective Charge Energy: </Bold> <Run Text="{Binding EffectiveCapacitymAh, Mode=OneWay}" /> mAh<LineBreak />
-                        <Bold>Effective Charge Energy: </Bold> <Run Text="{Binding EffectiveCapacityJ, Mode=OneWay}" /> J<LineBreak />
+                        <Bold>Optimal Energy Transfer: </Bold> <Run Text="{Binding SolarPanel.PowerW, Mode=OneWay}" /> W<LineBreak />
+                        <Bold>Effective Energy Transfer: </Bold> <Run Text="{Binding SolarPanel.EffectivePowerW, Mode=OneWay}" /> W<LineBreak />
                     </TextBlock>
                 </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Example Solar Panels" Margin="10" Grid.Column="1">
+                <ListBox ItemsSource="{Binding ExamplePanels}" 
+                 SelectedValue="{Binding SelectedExamplePanelName}" 
+                 SelectedValuePath="Name" DisplayMemberPath="Name" />
             </GroupBox>
         </Grid>
     </GroupBox>

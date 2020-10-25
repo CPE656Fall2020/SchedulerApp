@@ -8,6 +8,11 @@ namespace SchedulerGUI.Models
     public class SolarPanel
     {
         /// <summary>
+        /// Gets or sets the name of the panel.
+        /// </summary>
+        public string Name { get; set; } = "Solar Panel";
+
+        /// <summary>
         /// Gets or sets the max power voltage output of the panel.
         /// </summary>
         public double Voltage { get; set; } = 5;
