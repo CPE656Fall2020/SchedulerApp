@@ -13,12 +13,7 @@ namespace SchedulerGUI.ViewModels.Controls
     {
         private IEnumerable<PassOrbit> passes;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EditSolarCellControlViewModel"/> class.
-        /// </summary>
-        public EditSolarCellControlViewModel()
-        {
-        }
+        private SolarPanel solarPanel = new SolarPanel();
 
         /// <summary>
         /// Gets or sets the pass data that should be used to build the historical display.
@@ -38,6 +33,28 @@ namespace SchedulerGUI.ViewModels.Controls
         /// </summary>
         private void InitDefaultSolarData()
         {
+        }
+
+        /// <summary>
+        /// Gets or sets the multiplicative derating factor to apply to the capacity.
+        /// </summary>
+        public int Derating
+        {
+            get => this.SolarPanel.DeratedPct;
+            set
+            {
+                this.SolarPanel.DeratedPct = value;
+                this.RaisePropertyChanged(string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the SolarPannel being modeled.
+        /// </summary>
+        public SolarPanel SolarPanel
+        {
+            get => this.solarPanel;
+            set => this.Set(() => this.solarPanel, ref this.solarPanel, value);
         }
     }
 }
