@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -53,7 +54,8 @@ namespace SchedulerGUI.ViewModels
 
             this.SaveScheduleCommand = new RelayCommand(this.SaveScheduleHandler);
             this.OpenScheduleCommand = new RelayCommand(this.OpenScheduleHandler);
-            this.ExportReportCommand = new RelayCommand(this.ExportReportHandler);
+            this.ExportReportXPSCommand = new RelayCommand(this.ExportReportXPSHandler);
+            this.ExportReportPDFCommand = new RelayCommand(this.ExportReportPDFHandler);
             this.ImportDatabaseCommand = new RelayCommand(this.ImportDatabaseHandler);
             this.ExportDatabaseCommand = new RelayCommand(this.ExportDatabaseHandler);
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
@@ -154,14 +156,34 @@ namespace SchedulerGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Gets the command to execute to save the current set of scheduling parameters to a file.
+        /// </summary>
         public ICommand SaveScheduleCommand { get; }
 
+        /// <summary>
+        /// Gets the command to execute to load scheduling parameters from a file.
+        /// </summary>
         public ICommand OpenScheduleCommand { get; }
 
-        public ICommand ExportReportCommand { get; }
+        /// <summary>
+        /// Gets the command to export a scheduling report to a Microsoft XPS document.
+        /// </summary>
+        public ICommand ExportReportXPSCommand { get; }
 
+        /// <summary>
+        /// Gets the command to export a scheduling report to a Adobe PDF document.
+        /// </summary>
+        public ICommand ExportReportPDFCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to import a database of AES devices.
+        /// </summary>
         public ICommand ImportDatabaseCommand { get; }
 
+        /// <summary>
+        /// Gets the command to execute to export the current database of AES devices.
+        /// </summary>
         public ICommand ExportDatabaseCommand { get; }
 
         /// <summary>
@@ -531,11 +553,25 @@ namespace SchedulerGUI.ViewModels
             }
         }
 
-        private void ExportReportHandler()
+        private FlowDocument GenerateReport()
         {
-            var report = Reporting.ReportGenerator.GenerateReport(this.Passes, this.BatteryEditorViewModel.Battery, this.LastSolution);
+            return Reporting.ReportGenerator.GenerateReport(this.Passes, this.BatteryEditorViewModel.Battery, this.LastSolution);
+        }
 
-            Reporting.ReportIO.SaveAsXps("report.xps", report);
+        private void ExportReportXPSHandler()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Microsoft XPS Document|*.xps";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                Reporting.ReportIO.SaveAsXps(saveFileDialog.FileName, this.GenerateReport());
+            }
+        }
+
+        private void ExportReportPDFHandler()
+        {
+            Reporting.ReportIO.PrintToPdf(this.GenerateReport());
         }
 
         private void ExportDatabaseHandler()

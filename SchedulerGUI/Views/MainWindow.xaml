@@ -56,8 +56,12 @@
 
                         <Fluent:SeparatorTabItem />
 
-                        <Fluent:Button Header="Export Report"
-                                       Command="{Binding ExportReportCommand}"
+                        <Fluent:Button Header="Export Report (XPS)"
+                                       Command="{Binding ExportReportXPSCommand}"
+                                       Icon="{StaticResource VS2017Icons.VBReport}"/>
+
+                        <Fluent:Button Header="Export Report (PDF)"
+                                       Command="{Binding ExportReportPDFCommand}"
                                        Icon="{StaticResource VS2017Icons.VBReport}"/>
 
                         <Fluent:SeparatorTabItem />

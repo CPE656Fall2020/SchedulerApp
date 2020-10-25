@@ -8,10 +8,10 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using OxyPlot;
 using OxyPlot.Wpf;
+using SchedulerDatabase.Extensions;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
 using SchedulerGUI.ViewModels.Controls;
-using SchedulerDatabase.Extensions;
 
 namespace SchedulerGUI.Reporting
 {
@@ -221,7 +221,7 @@ namespace SchedulerGUI.Reporting
                 solutionDescription.Inlines.Add(ReportTheme.GetSuccessIcon(pass.IsScheduledSuccessfully));
                 solutionDescription.Inlines.Add(new Bold(new Run(pass.Name)));
 
-                var deviceProfile = new Paragraph(new Run($"Device: {profile.ToFullDescription()}"))
+                var deviceProfile = new Paragraph(new Run($"Device: {profile.ToFullDescription()}\n"))
                 {
                     Margin = new Thickness(20, 0, 0, 0),
                 };
