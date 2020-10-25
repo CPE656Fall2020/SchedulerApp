@@ -517,6 +517,7 @@ namespace SchedulerGUI.ViewModels
                 var data = new SavedSchedule()
                 {
                     Passes = this.Passes,
+                    Battery = this.BatteryEditorViewModel.Battery,
                 };
 
                 var settings = new JsonSerializerSettings()
@@ -548,6 +549,8 @@ namespace SchedulerGUI.ViewModels
                 {
                     this.Passes.Add(pass);
                 }
+
+                this.BatteryEditorViewModel.Battery = result.Battery;
 
                 this.RunSchedule();
             }

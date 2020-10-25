@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SchedulerDatabase.Models;
 
 namespace SchedulerGUI.Models
 {
@@ -13,8 +9,13 @@ namespace SchedulerGUI.Models
     public class SavedSchedule
     {
         /// <summary>
-        /// A collection of pass-orbits to schedule.
+        /// Gets or sets a collection of pass-orbits to schedule.
         /// </summary>
         public ICollection<PassOrbit> Passes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the battery specifications for the satellite.
+        /// </summary>
+        public Battery Battery { get; set; }
     }
 }
