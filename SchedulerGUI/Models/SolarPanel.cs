@@ -23,7 +23,7 @@ namespace SchedulerGUI.Models
         public double Current { get; set; } = 3.7;
 
         /// <summary>
-        /// Gets or sets the multiplicative scale factor used to derate the battery's capacity.
+        /// Gets or sets the multiplicative scale factor used to derate the solar panel's power output.
         /// </summary>
         public int DeratedPct { get; set; } = 100;
 
@@ -33,7 +33,7 @@ namespace SchedulerGUI.Models
         public double PowerW => this.Current * this.Voltage;
 
         /// <summary>
-        /// Gets the effective capacity (with derating) of the battery in milliamp-hours.
+        /// Gets the effective power output (with derating) of the solar panel in watts.
         /// </summary>
         public double EffectivePowerW => this.PowerW * (this.DeratedPct / 100.0);
     }
