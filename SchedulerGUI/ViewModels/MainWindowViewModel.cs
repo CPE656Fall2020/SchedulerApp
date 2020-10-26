@@ -68,14 +68,13 @@ namespace SchedulerGUI.ViewModels
             this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
             // Update the schedules when the parameters are changed
             this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
-            this.BatteryEditorViewModel.PropertyChanged += (s, e) => this.RunSchedule();            this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
+            this.BatteryEditorViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(this.Passes))
+                if (e.PropertyName == nameof(this.BatteryEditorViewModel.Battery))
                 {
                     this.RunSchedule();
                 }
-            };
-            // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
+            };            // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
             // would be nice as opposed to providing the icon from ViewModel.
             this.AvailableAlgorithms = new ObservableCollection<IScheduleSolver>()
             {

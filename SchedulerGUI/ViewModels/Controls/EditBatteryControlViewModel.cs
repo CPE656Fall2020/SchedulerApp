@@ -21,7 +21,9 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.Battery.CapacitymAh = value;
-                this.RaisePropertyChanged(string.Empty);
+                this.RaisePropertyChanged(nameof(this.CapacitymAh));
+                this.RaisePropertyChanged(nameof(this.Battery));
+                this.NotifyCalculationsChanged();
             }
         }
 
@@ -34,7 +36,9 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.Battery.Voltage = value;
-                this.RaisePropertyChanged(string.Empty);
+                this.RaisePropertyChanged(nameof(this.Voltage));
+                this.RaisePropertyChanged(nameof(this.Battery));
+                this.NotifyCalculationsChanged();
             }
         }
 
@@ -47,7 +51,9 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.Battery.DeratedPct = value;
-                this.RaisePropertyChanged(string.Empty);
+                this.RaisePropertyChanged(nameof(this.Derating));
+                this.RaisePropertyChanged(nameof(this.Battery));
+                this.NotifyCalculationsChanged();
             }
         }
 
@@ -57,7 +63,13 @@ namespace SchedulerGUI.ViewModels.Controls
         public Battery Battery
         {
             get => this.battery;
-            set => this.Set(() => this.Battery, ref this.battery, value);
+            set
+            {
+                this.Set(() => this.Battery, ref this.battery, value);
+
+                // Update all calculated parameters
+                this.NotifyCalculationsChanged();
+            }
         }
 
         /// <summary>
@@ -113,6 +125,13 @@ namespace SchedulerGUI.ViewModels.Controls
                 var weight = numCellsNeeded * 36;
                 return weight * GramsToPounds;
             }
+        }
+
+        private void NotifyCalculationsChanged()
+        {
+            this.RaisePropertyChanged(nameof(this.WeightLiion));
+            this.RaisePropertyChanged(nameof(this.WeightNimh));
+            this.RaisePropertyChanged(nameof(this.WeightSLA));
         }
     }
 }
