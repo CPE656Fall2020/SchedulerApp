@@ -64,10 +64,17 @@ namespace SchedulerGUI.ViewModels
 
             this.HistoryGraphViewModel = new HistoryGraphViewModel();
             this.DevicePickerViewModel = new DevicePickerViewModel();
-            this.SolarCellEditorViewModel = new EditSolarCellControlViewModel();
+            this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
 
             // Make sure to re-schedule when they change the enabled profiles
             this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
+            this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "Passes")
+                {
+                    this.RunSchedule();
+                }
+            };
 
             // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
             // would be nice as opposed to providing the icon from ViewModel.
@@ -432,7 +439,6 @@ namespace SchedulerGUI.ViewModels
 
             // Update the History graph with the new data, even if the schedule failed
             this.HistoryGraphViewModel.Passes = this.Passes;
-            this.SolarCellEditorViewModel.Passes = this.Passes;
         }
     }
 }

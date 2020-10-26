@@ -38,14 +38,14 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Charging Voltage (V)" Grid.Row="0" Grid.Column="0" />
-                    <mah:NumericUpDown Value="{Binding Voltage}" Grid.Row="0" Grid.Column="1" />
+                    <mah:NumericUpDown Value="{Binding SolarPanel.Voltage}" Grid.Row="0" Grid.Column="1" />
 
                     <TextBlock Text="Charging Current (A)"  Grid.Row="1" Grid.Column="0" />
-                    <mah:NumericUpDown Value="{Binding Current}" Grid.Row="1" Grid.Column="1" />
+                    <mah:NumericUpDown Value="{Binding SolarPanel.Current}" Grid.Row="1" Grid.Column="1" />
 
                     <TextBlock Text="Derated Percentage"  Grid.Row="3" Grid.Column="0" />
                     <Slider Minimum="0" Maximum="100" Value="{Binding Derating}" Grid.Row="3" Grid.Column="1" />
-                    <TextBlock Text="{Binding Derating}"  Grid.Row="4" Grid.Column="1" />
+                    <TextBlock Text="{Binding SolarPanel.Derating}"  Grid.Row="4" Grid.Column="1" />
 
                     <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0">
                         <Bold>Optimal Energy Transfer: </Bold> <Run Text="{Binding SolarPanel.PowerW, Mode=OneWay}" /> W<LineBreak />

@@ -13,7 +13,7 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class EditSolarCellControlViewModel : ViewModelBase
     {
-        private IEnumerable<PassOrbit> passes;
+        private ObservableCollection<PassOrbit> passes;
 
         private SolarPanel solarPanel = new SolarPanel();
 
@@ -30,6 +30,15 @@ namespace SchedulerGUI.ViewModels.Controls
         };
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="EditSolarCellControlViewModel"/> class.
+        /// </summary>
+        /// <param name="passes"> A reference to the list of passes in the main view model</param>
+        public EditSolarCellControlViewModel(ObservableCollection<PassOrbit> passes)
+        {
+            this.passes = passes;
+        }
+
+        /// <summary>
         /// Gets or sets the multiplicative derating factor to apply to the capacity.
         /// </summary>
         public int Derating
@@ -38,8 +47,8 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.DeratedPct = value;
+                this.RaisePropertyChanged("SolarPanel");
                 this.UpdatePassData();
-                this.RaisePropertyChanged(string.Empty);
             }
         }
 
@@ -52,8 +61,8 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.Current = value;
+                this.RaisePropertyChanged("SolarPanel");
                 this.UpdatePassData();
-                this.RaisePropertyChanged(string.Empty);
             }
         }
 
@@ -66,8 +75,8 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.Voltage = value;
+                this.RaisePropertyChanged("SolarPanel");
                 this.UpdatePassData();
-                this.RaisePropertyChanged(string.Empty);
             }
         }
 
@@ -80,8 +89,8 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.Set(() => this.SolarPanel, ref this.solarPanel, value);
+                this.RaisePropertyChanged("SolarPanel");
                 this.UpdatePassData();
-                this.RaisePropertyChanged(string.Empty);
             }
         }
 
@@ -90,10 +99,10 @@ namespace SchedulerGUI.ViewModels.Controls
         /// </summary>
         public IEnumerable<PassOrbit> Passes
         {
-            get => this.passes;
+            get => (IEnumerable<PassOrbit>)this.passes;
             set
             {
-                this.passes = value;
+                this.passes = (ObservableCollection<PassOrbit>)value;
                 this.UpdatePassData();
             }
         }
@@ -137,6 +146,8 @@ namespace SchedulerGUI.ViewModels.Controls
                 IPassPhase sunlightPhase = pass.PassPhases[0];
                 sunlightPhase.TotalEnergyUsed = -1 * this.solarPanel.EffectivePowerW * sunlightPhase.Duration.TotalSeconds;
             }
+
+            this.RaisePropertyChanged("Passes");
         }
     }
 }
