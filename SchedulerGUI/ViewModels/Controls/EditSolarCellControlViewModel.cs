@@ -39,7 +39,7 @@ namespace SchedulerGUI.ViewModels.Controls
         }
 
         /// <summary>
-        /// Gets or sets the multiplicative derating factor to apply to the capacity.
+        /// Gets or sets the multiplicative derating factor to apply to the power output.
         /// </summary>
         public int Derating
         {
@@ -47,7 +47,9 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.DeratedPct = value;
-                this.RaisePropertyChanged("SolarPanel");
+                this.RaisePropertyChanged(nameof(this.Derating));
+                this.RaisePropertyChanged(nameof(this.PowerW));
+                this.RaisePropertyChanged(nameof(this.EffectivePowerW));
                 this.UpdatePassData();
             }
         }
@@ -61,13 +63,15 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.Current = value;
-                this.RaisePropertyChanged("SolarPanel");
+                this.RaisePropertyChanged(nameof(this.Current));
+                this.RaisePropertyChanged(nameof(this.PowerW));
+                this.RaisePropertyChanged(nameof(this.EffectivePowerW));
                 this.UpdatePassData();
             }
         }
 
         /// <summary>
-        /// Gets or sets the nominal terminal voltage of the battery.
+        /// Gets or sets the nominal terminal voltage of the solar panel.
         /// </summary>
         public double Voltage
         {
@@ -75,9 +79,27 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.SolarPanel.Voltage = value;
-                this.RaisePropertyChanged("SolarPanel");
+                this.RaisePropertyChanged(nameof(this.Voltage));
+                this.RaisePropertyChanged(nameof(this.PowerW));
+                this.RaisePropertyChanged(nameof(this.EffectivePowerW));
                 this.UpdatePassData();
             }
+        }
+
+        /// <summary>
+        /// Gets the optimal power output of the solar panel.
+        /// </summary>
+        public double PowerW
+        {
+            get => this.SolarPanel.PowerW;
+        }
+
+        /// <summary>
+        /// Gets the effective power output of the solar panel.
+        /// </summary>
+        public double EffectivePowerW
+        {
+            get => this.SolarPanel.EffectivePowerW;
         }
 
         /// <summary>
@@ -89,34 +111,17 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.Set(() => this.SolarPanel, ref this.solarPanel, value);
-                this.RaisePropertyChanged("SolarPanel");
+                this.RaisePropertyChanged(nameof(this.SolarPanel));
                 this.UpdatePassData();
             }
         }
 
         /// <summary>
-        /// Gets or sets the pass data that should be used to build the historical display.
+        /// Gets the example panels to be displayed in the solar panel parameters panel.
         /// </summary>
-        public IEnumerable<PassOrbit> Passes
-        {
-            get => (IEnumerable<PassOrbit>)this.passes;
-            set
-            {
-                this.passes = (ObservableCollection<PassOrbit>)value;
-                this.UpdatePassData();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the example panels to be displayed in the solar panel parameters panel.
-        /// </summary>
-        public IEnumerable<SolarPanel> ExamplePanels
+        public ObservableCollection<SolarPanel> ExamplePanels
         {
             get => this.examplePanels;
-            set
-            {
-                this.examplePanels = (ObservableCollection<SolarPanel>)value;
-            }
         }
 
         /// <summary>
@@ -131,7 +136,11 @@ namespace SchedulerGUI.ViewModels.Controls
                 {
                     this.selectedExamplePanelName = value;
                     var examplePanel = this.examplePanels.Single(i => i.Name == this.selectedExamplePanelName);
-                    this.SolarPanel = examplePanel;
+                    this.Voltage = examplePanel.Voltage;
+                    this.Current = examplePanel.Current;
+                    this.Derating = examplePanel.DeratedPct;
+                    this.RaisePropertyChanged(nameof(this.PowerW));
+                    this.RaisePropertyChanged(nameof(this.EffectivePowerW));
                 }
             }
         }

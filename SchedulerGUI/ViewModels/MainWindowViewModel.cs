@@ -70,7 +70,7 @@ namespace SchedulerGUI.ViewModels
             this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
             this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "Passes")
+                if (e.PropertyName == nameof(this.Passes))
                 {
                     this.RunSchedule();
                 }
