@@ -25,9 +25,10 @@ namespace SchedulerGUI.Reporting
         /// </summary>
         /// <param name="passes">All orbital passes.</param>
         /// <param name="batterySpecs">The battery specifications used in the schedule.</param>
+        /// <param name="solarSpecs">The solar panel specifications used in the schedule.</param>
         /// <param name="schedulerSolution">The computed schedule.</param>
         /// <returns>A <see cref="FlowDocument"/> report.</returns>
-        public static FlowDocument GenerateReport(IEnumerable<PassOrbit> passes, Battery batterySpecs, ScheduleSolution schedulerSolution)
+        public static FlowDocument GenerateReport(IEnumerable<PassOrbit> passes, Battery batterySpecs, SolarPanel solarSpecs, ScheduleSolution schedulerSolution)
         {
             var report = new FlowDocument()
             {
@@ -45,8 +46,8 @@ namespace SchedulerGUI.Reporting
             graphSection.BreakPageBefore = true;
             graphSection.Blocks.Add(ReportTheme.MakeHeader1("Battery Utilization Graph"));
             graphSection.Blocks.Add(GenerateEnergyCapacityGraphExport(passes, batterySpecs));
-            graphSection.Blocks.Add(ReportTheme.MakeHeader1("Battery Specs"));
-            graphSection.Blocks.Add(GenerateBatterySection(batterySpecs));
+            graphSection.Blocks.Add(ReportTheme.MakeHeader1("Power Specifications"));
+            graphSection.Blocks.Add(GenerateEnergySourceSection(batterySpecs, solarSpecs));
             report.Blocks.Add(graphSection);
 
             // Scheduler results
@@ -146,34 +147,71 @@ namespace SchedulerGUI.Reporting
             return new BlockUIContainer(new Image() { Source = Converters.ImageUtils.BytesToImageSource(stream.ToArray()) });
         }
 
-        private static Block GenerateBatterySection(Battery battery)
+        private static Block GenerateEnergySourceSection(Battery battery, SolarPanel solar)
         {
-            var results = new Paragraph();
-            results.Inlines.Add(new Bold(new Run("Battery Capacity: ")));
-            results.Inlines.Add($"{battery.CapacitymAh:n} mAh");
-            results.Inlines.Add(new LineBreak());
+            var section = new Section();
+            section.Blocks.Add(ReportTheme.MakeHeader2("Battery Specs"));
 
-            results.Inlines.Add(new Bold(new Run("Battery Capacity: ")));
-            results.Inlines.Add($"{battery.CapacityJ:n} J");
-            results.Inlines.Add(new LineBreak());
+            var batterySource = new Paragraph();
+            batterySource.Inlines.Add(new Bold(new Run("Battery Capacity: ")));
+            batterySource.Inlines.Add($"{battery.CapacitymAh:n} mAh");
+            batterySource.Inlines.Add(new LineBreak());
 
-            results.Inlines.Add(new Bold(new Run("Nominal Voltage: ")));
-            results.Inlines.Add($"{battery.Voltage:n} V");
-            results.Inlines.Add(new LineBreak());
+            batterySource.Inlines.Add(new Bold(new Run("Battery Capacity: ")));
+            batterySource.Inlines.Add($"{battery.CapacityJ:n} J");
+            batterySource.Inlines.Add(new LineBreak());
 
-            results.Inlines.Add(new Bold(new Run("Derated Percentage: ")));
-            results.Inlines.Add($"{battery.DeratedPct:n} %");
-            results.Inlines.Add(new LineBreak());
+            batterySource.Inlines.Add(new Bold(new Run("Nominal Voltage: ")));
+            batterySource.Inlines.Add($"{battery.Voltage:n} V");
+            batterySource.Inlines.Add(new LineBreak());
 
-            results.Inlines.Add(new Bold(new Run("Effective Battery Capacity: ")));
-            results.Inlines.Add($"{battery.EffectiveCapacitymAh:n} mAh");
-            results.Inlines.Add(new LineBreak());
+            batterySource.Inlines.Add(new Bold(new Run("Derated Percentage: ")));
+            batterySource.Inlines.Add($"{battery.DeratedPct:n} %");
+            batterySource.Inlines.Add(new LineBreak());
 
-            results.Inlines.Add(new Bold(new Run("Effective Battery Capacity: ")));
-            results.Inlines.Add($"{battery.EffectiveCapacityJ:n} J");
-            results.Inlines.Add(new LineBreak());
+            batterySource.Inlines.Add(new Bold(new Run("Effective Battery Capacity: ")));
+            batterySource.Inlines.Add($"{battery.EffectiveCapacitymAh:n} mAh");
+            batterySource.Inlines.Add(new LineBreak());
 
-            return results;
+            batterySource.Inlines.Add(new Bold(new Run("Effective Battery Capacity: ")));
+            batterySource.Inlines.Add($"{battery.EffectiveCapacityJ:n} J");
+            batterySource.Inlines.Add(new LineBreak());
+
+            batterySource.Inlines.Add(new LineBreak());
+            batterySource.Inlines.Add(new LineBreak());
+
+            section.Blocks.Add(batterySource);
+
+            section.Blocks.Add(ReportTheme.MakeHeader2("Solar Specs"));
+
+            var solarPerformance = new Paragraph();
+            solarPerformance.Inlines.Add(new Bold(new Run("Panel Name: ")));
+            solarPerformance.Inlines.Add($"{solar.Name}");
+            solarPerformance.Inlines.Add(new LineBreak());
+
+            solarPerformance.Inlines.Add(new Bold(new Run("Voltage: ")));
+            solarPerformance.Inlines.Add($"{solar.Voltage} V");
+            solarPerformance.Inlines.Add(new LineBreak());
+
+            solarPerformance.Inlines.Add(new Bold(new Run("Current: ")));
+            solarPerformance.Inlines.Add($"{solar.Current} A");
+            solarPerformance.Inlines.Add(new LineBreak());
+
+            solarPerformance.Inlines.Add(new Bold(new Run("Total Power: ")));
+            solarPerformance.Inlines.Add($"{solar.PowerW} W");
+            solarPerformance.Inlines.Add(new LineBreak());
+
+            solarPerformance.Inlines.Add(new Bold(new Run("Derated Percentage: ")));
+            solarPerformance.Inlines.Add($"{solar.DeratedPct:n} %");
+            solarPerformance.Inlines.Add(new LineBreak());
+
+            solarPerformance.Inlines.Add(new Bold(new Run("Effective Power: ")));
+            solarPerformance.Inlines.Add($"{solar.EffectivePowerW} W");
+            solarPerformance.Inlines.Add(new LineBreak());
+
+            section.Blocks.Add(solarPerformance);
+
+            return section;
         }
 
         private static Block GenerateWarningsSection(ScheduleSolution schedulerSolution)

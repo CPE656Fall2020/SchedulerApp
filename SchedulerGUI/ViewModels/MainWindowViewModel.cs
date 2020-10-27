@@ -558,7 +558,7 @@ namespace SchedulerGUI.ViewModels
 
         private FlowDocument GenerateReport()
         {
-            return Reporting.ReportGenerator.GenerateReport(this.Passes, this.BatteryEditorViewModel.Battery, this.LastSolution);
+            return Reporting.ReportGenerator.GenerateReport(this.Passes, this.BatteryEditorViewModel.Battery, this.SolarCellEditorViewModel.SolarPanel, this.LastSolution);
         }
 
         private void ExportReportXPSHandler()
