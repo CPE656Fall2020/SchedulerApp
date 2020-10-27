@@ -49,7 +49,8 @@ namespace SchedulerGUI.ViewModels
 
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
             this.OpenBatteryEditorCommand = new RelayCommand(this.OpenBatteryEditorHandler);
-            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);            this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
+            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);           
+            this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
             this.OpenImportToolCLICommand = new RelayCommand(this.OpenImportToolCLIHandler);
@@ -66,6 +67,7 @@ namespace SchedulerGUI.ViewModels
             this.DevicePickerViewModel = new DevicePickerViewModel();
             this.BatteryEditorViewModel = new EditBatteryControlViewModel();
             this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
+
             // Update the schedules when the parameters are changed
             this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
             this.BatteryEditorViewModel.PropertyChanged += (s, e) =>
@@ -74,7 +76,17 @@ namespace SchedulerGUI.ViewModels
                 {
                     this.RunSchedule();
                 }
-            };            // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
+            };
+
+            this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(this.SolarCellEditorViewModel.Passes))
+                {
+                    this.RunSchedule();
+                }
+            };
+
+            // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
             // would be nice as opposed to providing the icon from ViewModel.
             this.AvailableAlgorithms = new ObservableCollection<IScheduleSolver>()
             {
@@ -142,9 +154,14 @@ namespace SchedulerGUI.ViewModels
         /// Gets the command to execute to open the battery parameters editor.
         /// </summary>
         public ICommand OpenBatteryEditorCommand { get; }
-                /// <summary>
+
+        /// <summary>
         /// Gets the command to execute to open the solar cell parameters editor.
-        /// </summary>        public ICommand OpenSolarCellEditorCommand { get; }        /// <summary>        /// Gets the command to execute to view the status of a schedule.
+        /// </summary>
+        public ICommand OpenSolarCellEditorCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to view the status of a schedule.
         /// </summary>
         public ICommand OpenScheduleStatusCommand { get; }
 
@@ -228,11 +245,17 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public DevicePickerViewModel DevicePickerViewModel { get; }
 
-        /// <summary>        /// Gets the battery editor ViewModel.
+        /// <summary>
+        /// Gets the battery editor ViewModel.
         /// </summary>
         public EditBatteryControlViewModel BatteryEditorViewModel { get; }
-        /// <summary>        /// Gets the solar cell editor ViewModel.        /// </summary>
+
+        /// <summary>
+        /// Gets the solar cell editor ViewModel.
+        /// </summary>
         public EditSolarCellControlViewModel SolarCellEditorViewModel { get; }
+
+        /// <summary>
         /// Gets the last solved scheduling solution.
         /// </summary>
         public ScheduleSolution LastSolution
@@ -289,7 +312,6 @@ namespace SchedulerGUI.ViewModels
 
             this.RunSchedule();
         }
-
 
         private void OpenBatteryEditorHandler()
         {
