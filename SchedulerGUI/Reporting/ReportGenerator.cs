@@ -9,6 +9,7 @@ using System.Windows.Media;
 using OxyPlot;
 using OxyPlot.Wpf;
 using SchedulerDatabase.Extensions;
+using SchedulerGUI.Converters;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
 using SchedulerGUI.ViewModels.Controls;
@@ -99,7 +100,7 @@ namespace SchedulerGUI.Reporting
                     var phaseDescription = new Paragraph();
                     phaseDescription.Inlines.Add(new Run($"Phase: {phase.PhaseName}"));
                     phaseDescription.Inlines.Add(new LineBreak());
-                    phaseDescription.Inlines.Add(new Run($"Energy Used: {phase.TotalEnergyUsed:n} J"));
+                    phaseDescription.Inlines.Add(new Run($"Energy Used: {MetricTools.MetricValueAxisLabelFormatter(phase.TotalEnergyUsed, "J")}"));
                     phaseDescription.Inlines.Add(new LineBreak());
                     phaseDescription.Inlines.Add(new Run($"Start Time: {phase.StartTime:hh:mm:ss tt}"));
                     phaseDescription.Inlines.Add(new LineBreak());

@@ -71,6 +71,7 @@
     <Compile Include="Converters\AcceleratorToStringConverter.cs" />
     <Compile Include="Converters\HzToStringConverter.cs" />
     <Compile Include="Converters\ImageUtils.cs" />
+    <Compile Include="Converters\MetricTools.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="CustomControls\MetroRibbonWindow.cs" />
@@ -80,9 +81,12 @@
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
     <Compile Include="Models\SavedSchedule.cs" />
-    <Compile Include="Reporting\ReportGenerator.cs" />    <Compile Include="Reporting\ReportIO.cs" />
+    <Compile Include="Reporting\ReportGenerator.cs" />
+    <Compile Include="Reporting\ReportIO.cs" />
     <Compile Include="Reporting\ReportTheme.cs" />
-    <Compile Include="Services\WindowService.cs" />    <Compile Include="Models\SolarPanel.cs" />    <Compile Include="Settings\CoreSettings.cs" />
+    <Compile Include="Services\WindowService.cs" />
+    <Compile Include="Models\SolarPanel.cs" />
+    <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Services\ViewModelLocator.cs" />
     <Compile Include="Solver\Algorithms\GreedyOptimizedLowPowerScheduler.cs" />
@@ -90,7 +94,9 @@
     <Compile Include="Solver\ScheduleSolution.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
-    <Compile Include="ViewModels\Controls\EditBatteryControlViewModel.cs" />    <Compile Include="ViewModels\Controls\EditSolarCellControlViewModel.cs" />    <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditBatteryControlViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditSolarCellControlViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
     <Compile Include="ViewModels\Controls\DevicePickerViewModel.cs" />
     <Compile Include="ViewModels\Controls\HistoryGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\PopupViewModel.cs" />
