@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="SchedulerGUI.Views.Controls.EditSolarCellControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             Background="{DynamicResource MahApps.Brushes.Control.Background}"
+             Width="570" Height="300">
+    <GroupBox Header="Solar Panel Parameters">
+        <GroupBox.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="0,0,10,0" />
+            </Style>
+        </GroupBox.Resources>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Header="Charging Parameters" Margin="10" Grid.Column="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Charging Voltage (V)" Grid.Row="0" Grid.Column="0" />
+                    <mah:NumericUpDown Value="{Binding Voltage}" Grid.Row="0" Grid.Column="1" />
+
+                    <TextBlock Text="Charging Current (A)"  Grid.Row="1" Grid.Column="0" />
+                    <mah:NumericUpDown Value="{Binding Current}" Grid.Row="1" Grid.Column="1" />
+
+                    <TextBlock Text="Derated Percentage"  Grid.Row="3" Grid.Column="0" />
+                    <Slider Minimum="0" Maximum="100" Value="{Binding Derating}" Grid.Row="3" Grid.Column="1" />
+                    <TextBlock Text="{Binding Derating}"  Grid.Row="4" Grid.Column="1" />
+
+                    <TextBlock Grid.Row="5" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                        <Bold>Optimal Energy Transfer: </Bold> <Run Text="{Binding PowerW, Mode=OneWay}" /> W<LineBreak />
+                        <Bold>Effective Energy Transfer: </Bold> <Run Text="{Binding EffectivePowerW, Mode=OneWay}" /> W<LineBreak />
+                    </TextBlock>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Example Solar Panels" Margin="10" Grid.Column="1">
+                <ListBox ItemsSource="{Binding ExamplePanels}" 
+                 SelectedValue="{Binding SelectedExamplePanelName}" 
+                 SelectedValuePath="Name" DisplayMemberPath="Name" />
+            </GroupBox>
+        </Grid>
+    </GroupBox>
+</UserControl>

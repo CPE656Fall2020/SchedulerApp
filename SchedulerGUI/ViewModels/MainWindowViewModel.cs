@@ -48,6 +48,7 @@ namespace SchedulerGUI.ViewModels
             this.Passes = new ObservableCollection<PassOrbit>();
 
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
+            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);
             this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
@@ -63,9 +64,17 @@ namespace SchedulerGUI.ViewModels
 
             this.HistoryGraphViewModel = new HistoryGraphViewModel();
             this.DevicePickerViewModel = new DevicePickerViewModel();
+            this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
 
             // Make sure to re-schedule when they change the enabled profiles
             this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
+            this.SolarCellEditorViewModel.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(this.Passes))
+                {
+                    this.RunSchedule();
+                }
+            };
 
             // TODO: Finding a way to have icons in XAML and algorithms in CS and not having to manually map them by index
             // would be nice as opposed to providing the icon from ViewModel.
@@ -131,6 +140,11 @@ namespace SchedulerGUI.ViewModels
         /// Gets the command to execute to toggle the visibilty of the device selection flyout.
         /// </summary>
         public ICommand ToggleDeviceSelectionVisibilityCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to open the solar cell parameters editor.
+        /// </summary>
+        public ICommand OpenSolarCellEditorCommand { get; }
 
         /// <summary>
         /// Gets the command to execute to view the status of a schedule.
@@ -218,6 +232,11 @@ namespace SchedulerGUI.ViewModels
         public DevicePickerViewModel DevicePickerViewModel { get; }
 
         /// <summary>
+        /// Gets the solar cell editor ViewModel.
+        /// </summary>
+        public EditSolarCellControlViewModel SolarCellEditorViewModel { get; }
+
+        /// <summary>
         /// Gets the last solved scheduling solution.
         /// </summary>
         public ScheduleSolution LastSolution
@@ -273,6 +292,11 @@ namespace SchedulerGUI.ViewModels
             this.SelectedPass = passData;
 
             this.RunSchedule();
+        }
+
+        private void OpenSolarCellEditorHandler()
+        {
+            this.DialogManager.PopupDialog = this.SolarCellEditorViewModel;
         }
 
         private void OpenScheduleStatusHandler()

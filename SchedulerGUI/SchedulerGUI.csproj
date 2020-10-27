@@ -77,6 +77,7 @@
     <Compile Include="Interfaces\IPassPhase.cs" />
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
+    <Compile Include="Models\SolarPanel.cs" />
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Solver\ScheduleSolution.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
+    <Compile Include="ViewModels\Controls\EditSolarCellControlViewModel.cs" />
     <Compile Include="ViewModels\Controls\EditControlViewModel.cs" />
     <Compile Include="ViewModels\Controls\DevicePickerViewModel.cs" />
     <Compile Include="ViewModels\Controls\HistoryGraphViewModel.cs" />
@@ -103,6 +105,9 @@
     </Compile>
     <Compile Include="Views\Controls\EditControl.xaml.cs">
       <DependentUpon>EditControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\EditSolarCellControl.xaml.cs">
+      <DependentUpon>EditSolarCellControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
@@ -155,6 +160,10 @@
     <Page Include="Views\Controls\EditControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\EditSolarCellControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\Popup.xaml">
       <Generator>MSBuild:Compile</Generator>
