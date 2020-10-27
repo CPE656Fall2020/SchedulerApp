@@ -107,6 +107,7 @@ namespace SchedulerGUI.ViewModels
             this.SelectedAlgorithm = this.AvailableAlgorithms.First();
 
             this.Init();
+            this.SolarCellEditorViewModel.UpdatePassData();
             this.RunSchedule();
         }
 
@@ -518,6 +519,7 @@ namespace SchedulerGUI.ViewModels
                 {
                     Passes = this.Passes,
                     Battery = this.BatteryEditorViewModel.Battery,
+                    SolarPanel = this.SolarCellEditorViewModel.SolarPanel,
                 };
 
                 var settings = new JsonSerializerSettings()
@@ -551,6 +553,7 @@ namespace SchedulerGUI.ViewModels
                 }
 
                 this.BatteryEditorViewModel.Battery = result.Battery;
+                this.SolarCellEditorViewModel.SolarPanel = result.SolarPanel;
 
                 this.RunSchedule();
             }

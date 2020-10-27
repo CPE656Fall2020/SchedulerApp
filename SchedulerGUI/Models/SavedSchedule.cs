@@ -17,5 +17,10 @@ namespace SchedulerGUI.Models
         /// Gets or sets the battery specifications for the satellite.
         /// </summary>
         public Battery Battery { get; set; }
+
+        /// <summary>
+        /// Gets or sets the solar specifications for the satellite.
+        /// </summary>
+        public SolarPanel SolarPanel { get; set; }
     }
 }
