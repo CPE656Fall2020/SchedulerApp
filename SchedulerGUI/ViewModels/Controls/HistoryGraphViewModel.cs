@@ -15,6 +15,7 @@ namespace SchedulerGUI.ViewModels.Controls
     public class HistoryGraphViewModel : ViewModelBase
     {
         private IEnumerable<PassOrbit> passes;
+        private Battery battery;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryGraphViewModel"/> class.
@@ -51,6 +52,23 @@ namespace SchedulerGUI.ViewModels.Controls
         public PlotModel PlotModel { get; }
 
         /// <summary>
+        /// Gets or sets the battery model to limit the display with.
+        /// </summary>
+        public Battery Battery
+        {
+            get => this.battery;
+            set
+            {
+                this.battery = value;
+
+                if (this.Passes != null)
+                {
+                    this.GeneratePlot();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the pass data that should be used to build the historical display.
         /// </summary>
         public IEnumerable<PassOrbit> Passes
@@ -59,7 +77,11 @@ namespace SchedulerGUI.ViewModels.Controls
             set
             {
                 this.passes = value;
-                this.GeneratePlot();
+
+                if (this.Battery != null)
+                {
+                    this.GeneratePlot();
+                }
             }
         }
 
@@ -90,6 +112,7 @@ namespace SchedulerGUI.ViewModels.Controls
                         cumulativeEnergy));
 
                     cumulativeEnergy += -1 * phase.TotalEnergyUsed;
+                    cumulativeEnergy = Math.Min(cumulativeEnergy, this.Battery.EffectiveCapacityJ);
 
                     scatterSeries.Points.Add(new DataPoint(
                         DateTimeAxis.ToDouble(phase.EndTime),

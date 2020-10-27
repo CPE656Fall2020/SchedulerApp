@@ -22,7 +22,7 @@ namespace SchedulerGUI.Solver.Algorithms
         public object Tag { get; set; }
 
         /// <inheritdoc/>
-        public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles)
+        public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles, Battery battery)
         {
             var solution = new ScheduleSolution()
             {
@@ -61,6 +61,15 @@ namespace SchedulerGUI.Solver.Algorithms
                                 ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
                                 $"Orbit parameters for {pass.Name} are impossible. No power remains after scheduling all prior passes optimally."));
                             return solution;
+                        }
+                        else if (currentCapacityJoules > battery.EffectiveCapacityJ)
+                        {
+                            solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
+                                ScheduleSolution.SchedulerProblem.SeverityLevel.Warning,
+                                $"The battery was a contraint during {pass.Name}. {currentCapacityJoules} J were available, but max charge capacity is {battery.EffectiveCapacityJ}"));
+
+                            // Apply the cap.
+                            currentCapacityJoules = battery.EffectiveCapacityJ;
                         }
                     }
                 }

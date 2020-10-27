@@ -17,13 +17,18 @@ namespace SchedulerGUI.Models
         /// <param name="name">The pass name.</param>
         /// <param name="startTime">The beginning time of the pass.</param>
         /// <param name="endTime">The ending time of the pass.</param>
+        /// <param name="random">A random number generator for initial values.</param>
         public PassOrbit(string name, DateTime startTime, DateTime endTime, Random random)
         {
             this.Name = "Pass #: " + name;
             this.StartTime = startTime;
             this.EndTime = endTime;
 
-            this.PassEnergy = random.Next();
+            // 30 watts for 2 hours is 216,000 Joules.
+            // That's in the ballpark of running a fairly decent (eg laptop) computer equipment
+            // and seems to be a reasonable default max for the random values.
+            // 15,000 Joules is around a 4.2 watt minimum.
+            this.PassEnergy = random.Next(minValue: 15000, maxValue: 216000);
             this.InitPhases(random);
         }
 

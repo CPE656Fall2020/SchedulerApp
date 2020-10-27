@@ -13,8 +13,6 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class EditSolarCellControlViewModel : ViewModelBase
     {
-        private ObservableCollection<PassOrbit> passes;
-
         private SolarPanel solarPanel = new SolarPanel();
 
         private string selectedExamplePanelName = string.Empty;
@@ -25,7 +23,7 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <param name="passes"> A reference to the list of passes in the main view model</param>
         public EditSolarCellControlViewModel(ObservableCollection<PassOrbit> passes)
         {
-            this.passes = passes;
+            this.Passes = passes;
         }
 
         /// <summary>
@@ -97,6 +95,11 @@ namespace SchedulerGUI.ViewModels.Controls
         public double EffectivePowerW => this.SolarPanel.EffectivePowerW;
 
         /// <summary>
+        /// Gets a collection of passes that are being updated with new solar data.
+        /// </summary>
+        public ObservableCollection<PassOrbit> Passes { get; }
+
+        /// <summary>
         /// Gets or sets the SolarPannel being modeled.
         /// </summary>
         public SolarPanel SolarPanel
@@ -143,13 +146,13 @@ namespace SchedulerGUI.ViewModels.Controls
         /// </summary>
         private void UpdatePassData()
         {
-            foreach (PassOrbit pass in this.passes)
+            foreach (PassOrbit pass in this.Passes)
             {
                 IPassPhase sunlightPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Sunlight);
                 sunlightPhase.TotalEnergyUsed = -1 * this.solarPanel.EffectivePowerW * sunlightPhase.Duration.TotalSeconds;
             }
 
-            this.RaisePropertyChanged("Passes");
+            this.RaisePropertyChanged(nameof(this.Passes));
         }
     }
 }

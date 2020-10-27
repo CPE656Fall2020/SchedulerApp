@@ -24,7 +24,8 @@ namespace SchedulerGUI.Solver
         /// </summary>
         /// <param name="passes">The orbital passes and associated constraints that need scheduled.</param>
         /// <param name="availableProfiles">The AES profiles describing the devices that are available to schedule for.</param>
+        /// <param name="battery">The specification for the battery powering the satellite.</param>
         /// <returns>A <see cref="ScheduleSolution"/> describing if the scenerio is possible and which device are required.</returns>
-        ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles);
+        ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles, Battery battery);
     }
 }
