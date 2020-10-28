@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using SchedulerDatabase;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
@@ -21,7 +26,7 @@ using TimelineLibrary;
 namespace SchedulerGUI.ViewModels
 {
     /// <summary>
-    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and bound to the <see cref="Views.MainWindow"/> view.
+    /// <see cref="MainWindowViewModel"/> provides the top-level View-Model for the Scheduler application, and bound to the <see cref="MainWindow"/> view.
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
@@ -47,6 +52,12 @@ namespace SchedulerGUI.ViewModels
             this.TimelineEventPasses = new ObservableCollection<TimelineEvent>();
             this.Passes = new ObservableCollection<PassOrbit>();
 
+            this.SaveScheduleCommand = new RelayCommand(this.SaveScheduleHandler);
+            this.OpenScheduleCommand = new RelayCommand(this.OpenScheduleHandler);
+            this.ExportReportXPSCommand = new RelayCommand(this.ExportReportXPSHandler);
+            this.ExportReportPDFCommand = new RelayCommand(this.ExportReportPDFHandler);
+            this.ImportDatabaseCommand = new RelayCommand(this.ImportDatabaseHandler);
+            this.ExportDatabaseCommand = new RelayCommand(this.ExportDatabaseHandler);
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
             this.OpenBatteryEditorCommand = new RelayCommand(this.OpenBatteryEditorHandler);
             this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);           
@@ -90,12 +101,13 @@ namespace SchedulerGUI.ViewModels
             // would be nice as opposed to providing the icon from ViewModel.
             this.AvailableAlgorithms = new ObservableCollection<IScheduleSolver>()
             {
-                new GreedyOptimizedLowPowerScheduler() { Tag = App.Current.Resources["VS2017Icons.VBPowerPack"] },
+                new GreedyOptimizedLowPowerScheduler() { Tag = Application.Current.Resources["VS2017Icons.VBPowerPack"] },
             };
 
             this.SelectedAlgorithm = this.AvailableAlgorithms.First();
 
             this.Init();
+            this.SolarCellEditorViewModel.UpdatePassData();
             this.RunSchedule();
         }
 
@@ -144,6 +156,36 @@ namespace SchedulerGUI.ViewModels
                 this.RunSchedule();
             }
         }
+
+        /// <summary>
+        /// Gets the command to execute to save the current set of scheduling parameters to a file.
+        /// </summary>
+        public ICommand SaveScheduleCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to load scheduling parameters from a file.
+        /// </summary>
+        public ICommand OpenScheduleCommand { get; }
+
+        /// <summary>
+        /// Gets the command to export a scheduling report to a Microsoft XPS document.
+        /// </summary>
+        public ICommand ExportReportXPSCommand { get; }
+
+        /// <summary>
+        /// Gets the command to export a scheduling report to a Adobe PDF document.
+        /// </summary>
+        public ICommand ExportReportPDFCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to import a database of AES devices.
+        /// </summary>
+        public ICommand ImportDatabaseCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to export the current database of AES devices.
+        /// </summary>
+        public ICommand ExportDatabaseCommand { get; }
 
         /// <summary>
         /// Gets the command to execute to toggle the visibilty of the device selection flyout.
@@ -361,7 +403,7 @@ namespace SchedulerGUI.ViewModels
 
             for (int i = 0; i < NUMPASSES; i++)
             {
-                this.Passes.Add(new PassOrbit((i + 1).ToString(), startTime, startTime.AddMinutes(PASSDURATION), random));
+                this.Passes.Add(new PassOrbit($"Pass #{i + 1}", startTime, startTime.AddMinutes(PASSDURATION), random));
                 startTime = startTime.AddMinutes(PASSDURATION);
             }
 
@@ -434,9 +476,9 @@ namespace SchedulerGUI.ViewModels
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
             var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
 
-            var warningIcon = App.Current.Resources["VS2017Icons.StatusWarning"];
-            var failedIcon = App.Current.Resources["VS2017Icons.TestCoveringFailed"];
-            var successIcon = App.Current.Resources["VS2017Icons.TestCoveringPassed"];
+            var warningIcon = Application.Current.Resources["VS2017Icons.StatusWarning"];
+            var failedIcon = Application.Current.Resources["VS2017Icons.TestCoveringFailed"];
+            var successIcon = Application.Current.Resources["VS2017Icons.TestCoveringPassed"];
 
             if (hasError)
             {
@@ -464,6 +506,105 @@ namespace SchedulerGUI.ViewModels
             // Update the History graph with the new data, even if the schedule failed
             this.HistoryGraphViewModel.Battery = this.BatteryEditorViewModel.Battery;
             this.HistoryGraphViewModel.Passes = this.Passes;
+        }
+
+        private void SaveScheduleHandler()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Scheduler Json Documents|*.sjn";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var data = new SavedSchedule()
+                {
+                    Passes = this.Passes,
+                    Battery = this.BatteryEditorViewModel.Battery,
+                    SolarPanel = this.SolarCellEditorViewModel.SolarPanel,
+                };
+
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                };
+
+                var result = JsonConvert.SerializeObject(data, settings);
+                File.WriteAllText(saveFileDialog.FileName, result);
+            }
+        }
+
+        private void OpenScheduleHandler()
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Scheduler Json Documents|*.sjn";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var settings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                };
+
+                var result = JsonConvert.DeserializeObject<SavedSchedule>(File.ReadAllText(openFileDialog.FileName), settings);
+
+                this.Passes.Clear();
+                foreach (var pass in result.Passes)
+                {
+                    this.Passes.Add(pass);
+                }
+
+                this.BatteryEditorViewModel.Battery = result.Battery;
+                this.SolarCellEditorViewModel.SolarPanel = result.SolarPanel;
+
+                this.RunSchedule();
+            }
+        }
+
+        private FlowDocument GenerateReport()
+        {
+            return Reporting.ReportGenerator.GenerateReport(this.Passes, this.BatteryEditorViewModel.Battery, this.SolarCellEditorViewModel.SolarPanel, this.LastSolution);
+        }
+
+        private void ExportReportXPSHandler()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Microsoft XPS Document|*.xps";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                Reporting.ReportIO.SaveAsXps(saveFileDialog.FileName, this.GenerateReport());
+            }
+        }
+
+        private void ExportReportPDFHandler()
+        {
+            Reporting.ReportIO.PrintToPdf(this.GenerateReport());
+        }
+
+        private void ExportDatabaseHandler()
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Database|*.db";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                var settings = SimpleIoc.Default.GetInstance<SettingsManager>();
+                File.Copy(settings.CoreSettings.DatabaseLocation, saveFileDialog.FileName);
+            }
+        }
+
+        private void ImportDatabaseHandler()
+        {
+            var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Database|*.db";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var settings = SimpleIoc.Default.GetInstance<SettingsManager>();
+                File.Delete(settings.CoreSettings.DatabaseLocation);
+                File.Copy(openFileDialog.FileName, settings.CoreSettings.DatabaseLocation);
+
+                MessageBox.Show("Database Import Completed. Please Reboot To Reload New Data!", "Scheduler Application", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

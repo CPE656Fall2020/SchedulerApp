@@ -175,7 +175,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = energyAxisTitle,
                     Base = 10,
                     Minimum = 1e-10,
-                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "J/b", binary: false),
+                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "J/b", binary: false),
                     IsPanEnabled = false,
                 });
             }
@@ -188,7 +188,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = energyAxisTitle,
                     AbsoluteMinimum = 0,
                     Minimum = 0,
-                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "J/b", binary: false),
+                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "J/b", binary: false),
                     IsPanEnabled = false,
                 });
             }
@@ -205,7 +205,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = throughputAxisTitle,
                     Base = 1024,
                     Minimum = 0,
-                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "B/s", binary: true),
+                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "B/s", binary: true),
                     IsPanEnabled = false,
                 });
             }
@@ -218,7 +218,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = throughputAxisTitle,
                     AbsoluteMinimum = 0,
                     Minimum = 0,
-                    LabelFormatter = (v) => this.ValueAxisLabelFormatter(v, "B/s", binary: true),
+                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "B/s", binary: true),
                     IsPanEnabled = false,
                 });
             }
@@ -249,82 +249,6 @@ namespace SchedulerGUI.ViewModels.Controls
 
             this.JoulesPerByteStdDev = CalculateStandardDeviation(joulesPerByteSeriesData.Select(s => s.Value));
             this.BytesPerSecondStdDev = CalculateStandardDeviation(bytesPerSecondSeriesData.Select(s => s.Value));
-        }
-
-        // Adapted from https://stackoverflow.com/a/40266660.
-        private string ValueAxisLabelFormatter(double input, string unit, bool binary = false)
-        {
-            double res = double.NaN;
-            string suffix = string.Empty;
-            var powBase = binary ? 2 : 10;
-
-            // Smaller than Base unit
-            if (Math.Abs(input) <= 0.001)
-            {
-                var siLow = new Dictionary<int, string> { };
-
-                if (!binary)
-                {
-                    siLow = new Dictionary<int, string>
-                    {
-                        [-12] = "p",
-                        [-9] = "n",
-                        [-6] = "μ",
-                        [-3] = "m",
-                    };
-                }
-
-                foreach (var v in siLow.Keys)
-                {
-                    if (input != 0 && Math.Abs(input) <= Math.Pow(powBase, v))
-                    {
-                        res = input * Math.Pow(powBase, Math.Abs(v));
-                        suffix = siLow[v];
-                        break;
-                    }
-                }
-            }
-
-            // Greater than Base Unit
-            if (Math.Abs(input) >= 1000)
-            {
-                Dictionary<int, string> siHigh;
-
-                if (!binary)
-                {
-                    // Powers of 10
-                    siHigh = new Dictionary<int, string>
-                    {
-                        [12] = "T",
-                        [9] = "G",
-                        [6] = "M",
-                        [3] = "k",
-                    };
-                }
-                else
-                {
-                    // As defined in IEEE 1541, expect without the trailing "i" since that's not commonly used in written text.
-                    siHigh = new Dictionary<int, string>
-                    {
-                        [40] = "T",
-                        [30] = "G",
-                        [20] = "M",
-                        [10] = "k",
-                    };
-                }
-
-                foreach (var v in siHigh.Keys)
-                {
-                    if (input != 0 && Math.Abs(input) >= Math.Pow(powBase, v))
-                    {
-                        res = input / Math.Pow(powBase, Math.Abs(v));
-                        suffix = siHigh[v];
-                        break;
-                    }
-                }
-            }
-
-            return double.IsNaN(res) ? $"{input:0.000}{unit}" : $"{res:0.000}{suffix}{unit}";
         }
 
         private class ThroughputColumnItem : ColumnItem

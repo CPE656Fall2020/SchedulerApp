@@ -14,17 +14,16 @@ namespace SchedulerGUI.Models
         /// </summary>
         /// <param name="startTime">Start of phase.</param>
         /// <param name="endTime">End of phase.</param>
-        /// <param name="name">Name of phase.</param>
-        public PassPhase(DateTime startTime, DateTime endTime, PhaseType name)
+        /// <param name="phaseName">Name of phase.</param>
+        public PassPhase(DateTime startTime, DateTime endTime, PhaseType phaseName)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
-            this.PhaseName = name;
-            this.Duration = endTime - startTime;
+            this.PhaseName = phaseName;
         }
 
         /// <inheritdoc/>
-        public TimeSpan Duration { get; set; }
+        public TimeSpan Duration => this.EndTime - this.StartTime;
 
         /// <inheritdoc/>
         public DateTime StartTime { get; set; }

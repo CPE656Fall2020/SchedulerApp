@@ -24,6 +24,7 @@ namespace SchedulerGUI.ViewModels.Controls
         public EditSolarCellControlViewModel(ObservableCollection<PassOrbit> passes)
         {
             this.Passes = passes;
+            this.UpdatePassData();
         }
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace SchedulerGUI.ViewModels.Controls
         public ObservableCollection<PassOrbit> Passes { get; }
 
         /// <summary>
-        /// Gets or sets the SolarPannel being modeled.
+        /// Gets or sets the SolarPanel being modeled.
         /// </summary>
         public SolarPanel SolarPanel
         {
@@ -133,18 +134,9 @@ namespace SchedulerGUI.ViewModels.Controls
         }
 
         /// <summary>
-        /// Used to trigger that the power needs to be refreshed on the view.
-        /// </summary>
-        private void NotifyCalculatedParams()
-        {
-            this.RaisePropertyChanged(nameof(this.PowerW));
-            this.RaisePropertyChanged(nameof(this.EffectivePowerW));
-        }
-
-        /// <summary>
         /// Modifies the passes based on the values in the solar panel class.
         /// </summary>
-        private void UpdatePassData()
+        public void UpdatePassData()
         {
             foreach (PassOrbit pass in this.Passes)
             {
@@ -153,6 +145,15 @@ namespace SchedulerGUI.ViewModels.Controls
             }
 
             this.RaisePropertyChanged(nameof(this.Passes));
+        }
+
+        /// <summary>
+        /// Used to trigger that the power needs to be refreshed on the view.
+        /// </summary>
+        private void NotifyCalculatedParams()
+        {
+            this.RaisePropertyChanged(nameof(this.PowerW));
+            this.RaisePropertyChanged(nameof(this.EffectivePowerW));
         }
     }
 }
