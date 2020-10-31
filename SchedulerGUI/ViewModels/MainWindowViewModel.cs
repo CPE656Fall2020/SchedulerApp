@@ -61,7 +61,7 @@ namespace SchedulerGUI.ViewModels
             this.ExportDatabaseCommand = new RelayCommand(this.ExportDatabaseHandler);
             this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
             this.OpenBatteryEditorCommand = new RelayCommand(this.OpenBatteryEditorHandler);
-            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);           
+            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);
             this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);

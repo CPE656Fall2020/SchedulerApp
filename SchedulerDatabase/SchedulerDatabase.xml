@@ -375,7 +375,12 @@
         </member>
         <member name="P:SchedulerDatabase.SchedulerContext.AESProfiles">
             <summary>
-            Gets or sets the <see cref="P:SchedulerDatabase.SchedulerContext.AESProfiles"/>s stored in the database.
+            Gets or sets the <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile"/>s stored in the database.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.SchedulerContext.CompressorProfiles">
+            <summary>
+            Gets or sets the <see cref="T:SchedulerDatabase.Models.CompressorProfile"/>s stored in the database.
             </summary>
         </member>
         <member name="M:SchedulerDatabase.SchedulerContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
