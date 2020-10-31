@@ -7,7 +7,6 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using SchedulerDatabase.Helpers;
 using SchedulerDatabase.Models;
-using SchedulerGUI.Converters;
 
 namespace SchedulerGUI.ViewModels.Controls
 {
@@ -16,7 +15,7 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class AESGraphViewModel : ViewModelBase
     {
-        private IEnumerable<AESEncyptorProfile> displayedData;
+        private IEnumerable<IByteStreamProcessor> displayedData;
         private double joulesPerByteStdDev;
         private double bytesPerSecondStdDev;
         private bool showBytesLog;
@@ -36,7 +35,7 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <summary>
         /// Gets or sets the AES profile data to visually display in the graph.
         /// </summary>
-        public IEnumerable<AESEncyptorProfile> DisplayedData
+        public IEnumerable<IByteStreamProcessor> DisplayedData
         {
             get => this.displayedData;
             set

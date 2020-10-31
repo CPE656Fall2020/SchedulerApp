@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using SchedulerDatabase;
+using SchedulerDatabase.Models;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 using SchedulerGUI.Services;
@@ -75,7 +76,7 @@ namespace SchedulerGUI.ViewModels
             };
 
             this.HistoryGraphViewModel = new HistoryGraphViewModel();
-            this.DevicePickerViewModel = new DevicePickerViewModel();
+            this.DevicePickerViewModel = new DevicePickerViewModelAES();
             this.BatteryEditorViewModel = new EditBatteryControlViewModel();
             this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
 
@@ -285,7 +286,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets the device picker control ViewModel for enabling and disabling AES devices.
         /// </summary>
-        public DevicePickerViewModel DevicePickerViewModel { get; }
+        public DevicePickerViewModelAES DevicePickerViewModel { get; }
 
         /// <summary>
         /// Gets the battery editor ViewModel.
