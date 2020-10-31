@@ -86,7 +86,7 @@ namespace SchedulerDatabase.Models
                 return
                     $@"Platform: {this.PlatformName}" + "\n" +
                     additional +
-                    $@"Compression Mode: {this.TestedCompressionMode}"+ "\n" +
+                    $@"Compression Mode: {this.TestedCompressionMode}" + "\n" +
                     $@"Tested Frequency: {this.TestedFrequency:N0} Hz" + "\n" +
                     $@"Description: {this.Description}";
             }
@@ -99,5 +99,9 @@ namespace SchedulerDatabase.Models
         /// <inheritdoc/>
         public string ShortProfileSpecificDescription =>
             $"{this.PlatformName} {this.TestedCompressionMode} {this.AdditionalUniqueInfo}\n{MetricUtils.HzToString(this.TestedFrequency)} {this.NumCores} core(s) {this.Author}";
+
+        /// <inheritdoc/>
+        public string ComparisonHashString =>
+            $"{this.PlatformName}{this.TestedCompressionMode}{this.TestedFrequency}{this.NumCores}{this.AdditionalUniqueInfo}";
     }
 }

@@ -148,5 +148,9 @@ namespace SchedulerDatabase.Models
         /// <inheritdoc/>
         public string ShortProfileSpecificDescription =>
             $"{this.PlatformName} {this.ProviderName} {this.AdditionalUniqueInfo}\n{MetricUtils.HzToString(this.TestedFrequency)} {this.NumCores} core(s) {this.Author}";
+
+        /// <inheritdoc/>
+        public string ComparisonHashString =>
+            $"{this.PlatformName}{this.PlatformAccelerator}{this.ProviderName}{this.TestedAESBitLength}{this.TestedAESMode}{this.TestedFrequency}{this.NumCores}{this.AdditionalUniqueInfo}";
     }
 }

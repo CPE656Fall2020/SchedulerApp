@@ -30,5 +30,18 @@ namespace SchedulerDatabase.Models
         /// class of related experiments. For a more general description of a device profile see also <seealso cref="ShortProfileClassDescription"/>.
         /// </summary>
         string ShortProfileSpecificDescription { get; }
+
+        /// <summary>
+        /// Gets a hash string that can be used to compare different <see cref="IProfile"/>s
+        /// to determine if they both describe the same device, setup, experiment, and intentions.
+        /// Equivalent profiles may be averaged or interpolated together to accomidate for incomplete data sets.
+        /// </summary>
+        /// <remarks>
+        /// Formatting is not relevant here, this value will never be displayed to end users.
+        /// However, it should be treated as a hash value. Identical profiles must always
+        /// produce the same hash, and the likelihood of collisions (identical hashes being produced by
+        /// differing profiles) must be minimized.
+        /// </remarks>
+        string ComparisonHashString { get; }
     }
 }
