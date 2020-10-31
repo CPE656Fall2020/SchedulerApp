@@ -54,6 +54,10 @@
         <controlviews:DevicePickerControl />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModelCompression}">
+        <controlviews:DevicePickerControl />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type controlvms:EditBatteryControlViewModel}">
         <controlviews:EditBatteryControl />
     </DataTemplate>

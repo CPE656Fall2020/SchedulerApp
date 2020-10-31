@@ -26,9 +26,15 @@
 
     <metro:MetroWindow.Flyouts>
         <metro:FlyoutsControl>
-            <metro:Flyout Header="Available Devices" Position="Right" Width="440" IsOpen="{Binding IsDeviceSelectionVisible}" Theme="Accent">
+            <metro:Flyout Header="Available Encryption Devices" Position="Right" Width="440" IsOpen="{Binding IsAESDeviceSelectionVisible}" Theme="Accent">
                 <!--Selection Control for devices to schedule with-->
-                <ContentControl Content="{Binding DevicePickerViewModel}" 
+                <ContentControl Content="{Binding AESDevicePickerViewModel}" 
+                                Foreground="White" />
+            </metro:Flyout>
+
+            <metro:Flyout Header="Available Compression Devices" Position="Right" Width="440" IsOpen="{Binding IsCompressionDeviceSelectionVisible}" Theme="Accent">
+                <!--Selection Control for devices to schedule with-->
+                <ContentControl Content="{Binding CompressionDevicePickerViewModel}" 
                                 Foreground="White" />
             </metro:Flyout>
         </metro:FlyoutsControl>
@@ -107,10 +113,16 @@
                         </Fluent:Gallery.ItemTemplate>
                     </Fluent:Gallery>
 
-                    <Fluent:Button Header="Edit Available Devices"
+                    <Fluent:Button Header="Edit Available AES Devices"
                                    Icon="{StaticResource VS2017Icons.CustomActionEditor}"
                                    LargeIcon="{StaticResource VS2017Icons.CustomActionEditor}"
-                                   Command="{Binding ToggleDeviceSelectionVisibilityCommand}"/>
+                                   Command="{Binding ToggleAESDeviceSelectionVisibilityCommand}"/>
+
+                    <Fluent:Button Header="Edit Available Compression Devices"
+                                   Icon="{StaticResource VS2017Icons.ZipFile}"
+                                   LargeIcon="{StaticResource VS2017Icons.ZipFile}"
+                                   Command="{Binding ToggleCompressionDeviceSelectionVisibilityCommand}"/>
+
 
                     <Fluent:Button Header="Edit Battery Parameters"
                                    Icon="{StaticResource VS2017Icons.Power}"
