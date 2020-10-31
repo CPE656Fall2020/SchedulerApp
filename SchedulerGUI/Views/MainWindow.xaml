@@ -118,11 +118,10 @@
                                    LargeIcon="{StaticResource VS2017Icons.CustomActionEditor}"
                                    Command="{Binding ToggleAESDeviceSelectionVisibilityCommand}"/>
 
-                    <Fluent:Button Header="Edit Available Compression Devices"
+                    <Fluent:Button Header="Edit Data Link Devices"
                                    Icon="{StaticResource VS2017Icons.ZipFile}"
                                    LargeIcon="{StaticResource VS2017Icons.ZipFile}"
                                    Command="{Binding ToggleCompressionDeviceSelectionVisibilityCommand}"/>
-
 
                     <Fluent:Button Header="Edit Battery Parameters"
                                    Icon="{StaticResource VS2017Icons.Power}"
