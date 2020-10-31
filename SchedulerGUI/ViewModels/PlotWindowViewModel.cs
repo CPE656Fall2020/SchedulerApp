@@ -224,7 +224,7 @@ namespace SchedulerGUI.ViewModels
                         break;
 
                     case PlotOption.Summarized:
-                        this.Plot.DisplayedData = summarizer.SummarizeResults(rawData).ToList();
+                        this.Plot.DisplayedData = summarizer.SummarizeDeviceResults(rawData).ToList();
                         break;
                 }
             }

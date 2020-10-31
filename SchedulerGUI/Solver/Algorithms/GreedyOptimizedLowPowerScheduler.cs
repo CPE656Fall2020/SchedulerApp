@@ -133,7 +133,7 @@ namespace SchedulerGUI.Solver.Algorithms
         /// <returns>A dictionary sorted by energy efficiency as the key, most efficient first.</returns>
         private SortedDictionary<double, AESEncyptorProfile> BuildOptimizationMap(IEnumerable<AESEncyptorProfile> availableProfiles, ScheduleSolution solution)
         {
-            var summarizedProfiles = new SchedulingSummarizer(null).SummarizeResults(availableProfiles);
+            var summarizedProfiles = new SchedulingSummarizer(null).SummarizeDeviceResults(availableProfiles);
             var optimizationMap = new SortedDictionary<double, AESEncyptorProfile>();
 
             // Characterize each profile based on how low-power it can be

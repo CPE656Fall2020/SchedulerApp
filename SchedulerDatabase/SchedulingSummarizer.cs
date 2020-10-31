@@ -22,6 +22,10 @@ namespace SchedulerDatabase
 
         private SchedulerContext Context { get; }
 
+        private string SummarizedAuthor => "CPE656 Authors";
+
+        private string SummarizedDescription => "Summarized data computed with the SchedulerDatabase tool";
+
         /// <summary>
         /// Gets a listing of all the authors who have test results included in the database.
         /// </summary>
@@ -89,28 +93,13 @@ namespace SchedulerDatabase
         }
 
         /// <summary>
-        /// Computes summarized results for each unique test case provided in a collection of raw profiles.
+        /// Computes summarized results for each unique test case provided in a collection of raw AES profiles.
         /// </summary>
         /// <param name="profiles">A collection of raw <see cref="AESEncyptorProfile"/>.</param>
         /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
-        public List<AESEncyptorProfile> SummarizeResults(IEnumerable<AESEncyptorProfile> profiles)
+        public List<AESEncyptorProfile> SummarizeDeviceResults(IEnumerable<AESEncyptorProfile> profiles)
         {
-            var buckets = new Dictionary<string, List<AESEncyptorProfile>>();
-
-            // Group all the independent test runs provided into buckets, based on which test runs are done under the same conditions.
-            foreach (var profile in profiles)
-            {
-                // For two profiles to be considered different iterations of the same test case, they have to match on the following criteria:
-                var id = $"{profile.PlatformName}{profile.PlatformAccelerator}{profile.ProviderName}{profile.TestedAESBitLength}{profile.TestedAESMode}{profile.TestedFrequency}{profile.NumCores}{profile.AdditionalUniqueInfo}";
-
-                if (!buckets.ContainsKey(id))
-                {
-                    buckets.Add(id, new List<AESEncyptorProfile>());
-                }
-
-                buckets[id].Add(profile);
-            }
-
+            var buckets = this.GroupIntoBuckets(profiles);
             var allSummarizedResults = new List<AESEncyptorProfile>();
 
             // For all related tests in each bucket, compute an average.
@@ -132,8 +121,8 @@ namespace SchedulerDatabase
                 {
                     /* Static description */
                     ProfileId = Guid.NewGuid(),
-                    Author = "CPE656 Authors",
-                    Description = "Summarized data computed with the SchedulerDatabase tool",
+                    Author = this.SummarizedAuthor,
+                    Description = this.SummarizedDescription,
                     PlatformName = bucket.Value.First().PlatformName,
                     PlatformAccelerator = bucket.Value.First().PlatformAccelerator,
                     ProviderName = bucket.Value.First().ProviderName,
@@ -153,6 +142,76 @@ namespace SchedulerDatabase
             }
 
             return allSummarizedResults;
+        }
+
+        /// <summary>
+        /// Computes summarized results for each unique test case provided in a collection of raw compression profiles.
+        /// </summary>
+        /// <param name="profiles">A collection of raw <see cref="CompressorProfile"/>.</param>
+        /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        public List<CompressorProfile> SummarizeDeviceResults(IEnumerable<CompressorProfile> profiles)
+        {
+            var buckets = this.GroupIntoBuckets(profiles);
+            var allSummarizedResults = new List<CompressorProfile>();
+
+            // For all related tests in each bucket, compute an average.
+            foreach (var bucket in buckets)
+            {
+                var summation = new CompressorProfile();
+                var count = bucket.Value.Count;
+
+                foreach (var result in bucket.Value)
+                {
+                    summation.AverageCurrent += result.AverageCurrent;
+                    summation.AverageVoltage += result.AverageVoltage;
+                    summation.TotalTestedByteSize += result.TotalTestedByteSize;
+                    summation.TotalTestedEnergyJoules += result.TotalTestedEnergyJoules;
+                    summation.TotalTestTime += result.TotalTestTime;
+                }
+
+                allSummarizedResults.Add(new CompressorProfile()
+                {
+                    /* Static description */
+                    ProfileId = Guid.NewGuid(),
+                    Author = this.SummarizedAuthor,
+                    Description = this.SummarizedDescription,
+                    PlatformName = bucket.Value.First().PlatformName,
+                    TestedCompressionMode = bucket.Value.First().TestedCompressionMode,
+                    TestedFrequency = bucket.Value.First().TestedFrequency,
+                    NumCores = bucket.Value.First().NumCores,
+                    AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
+
+                    /* Averaged results */
+                    AverageCurrent = summation.AverageCurrent / count,
+                    AverageVoltage = summation.AverageVoltage / count,
+                    TotalTestedByteSize = summation.TotalTestedByteSize / count,
+                    TotalTestedEnergyJoules = summation.TotalTestedEnergyJoules / count,
+                    TotalTestTime = TimeSpan.FromTicks(summation.TotalTestTime.Ticks / count),
+                });
+            }
+
+            return allSummarizedResults;
+        }
+
+        private Dictionary<string, List<T>> GroupIntoBuckets<T>(IEnumerable<T> profiles)
+            where T : IProfile
+        {
+            var buckets = new Dictionary<string, List<T>>();
+
+            // Group all the independent test runs provided into buckets, based on which test runs are done under the same conditions.
+            foreach (var profile in profiles)
+            {
+                var id = profile.ComparisonHashString;
+
+                if (!buckets.ContainsKey(id))
+                {
+                    buckets.Add(id, new List<T>());
+                }
+
+                buckets[id].Add(profile);
+            }
+
+            return buckets;
         }
     }
 }
