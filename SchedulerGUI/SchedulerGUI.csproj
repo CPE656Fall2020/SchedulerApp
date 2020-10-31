@@ -71,7 +71,6 @@
     <Compile Include="Converters\AcceleratorToStringConverter.cs" />
     <Compile Include="Converters\HzToStringConverter.cs" />
     <Compile Include="Converters\ImageUtils.cs" />
-    <Compile Include="Converters\MetricTools.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="CustomControls\MetroRibbonWindow.cs" />

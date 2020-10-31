@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using SchedulerDatabase.Extensions;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
 
@@ -32,7 +31,7 @@ namespace SchedulerGUI.ViewModels
             this.SolutionPerPass = new Dictionary<PassOrbit, string>();
             foreach (var passSln in solution.ViableProfiles)
             {
-                this.SolutionPerPass.Add(passSln.Key, passSln.Value?.ToFullDescription());
+                this.SolutionPerPass.Add(passSln.Key, passSln.Value?.FullProfileDescription);
             }
         }
 

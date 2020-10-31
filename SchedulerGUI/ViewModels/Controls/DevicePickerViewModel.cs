@@ -92,12 +92,12 @@ namespace SchedulerGUI.ViewModels.Controls
             /// <summary>
             /// Gets the short description string for this profile.
             /// </summary>
-            public string DeviceDescription => $"{this.Device.PlatformAccelerator.ToFriendlyName()}, {this.Device.AdditionalUniqueInfo} {Converters.HzToStringConverter.HzToString(this.Device.TestedFrequency)} {this.Device.NumCores} Cores, {this.Device.ProviderName}";
+            public string DeviceDescription => this.Device.ShortProfileClassDescription;
 
             /// <summary>
             /// Gets the complete platform description.
             /// </summary>
-            public string FullDescription => this.Device.ToFullDescription();
+            public string FullDescription => this.Device.FullProfileDescription;
 
             /// <summary>
             /// Gets or sets a value indicating whether this profile is enabled.

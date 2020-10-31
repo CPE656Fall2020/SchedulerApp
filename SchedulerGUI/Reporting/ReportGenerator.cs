@@ -9,6 +9,7 @@ using System.Windows.Media;
 using OxyPlot;
 using OxyPlot.Wpf;
 using SchedulerDatabase.Extensions;
+using SchedulerDatabase.Helpers;
 using SchedulerGUI.Converters;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
@@ -100,7 +101,7 @@ namespace SchedulerGUI.Reporting
                     var phaseDescription = new Paragraph();
                     phaseDescription.Inlines.Add(new Run($"Phase: {phase.PhaseName}"));
                     phaseDescription.Inlines.Add(new LineBreak());
-                    phaseDescription.Inlines.Add(new Run($"Energy Used: {MetricTools.MetricValueAxisLabelFormatter(phase.TotalEnergyUsed, "J")}"));
+                    phaseDescription.Inlines.Add(new Run($"Energy Used: {MetricUtils.MetricValueAxisLabelFormatter(phase.TotalEnergyUsed, "J")}"));
                     phaseDescription.Inlines.Add(new LineBreak());
                     phaseDescription.Inlines.Add(new Run($"Start Time: {phase.StartTime:hh:mm:ss tt}"));
                     phaseDescription.Inlines.Add(new LineBreak());
@@ -274,7 +275,7 @@ namespace SchedulerGUI.Reporting
                 solutionDescription.Inlines.Add(ReportTheme.GetSuccessIcon(pass.IsScheduledSuccessfully));
                 solutionDescription.Inlines.Add(new Bold(new Run(pass.Name)));
 
-                var deviceProfile = new Paragraph(new Run($"Device: {profile.ToFullDescription()}\n"))
+                var deviceProfile = new Paragraph(new Run($"Device: {profile.FullProfileDescription}\n"))
                 {
                     Margin = new Thickness(20, 0, 0, 0),
                 };

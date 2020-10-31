@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using SchedulerDatabase.Extensions;
+using SchedulerDatabase.Helpers;
 
 namespace SchedulerDatabase.Models
 {
     /// <summary>
     /// <see cref="AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
     /// </summary>
-    public class AESEncyptorProfile
+    public class AESEncyptorProfile : IByteStreamProcessor
     {
         /// <summary>
         /// <see cref="AESMode"/> defines the different modes in which the AES encryption can be performed.
@@ -138,5 +140,35 @@ namespace SchedulerDatabase.Models
         /// Gets the throughput of the encryptor, in bytes per second.
         /// </summary>
         public double BytesPerSecond => this.TotalTestedByteSize / this.TotalTestTime.TotalSeconds;
+
+        /// <inheritdoc/>
+        public string FullProfileDescription
+        {
+            get
+            {
+                var additional = string.Empty;
+                if (!string.IsNullOrEmpty(this.AdditionalUniqueInfo))
+                {
+                    additional = $@"Additional : {this.AdditionalUniqueInfo}" + "\n";
+                }
+
+                return
+                    $@"Platform: {this.PlatformName}" + "\n" +
+                    $@"Accelerator: {this.PlatformAccelerator.ToFriendlyName()}" + "\n" +
+                    additional +
+                    $@"AES Mode: {this.TestedAESMode}, {this.TestedAESBitLength}-bit" + "\n" +
+                    $@"Provider: {this.ProviderName}" + "\n" +
+                    $@"Tested Frequency: {this.TestedFrequency:N0} Hz" + "\n" +
+                    $@"Description: {this.Description}";
+            }
+        }
+
+        /// <inheritdoc/>
+        public string ShortProfileClassDescription =>
+            $"{this.PlatformAccelerator.ToFriendlyName()}, {this.AdditionalUniqueInfo} {MetricUtils.HzToString(this.TestedFrequency)} {this.NumCores} Cores, {this.ProviderName}";
+
+        /// <inheritdoc/>
+        public string ShortProfileSpecificDescription =>
+            $"{this.PlatformName} {this.ProviderName} {this.AdditionalUniqueInfo}\n{MetricUtils.HzToString(this.TestedFrequency)} {this.NumCores} core(s) {this.Author}";
     }
 }
