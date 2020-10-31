@@ -86,19 +86,13 @@ namespace SchedulerDatabase.Models
         /// </summary>
         public int TestedAESBitLength { get; set; }
 
-        /// <summary>
-        /// Gets or sets the total number of bytes that were encrypted when profiling this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public long TotalTestedByteSize { get; set; }
 
-        /// <summary>
-        /// Gets or sets the total number of joules that were consumed when profiling this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public double TotalTestedEnergyJoules { get; set; }
 
-        /// <summary>
-        /// Gets or sets the total runtime of the this profile when benchmarking this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public TimeSpan TotalTestTime { get; set; }
 
         /// <inheritdoc/>

@@ -105,40 +105,21 @@ namespace SchedulerDatabase
             // For all related tests in each bucket, compute an average.
             foreach (var bucket in buckets)
             {
-                var summation = new AESEncryptorProfile();
                 var count = bucket.Value.Count;
+                var summation = this.CreateSummation(bucket.Value, new AESEncryptorProfile());
 
-                foreach (var result in bucket.Value)
+                /* Static description */
+                var result = new AESEncryptorProfile()
                 {
-                    summation.AverageCurrent += result.AverageCurrent;
-                    summation.AverageVoltage += result.AverageVoltage;
-                    summation.TotalTestedByteSize += result.TotalTestedByteSize;
-                    summation.TotalTestedEnergyJoules += result.TotalTestedEnergyJoules;
-                    summation.TotalTestTime += result.TotalTestTime;
-                }
-
-                allSummarizedResults.Add(new AESEncryptorProfile()
-                {
-                    /* Static description */
-                    ProfileId = Guid.NewGuid(),
-                    Author = this.SummarizedAuthor,
-                    Description = this.SummarizedDescription,
-                    PlatformName = bucket.Value.First().PlatformName,
-                    PlatformAccelerator = bucket.Value.First().PlatformAccelerator,
-                    ProviderName = bucket.Value.First().ProviderName,
                     TestedAESBitLength = bucket.Value.First().TestedAESBitLength,
                     TestedAESMode = bucket.Value.First().TestedAESMode,
-                    TestedFrequency = bucket.Value.First().TestedFrequency,
-                    NumCores = bucket.Value.First().NumCores,
-                    AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
+                };
+                result = (AESEncryptorProfile)this.GenerateResult(bucket.Value.First(), result);
 
-                    /* Averaged results */
-                    AverageCurrent = summation.AverageCurrent / count,
-                    AverageVoltage = summation.AverageVoltage / count,
-                    TotalTestedByteSize = summation.TotalTestedByteSize / count,
-                    TotalTestedEnergyJoules = summation.TotalTestedEnergyJoules / count,
-                    TotalTestTime = TimeSpan.FromTicks(summation.TotalTestTime.Ticks / count),
-                });
+                /* Averaged results */
+                result = (AESEncryptorProfile)this.AddSummationToResult(summation, result, count);
+
+                allSummarizedResults.Add(result);
             }
 
             return allSummarizedResults;
@@ -157,40 +138,62 @@ namespace SchedulerDatabase
             // For all related tests in each bucket, compute an average.
             foreach (var bucket in buckets)
             {
-                var summation = new CompressorProfile();
                 var count = bucket.Value.Count;
+                var summation = this.CreateSummation(bucket.Value, new CompressorProfile());
 
-                foreach (var result in bucket.Value)
+                /* Static description */
+                var result = new CompressorProfile()
                 {
-                    summation.AverageCurrent += result.AverageCurrent;
-                    summation.AverageVoltage += result.AverageVoltage;
-                    summation.TotalTestedByteSize += result.TotalTestedByteSize;
-                    summation.TotalTestedEnergyJoules += result.TotalTestedEnergyJoules;
-                    summation.TotalTestTime += result.TotalTestTime;
-                }
-
-                allSummarizedResults.Add(new CompressorProfile()
-                {
-                    /* Static description */
-                    ProfileId = Guid.NewGuid(),
-                    Author = this.SummarizedAuthor,
-                    Description = this.SummarizedDescription,
-                    PlatformName = bucket.Value.First().PlatformName,
                     TestedCompressionMode = bucket.Value.First().TestedCompressionMode,
-                    TestedFrequency = bucket.Value.First().TestedFrequency,
-                    NumCores = bucket.Value.First().NumCores,
-                    AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
+                };
+                result = (CompressorProfile)this.GenerateResult(bucket.Value.First(), result);
 
-                    /* Averaged results */
-                    AverageCurrent = summation.AverageCurrent / count,
-                    AverageVoltage = summation.AverageVoltage / count,
-                    TotalTestedByteSize = summation.TotalTestedByteSize / count,
-                    TotalTestedEnergyJoules = summation.TotalTestedEnergyJoules / count,
-                    TotalTestTime = TimeSpan.FromTicks(summation.TotalTestTime.Ticks / count),
-                });
+                /* Averaged results */
+                result = (CompressorProfile)this.AddSummationToResult(summation, result, count);
+
+                allSummarizedResults.Add(result);
             }
 
             return allSummarizedResults;
+        }
+
+        private IByteStreamProcessor GenerateResult(IByteStreamProcessor bucketValue, IByteStreamProcessor result)
+        {
+            result.ProfileId = Guid.NewGuid();
+            result.Author = this.SummarizedAuthor;
+            result.Description = this.SummarizedDescription;
+            result.PlatformName = bucketValue.PlatformName;
+            result.TestedFrequency = bucketValue.TestedFrequency;
+            result.NumCores = bucketValue.NumCores;
+            result.AdditionalUniqueInfo = bucketValue.AdditionalUniqueInfo;
+
+            return result;
+        }
+
+        private IByteStreamProcessor AddSummationToResult(IByteStreamProcessor summation, IByteStreamProcessor result, int count)
+        {
+            result.AverageCurrent = summation.AverageCurrent / count;
+            result.AverageVoltage = summation.AverageVoltage / count;
+            result.TotalTestedByteSize = summation.TotalTestedByteSize / count;
+            result.TotalTestedEnergyJoules = summation.TotalTestedEnergyJoules / count;
+            result.TotalTestTime = TimeSpan.FromTicks(summation.TotalTestTime.Ticks / count);
+
+            return result;
+        }
+
+        private IByteStreamProcessor CreateSummation<T>(List<T> devices, IByteStreamProcessor summation)
+            where T : IByteStreamProcessor
+        {
+            foreach (var device in devices)
+            {
+                summation.AverageCurrent += device.AverageCurrent;
+                summation.AverageVoltage += device.AverageVoltage;
+                summation.TotalTestedByteSize += device.TotalTestedByteSize;
+                summation.TotalTestedEnergyJoules += device.TotalTestedEnergyJoules;
+                summation.TotalTestTime += device.TotalTestTime;
+            }
+
+            return summation;
         }
 
         private Dictionary<string, List<T>> GroupIntoBuckets<T>(IEnumerable<T> profiles)

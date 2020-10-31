@@ -123,19 +123,13 @@
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestedByteSize">
-            <summary>
-            Gets or sets the total number of bytes that were encrypted when profiling this platform.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestedEnergyJoules">
-            <summary>
-            Gets or sets the total number of joules that were consumed when profiling this platform.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestTime">
-            <summary>
-            Gets or sets the total runtime of the this profile when benchmarking this platform.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedFrequency">
             <inheritdoc/>
@@ -203,19 +197,13 @@
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.CompressorProfile.TotalTestedByteSize">
-            <summary>
-            Gets or sets the total number of bytes that were compressed when profiling this platform.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:SchedulerDatabase.Models.CompressorProfile.TotalTestedEnergyJoules">
-            <summary>
-            Gets or sets the total number of joules that were consumed when profiling this platform.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:SchedulerDatabase.Models.CompressorProfile.TotalTestTime">
-            <summary>
-            Gets or sets the total runtime of the this profile when benchmarking this platform.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:SchedulerDatabase.Models.CompressorProfile.TestedFrequency">
             <inheritdoc/>
@@ -271,17 +259,17 @@
         </member>
         <member name="P:SchedulerDatabase.Models.IExperimentalHardwareProfile.Description">
             <summary>
-            Gets a free-form description of the conditions under which this experiment was performed or any other relevant details.
+            Gets or sets a free-form description of the conditions under which this experiment was performed or any other relevant details.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IExperimentalHardwareProfile.AdditionalUniqueInfo">
             <summary>
-            Gets any additional information that is required to uniquely identify this profile.
+            Gets or sets any additional information that is required to uniquely identify this profile.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IExperimentalHardwareProfile.Author">
             <summary>
-            Gets the name of the person who authored this entry.
+            Gets or sets the name of the person who authored this entry.
             </summary>
         </member>
         <member name="T:SchedulerDatabase.Models.IHardwareProfile">
@@ -291,27 +279,42 @@
         </member>
         <member name="P:SchedulerDatabase.Models.IHardwareProfile.PlatformName">
             <summary>
-            Gets the name of the hardware platform described by this profile.
+            Gets or sets the name of the hardware platform described by this profile.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IHardwareProfile.TestedFrequency">
             <summary>
-            Gets the processor frequency (in Hz) during the test profile when benchmarking this platform.
+            Gets or sets the processor frequency (in Hz) during the test profile when benchmarking this platform.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IHardwareProfile.AverageVoltage">
             <summary>
-            Gets the average voltage (in Volts) used to power the device during the duration of the test.
+            Gets or sets the average voltage (in Volts) used to power the device during the duration of the test.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IHardwareProfile.AverageCurrent">
             <summary>
-            Gets the average current (in Amps) consumed by the platform during the duration of the test.
+            Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IHardwareProfile.NumCores">
             <summary>
-            Gets an integer value representing the number of processor cores utilized during the test.
+            Gets or sets an integer value representing the number of processor cores utilized during the test.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TotalTestedByteSize">
+            <summary>
+            Gets or sets the total number of bytes that were modified when profiling this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TotalTestedEnergyJoules">
+            <summary>
+            Gets or sets the total number of joules that were consumed when profiling this platform.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TotalTestTime">
+            <summary>
+            Gets or sets the total runtime of the this profile when benchmarking this platform.
             </summary>
         </member>
         <member name="T:SchedulerDatabase.Models.IProfile">

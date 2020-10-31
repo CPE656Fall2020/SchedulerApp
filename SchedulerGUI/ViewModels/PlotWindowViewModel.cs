@@ -45,18 +45,12 @@ namespace SchedulerGUI.ViewModels
                 this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncryptorProfile.AcceleratorType)));
                 this.ClockSpeeds = new ObservableCollection<int>(summarizer.GetAllClockSpeeds().OrderBy(x => x));
                 this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
-                this.ProfileTypes = new ObservableCollection<string>(summarizer.GetAllProfileTypes());
             }
 
             this.FilterSelectionChangedCommand = new RelayCommand<SelectedItemsChangedEventArgs>(this.DropdownSelectionChangedHandler);
 
             this.GeneratePlot();
         }
-
-        /// <summary>
-        /// Gets a listing of available profile types.
-        /// </summary>
-        public ObservableCollection<string> ProfileTypes { get; }
 
         /// <summary>
         /// Gets a listing of available authors.
