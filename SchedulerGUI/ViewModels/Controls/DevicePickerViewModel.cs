@@ -5,8 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Ioc;
-using SchedulerDatabase;
 using SchedulerDatabase.Models;
 
 namespace SchedulerGUI.ViewModels.Controls
@@ -14,6 +12,7 @@ namespace SchedulerGUI.ViewModels.Controls
     /// <summary>
     /// <see cref="DevicePickerViewModel"/> provides a View-Model for the <see cref="Views.Controls.DevicePickerControl"/> control.
     /// </summary>
+    /// <typeparam name="T">The type of device that is being selected in this control.</typeparam>
     public abstract class DevicePickerViewModel<T> : ViewModelBase
         where T : IByteStreamProcessor
     {
@@ -22,28 +21,10 @@ namespace SchedulerGUI.ViewModels.Controls
         /// </summary>
         public DevicePickerViewModel()
         {
-            this.Devices = new ObservableCollection<SelectableDevice<T>>();
+            this.Devices = new ObservableCollection<SelectableDevice>();
             this.DevicesView = CollectionViewSource.GetDefaultView(this.Devices);
 
-            this.DevicesView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(SelectableDevice<T>.DeviceName)));
-
-            using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
-            {
-                var summarizer = new SchedulingSummarizer(context);
-                var summarizedDevices = summarizer.SummarizeResults(context.AESProfiles);
-
-                foreach (var device in summarizedDevices)
-                {
-                    //var selectableDevice = new SelectableDevice<T>(device)
-                    //{
-                    //    IsSelected = true,
-                    //};
-
-                    //selectableDevice.PropertyChanged += this.Device_PropertyChanged;
-
-                    //this.Devices.Add(selectableDevice);
-                }
-            }
+            this.DevicesView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(SelectableDevice.DeviceName)));
         }
 
         /// <summary>
@@ -52,32 +33,39 @@ namespace SchedulerGUI.ViewModels.Controls
         public abstract string Header { get; }
 
         /// <summary>
-        /// Gets a listing of AES Profiles that are enabled.
+        /// Gets a listing of Device Profiles that are enabled.
         /// </summary>
         public IEnumerable<T> EnabledProfiles => this.Devices.Where(x => x.IsSelected).Select(x => x.Device);
 
         /// <summary>
-        /// Gets an observable sorted view of the available AES devices.
+        /// Gets an observable sorted view of the available devices.
         /// </summary>
         public ICollectionView DevicesView { get; }
 
-        private ObservableCollection<SelectableDevice<T>> Devices { get; }
+        /// <summary>
+        /// Gets an observable collection of devices that are available for selection.
+        /// </summary>
+        protected ObservableCollection<SelectableDevice> Devices { get; }
 
-        private void Device_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Indicates that the property of a device has been changed. This is triggered when a device is checked or unchecked.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments.</param>
+        protected void Device_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             this.RaisePropertyChanged(nameof(this.Devices));
         }
 
         /// <summary>
-        /// Gets or sets an AES profile that can be enabled or disabled for scheduling purposes.
+        /// A profile that can be enabled or disabled for scheduling purposes.
         /// </summary>
-        public class SelectableDevice<T> : ObservableObject
-            where T : IByteStreamProcessor
+        public class SelectableDevice : ObservableObject
         {
             private bool isSelected;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SelectableDevice{T}"/> class.
+            /// Initializes a new instance of the <see cref="SelectableDevice"/> class.
             /// </summary>
             /// <param name="device">The underlying AES test profile.</param>
             public SelectableDevice(T device)
@@ -91,7 +79,7 @@ namespace SchedulerGUI.ViewModels.Controls
             public T Device { get; }
 
             /// <summary>
-            /// Gets the name of the AES device.
+            /// Gets the name of the device.
             /// </summary>
             public string DeviceName => this.Device.PlatformName;
 
