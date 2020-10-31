@@ -321,7 +321,7 @@
         </member>
         <member name="P:SchedulerDatabase.Models.IProfile.ProfileId">
             <summary>
-            Gets the unique identifier for this profile.
+            Gets or sets the unique identifier for this profile.
             </summary>
         </member>
         <member name="P:SchedulerDatabase.Models.IProfile.FullProfileDescription">

@@ -8,9 +8,9 @@ namespace SchedulerDatabase.Models
     public interface IProfile
     {
         /// <summary>
-        /// Gets the unique identifier for this profile.
+        /// Gets or sets the unique identifier for this profile.
         /// </summary>
-        Guid ProfileId { get; }
+        Guid ProfileId { get; set; }
 
         /// <summary>
         /// Gets a complete description string for this device profile.

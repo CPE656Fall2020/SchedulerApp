@@ -58,37 +58,23 @@ namespace SchedulerImportTools
                     var worksheet = dataset.Tables[index];
                     Console.WriteLine($"Beginning import on worksheet \"{worksheet.TableName}\"");
 
-                    IProfile profile;
                     var type = map[this.ProfileTypeKey];
                     var typeName = type?.ToString() ?? string.Empty;
 
-                    if (typeName == nameof(AESEncryptorProfile))
-                    {
-                        profile = new AESEncryptorProfile();
-                    }
-                    else if (typeName == nameof(CompressorProfile))
-                    {
-                        profile = new CompressorProfile();
-                    }
-                    else
-                    {
-                        throw new ArgumentException("ProfileType is not recognized!");
-                    }
+                    var profile = this.MakeCorrectType(typeName);
 
                     var guidLocation = map[nameof(AESEncryptorProfile.ProfileId)];
                     if (guidLocation != null && IsExcelFieldRef(guidLocation.ToString(), out var guidColumnIndex, out var guidRowIndex))
                     {
                         // A valid Excel cell-ref is provided for the GUID. The GUID may not exist in the DB yet though.
                         var targetGUID = Guid.Parse(worksheet.Rows[guidRowIndex][guidColumnIndex].ToString());
-                        profile = this.Context.AESProfiles.Find(targetGUID);
+                        profile = this.Context.Find(profile.GetType(), targetGUID) as IProfile;
 
                         if (profile == null)
                         {
                             // Make a new DB entry with this GUID
-                            profile = new AESEncryptorProfile()
-                            {
-                                ProfileId = targetGUID,
-                            };
+                            profile = this.MakeCorrectType(typeName);
+                            profile.ProfileId = targetGUID;
 
                             // Since this is a new entry with a static ID, add it to the DB to begin tracking changes.
                             this.Context.Add(profile);
@@ -96,10 +82,9 @@ namespace SchedulerImportTools
                     }
                     else
                     {
-                        profile = new AESEncryptorProfile()
-                        {
-                            ProfileId = Guid.NewGuid(),
-                        };
+                        // Make a new DB entry with this GUID
+                        profile = this.MakeCorrectType(typeName);
+                        profile.ProfileId = Guid.NewGuid();
 
                         // Since this is a new entry with a random ID, add it to the DB to begin tracking changes.
                         this.Context.Add(profile);
@@ -159,6 +144,26 @@ namespace SchedulerImportTools
                 this.Context.SaveChanges();
                 return successfulEntryCount;
             }
+        }
+
+        private IProfile MakeCorrectType(string profileType)
+        {
+            IProfile profile;
+
+            if (profileType == nameof(AESEncryptorProfile))
+            {
+                profile = new AESEncryptorProfile();
+            }
+            else if (profileType == nameof(CompressorProfile))
+            {
+                profile = new CompressorProfile();
+            }
+            else
+            {
+                throw new ArgumentException("ProfileType is not recognized!");
+            }
+
+            return profile;
         }
 
         private static bool IsExcelFieldRef(string value, out int columnIndex, out int rowIndex)
