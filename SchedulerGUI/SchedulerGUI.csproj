@@ -93,6 +93,7 @@
     <Compile Include="Solver\ScheduleSolution.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
     <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
+    <Compile Include="ViewModels\Controls\DevicePickerViewModelCompression.cs" />
     <Compile Include="ViewModels\Controls\DevicePickerViewModelAES.cs" />
     <Compile Include="ViewModels\Controls\EditBatteryControlViewModel.cs" />
     <Compile Include="ViewModels\Controls\EditSolarCellControlViewModel.cs" />
