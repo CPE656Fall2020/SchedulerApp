@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using static SchedulerDatabase.Models.AESEncyptorProfile;
+using static SchedulerDatabase.Models.AESEncryptorProfile;
 
 namespace SchedulerDatabase.Extensions
 {

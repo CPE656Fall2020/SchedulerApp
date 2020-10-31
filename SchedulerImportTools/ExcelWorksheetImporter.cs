@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using ExcelDataReader;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Newtonsoft.Json.Linq;
 using SchedulerDatabase;
 using SchedulerDatabase.Models;
@@ -34,6 +33,8 @@ namespace SchedulerImportTools
 
         private SchedulerContext Context { get; }
 
+        private string ProfileTypeKey => "ProfileType";
+
         /// <summary>
         /// Executes the import operation.
         /// </summary>
@@ -57,42 +58,48 @@ namespace SchedulerImportTools
                     var worksheet = dataset.Tables[index];
                     Console.WriteLine($"Beginning import on worksheet \"{worksheet.TableName}\"");
 
-                    AESEncyptorProfile profile;
+                    var type = map[this.ProfileTypeKey];
+                    var typeName = type?.ToString() ?? string.Empty;
 
-                    var guidLocation = map[nameof(AESEncyptorProfile.ProfileId)];
+                    var profile = this.MakeCorrectType(typeName);
+
+                    var guidLocation = map[nameof(AESEncryptorProfile.ProfileId)];
                     if (guidLocation != null && IsExcelFieldRef(guidLocation.ToString(), out var guidColumnIndex, out var guidRowIndex))
                     {
                         // A valid Excel cell-ref is provided for the GUID. The GUID may not exist in the DB yet though.
                         var targetGUID = Guid.Parse(worksheet.Rows[guidRowIndex][guidColumnIndex].ToString());
-                        profile = this.Context.AESProfiles.Find(targetGUID);
+                        profile = this.Context.Find(profile.GetType(), targetGUID) as IProfile;
 
                         if (profile == null)
                         {
                             // Make a new DB entry with this GUID
-                            profile = new AESEncyptorProfile()
-                            {
-                                ProfileId = targetGUID,
-                            };
+                            profile = this.MakeCorrectType(typeName);
+                            profile.ProfileId = targetGUID;
 
                             // Since this is a new entry with a static ID, add it to the DB to begin tracking changes.
-                            this.Context.AESProfiles.Add(profile);
+                            this.Context.Add(profile);
                         }
                     }
                     else
                     {
-                        profile = new AESEncyptorProfile()
-                        {
-                            ProfileId = Guid.NewGuid(),
-                        };
+                        // Make a new DB entry with this GUID
+                        profile = this.MakeCorrectType(typeName);
+                        profile.ProfileId = Guid.NewGuid();
 
                         // Since this is a new entry with a random ID, add it to the DB to begin tracking changes.
-                        this.Context.AESProfiles.Add(profile);
+                        this.Context.Add(profile);
 
                         Console.WriteLine($"Entry missing ID, assigned new random ID ({profile.ProfileId})");
                     }
 
                     foreach (var param in map)
                     {
+                        if (param.Key.ToString() == this.ProfileTypeKey)
+                        {
+                            // Skip metadata keys since they only affect the import process, and don't get stored directly in a model field.
+                            continue;
+                        }
+
                         var databaseProperty = profile.GetType().GetProperty(param.Key);
                         var converter = TypeDescriptor.GetConverter(databaseProperty.PropertyType);
 
@@ -137,6 +144,26 @@ namespace SchedulerImportTools
                 this.Context.SaveChanges();
                 return successfulEntryCount;
             }
+        }
+
+        private IProfile MakeCorrectType(string profileType)
+        {
+            IProfile profile;
+
+            if (profileType == nameof(AESEncryptorProfile))
+            {
+                profile = new AESEncryptorProfile();
+            }
+            else if (profileType == nameof(CompressorProfile))
+            {
+                profile = new CompressorProfile();
+            }
+            else
+            {
+                throw new ArgumentException("ProfileType is not recognized!");
+            }
+
+            return profile;
         }
 
         private static bool IsExcelFieldRef(string value, out int columnIndex, out int rowIndex)

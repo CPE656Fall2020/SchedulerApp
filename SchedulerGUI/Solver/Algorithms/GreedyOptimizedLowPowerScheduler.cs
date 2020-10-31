@@ -2,6 +2,7 @@
 using System.Linq;
 using SchedulerDatabase;
 using SchedulerDatabase.Models;
+using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 
 namespace SchedulerGUI.Solver.Algorithms
@@ -22,12 +23,12 @@ namespace SchedulerGUI.Solver.Algorithms
         public object Tag { get; set; }
 
         /// <inheritdoc/>
-        public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles, Battery battery)
+        public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<IByteStreamProcessor> summarizedEncryptors, IEnumerable<IByteStreamProcessor> summarizedCompressors, Battery battery)
         {
             var solution = new ScheduleSolution()
             {
                 IsSolvable = true, // Start out assuming it is solvable unless we encounter a problem.
-                ViableProfiles = new Dictionary<PassOrbit, AESEncyptorProfile>(),
+                ViableProfiles = new Dictionary<PassOrbit, IByteStreamProcessor>(),
                 Problems = new List<ScheduleSolution.SchedulerProblem>(),
             };
 
@@ -40,7 +41,8 @@ namespace SchedulerGUI.Solver.Algorithms
                 pass.IsScheduledSuccessfully = false;
             }
 
-            var optimizationMap = this.BuildOptimizationMap(availableProfiles, solution);
+            var optimizedAES = this.BuildOptimizationMap(summarizedEncryptors, solution);
+            var optimizedCompression = this.BuildOptimizationMap(summarizedCompressors, solution);
 
             double currentCapacityJoules = 0;
             foreach (var pass in passes)
@@ -75,40 +77,11 @@ namespace SchedulerGUI.Solver.Algorithms
                 }
 
                 var encryptionPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption) as EncryptionPassPhase;
-                var allowedTime = encryptionPhase.EndTime.Subtract(encryptionPhase.StartTime);
 
-                // For the encryption phase, we have an abs max of currentCapacityJoules
-                // and the time allocated to encryptionPhase.
+                /* ----- Handle AES Processing -------- */
+                var foundViableAESProfile = this.FindProfileForPhase(optimizedAES, solution, pass, encryptionPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
 
-                // Start with the most ideal profile and keep testing until we find one that fits
-                var foundViableProfile = false;
-                foreach (var profile in optimizationMap.Values)
-                {
-                    var timeRequired = encryptionPhase.BytesToEncrypt / profile.BytesPerSecond;
-                    var energyRequired = encryptionPhase.BytesToEncrypt * profile.JoulesPerByte;
-
-                    if (timeRequired > allowedTime.TotalSeconds)
-                    {
-                        // Out of time
-                        foundViableProfile = false;
-                    }
-                    else if (energyRequired > currentCapacityJoules)
-                    {
-                        // Out of power
-                        foundViableProfile = false;
-                    }
-                    else
-                    {
-                        // This solution works for this part
-                        solution.ViableProfiles[pass] = profile;
-                        encryptionPhase.TotalEnergyUsed = energyRequired;
-                        pass.IsScheduledSuccessfully = true;
-                        foundViableProfile = true;
-                        break;
-                    }
-                }
-
-                if (!foundViableProfile)
+                if (!foundViableAESProfile)
                 {
                     // No profile could be found that fits the available power and time
                     // All previous schedules have already been done with the lowest-power option that fits
@@ -120,21 +93,38 @@ namespace SchedulerGUI.Solver.Algorithms
                               $"Orbit parameters for {pass.Name} are impossible. No devices are capable of performing the encryption in the required time window."));
                     solution.ViableProfiles[pass] = null;
                 }
+
+                /* ----- Handle Compression Processing -------- */
+
+                var downlinkPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink);
+                var foundViableCompressionProfile = this.FindProfileForPhase(optimizedCompression, solution, pass, downlinkPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
+
+                if (!foundViableCompressionProfile)
+                {
+                    // No profile could be found that fits the available power and time
+                    // All previous schedules have already been done with the lowest-power option that fits
+                    // so if we're out of power, there is no solution possible.
+                    // If we're out of time, faster devices are needed, or the compression phase needs lengthened.
+                    solution.IsSolvable = false;
+                    solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
+                              ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
+                              $"Orbit parameters for {pass.Name} are impossible. No devices are capable of performing the compression in the required time window."));
+                    solution.ViableProfiles[pass] = null;
+                }
             }
 
             return solution;
         }
 
         /// <summary>
-        /// Builds a dictionary of AES Profiles sorted according to energy efficency.
+        /// Builds a dictionary of Byte Processor Profiles sorted according to energy efficency.
         /// </summary>
         /// <param name="availableProfiles">The profiles that need to be ordered.</param>
         /// <param name="solution">A solution profile to recording warnings into.</param>
         /// <returns>A dictionary sorted by energy efficiency as the key, most efficient first.</returns>
-        private SortedDictionary<double, AESEncyptorProfile> BuildOptimizationMap(IEnumerable<AESEncyptorProfile> availableProfiles, ScheduleSolution solution)
+        private SortedDictionary<double, IByteStreamProcessor> BuildOptimizationMap(IEnumerable<IByteStreamProcessor> summarizedProfiles, ScheduleSolution solution)
         {
-            var summarizedProfiles = new SchedulingSummarizer(null).SummarizeResults(availableProfiles);
-            var optimizationMap = new SortedDictionary<double, AESEncyptorProfile>();
+            var optimizationMap = new SortedDictionary<double, IByteStreamProcessor>();
 
             // Characterize each profile based on how low-power it can be
             foreach (var profile in summarizedProfiles)
@@ -145,14 +135,16 @@ namespace SchedulerGUI.Solver.Algorithms
                     var fasterProfile = existingProfile.BytesPerSecond > profile.BytesPerSecond ? existingProfile : profile;
                     optimizationMap[profile.JoulesPerByte] = fasterProfile;
 
+                    /*
                     var description1 = $"{existingProfile.PlatformName} Accelerator: {existingProfile.PlatformAccelerator} Cores: {existingProfile.NumCores} Provider: {existingProfile.ProviderName} Clock: {existingProfile.TestedFrequency}";
                     var description2 = $"{profile.PlatformName} Accelerator: {profile.PlatformAccelerator} Cores: {profile.NumCores} Provider: {profile.ProviderName} Clock: {profile.TestedFrequency}";
+                    */
 
                     var fasterNumber = (fasterProfile == existingProfile) ? "1" : "2";
 
                     solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
                         ScheduleSolution.SchedulerProblem.SeverityLevel.Warning,
-                        $"Two profiles appear to offer identical power efficiency. Profile 1: {description1}, Profile 2: {description2}. Selecting the faster one: Profile {fasterNumber}"));
+                        $"Two profiles appear to offer identical power efficiency. Profile 1: {existingProfile.ShortProfileClassDescription}, Profile 2: {profile.ShortProfileClassDescription}. Selecting the faster one: Profile {fasterNumber}"));
                 }
                 else
                 {
@@ -161,6 +153,45 @@ namespace SchedulerGUI.Solver.Algorithms
             }
 
             return optimizationMap;
+        }
+
+        private bool FindProfileForPhase(SortedDictionary<double, IByteStreamProcessor> optimizationMap, ScheduleSolution solution, PassOrbit pass, IPassPhase phase, long bytes, ref double currentCapacityJoules)
+        {
+            var allowedTime = phase.EndTime.Subtract(phase.StartTime);
+
+            // For the encryption phase, we have an abs max of currentCapacityJoules
+            // and the time allocated to encryptionPhase.
+
+            // Start with the most ideal profile and keep testing until we find one that fits
+            var foundViableProfile = false;
+            foreach (var profile in optimizationMap.Values)
+            {
+                var timeRequired = bytes / profile.BytesPerSecond;
+                var energyRequired = bytes * profile.JoulesPerByte;
+
+                if (timeRequired > allowedTime.TotalSeconds)
+                {
+                    // Out of time
+                    foundViableProfile = false;
+                }
+                else if (energyRequired > currentCapacityJoules)
+                {
+                    // Out of power
+                    foundViableProfile = false;
+                }
+                else
+                {
+                    // This solution works for this part
+                    solution.ViableProfiles[pass] = profile;
+                    phase.TotalEnergyUsed = energyRequired;
+                    pass.IsScheduledSuccessfully = true;
+                    foundViableProfile = true;
+                    currentCapacityJoules -= energyRequired;
+                    break;
+                }
+            }
+
+            return foundViableProfile;
         }
     }
 }

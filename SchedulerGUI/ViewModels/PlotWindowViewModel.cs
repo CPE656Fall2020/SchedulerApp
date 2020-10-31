@@ -42,7 +42,7 @@ namespace SchedulerGUI.ViewModels
                 this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
                 this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
                 this.Providers = new ObservableCollection<string>(summarizer.GetAllTestedProviders());
-                this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
+                this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncryptorProfile.AcceleratorType)));
                 this.ClockSpeeds = new ObservableCollection<int>(summarizer.GetAllClockSpeeds().OrderBy(x => x));
                 this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
             }
@@ -224,7 +224,7 @@ namespace SchedulerGUI.ViewModels
                         break;
 
                     case PlotOption.Summarized:
-                        this.Plot.DisplayedData = summarizer.SummarizeResults(rawData).ToList();
+                        this.Plot.DisplayedData = summarizer.SummarizeDeviceResults(rawData).ToList();
                         break;
                 }
             }

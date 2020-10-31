@@ -5,8 +5,8 @@ using GalaSoft.MvvmLight;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using SchedulerDatabase.Helpers;
 using SchedulerDatabase.Models;
-using SchedulerGUI.Converters;
 
 namespace SchedulerGUI.ViewModels.Controls
 {
@@ -15,7 +15,7 @@ namespace SchedulerGUI.ViewModels.Controls
     /// </summary>
     public class AESGraphViewModel : ViewModelBase
     {
-        private IEnumerable<AESEncyptorProfile> displayedData;
+        private IEnumerable<IByteStreamProcessor> displayedData;
         private double joulesPerByteStdDev;
         private double bytesPerSecondStdDev;
         private bool showBytesLog;
@@ -35,7 +35,7 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <summary>
         /// Gets or sets the AES profile data to visually display in the graph.
         /// </summary>
-        public IEnumerable<AESEncyptorProfile> DisplayedData
+        public IEnumerable<IByteStreamProcessor> DisplayedData
         {
             get => this.displayedData;
             set
@@ -148,8 +148,7 @@ namespace SchedulerGUI.ViewModels.Controls
                 joulesPerByteSeriesData.Add(new ColumnItem() { Value = aesProfile.JoulesPerByte });
                 bytesPerSecondSeriesData.Add(new ThroughputColumnItem() { Value = aesProfile.BytesPerSecond });
 
-                var clockSpeed = HzToStringConverter.HzToString(aesProfile.TestedFrequency);
-                categoryAxisData.Add($"{aesProfile.PlatformName} {aesProfile.ProviderName} {aesProfile.AdditionalUniqueInfo}\n{clockSpeed} {aesProfile.NumCores} core(s) {aesProfile.Author}");
+                categoryAxisData.Add(aesProfile.ShortProfileSpecificDescription);
             }
 
             this.Plot.Axes.Clear();
@@ -175,7 +174,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = energyAxisTitle,
                     Base = 10,
                     Minimum = 1e-10,
-                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "J/b", binary: false),
+                    LabelFormatter = (v) => MetricUtils.MetricValueAxisLabelFormatter(v, "J/b", binary: false),
                     IsPanEnabled = false,
                 });
             }
@@ -188,7 +187,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = energyAxisTitle,
                     AbsoluteMinimum = 0,
                     Minimum = 0,
-                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "J/b", binary: false),
+                    LabelFormatter = (v) => MetricUtils.MetricValueAxisLabelFormatter(v, "J/b", binary: false),
                     IsPanEnabled = false,
                 });
             }
@@ -205,7 +204,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = throughputAxisTitle,
                     Base = 1024,
                     Minimum = 0,
-                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "B/s", binary: true),
+                    LabelFormatter = (v) => MetricUtils.MetricValueAxisLabelFormatter(v, "B/s", binary: true),
                     IsPanEnabled = false,
                 });
             }
@@ -218,7 +217,7 @@ namespace SchedulerGUI.ViewModels.Controls
                     Title = throughputAxisTitle,
                     AbsoluteMinimum = 0,
                     Minimum = 0,
-                    LabelFormatter = (v) => MetricTools.MetricValueAxisLabelFormatter(v, "B/s", binary: true),
+                    LabelFormatter = (v) => MetricUtils.MetricValueAxisLabelFormatter(v, "B/s", binary: true),
                     IsPanEnabled = false,
                 });
             }

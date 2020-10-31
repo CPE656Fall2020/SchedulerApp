@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using SchedulerDatabase;
+using SchedulerDatabase.Models;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 using SchedulerGUI.Services;
@@ -39,7 +40,8 @@ namespace SchedulerGUI.ViewModels
         private IScheduleSolver selectedAlgorithm;
         private ScheduleSolution lastSolution;
         private object scheduleStatusIcon;
-        private bool isDeviceSelectionVisible;
+        private bool isAESDeviceSelectionVisible;
+        private bool isCompressionDeviceSelectionVisible;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel"/> class.
@@ -58,9 +60,10 @@ namespace SchedulerGUI.ViewModels
             this.ExportReportPDFCommand = new RelayCommand(this.ExportReportPDFHandler);
             this.ImportDatabaseCommand = new RelayCommand(this.ImportDatabaseHandler);
             this.ExportDatabaseCommand = new RelayCommand(this.ExportDatabaseHandler);
-            this.ToggleDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsDeviceSelectionVisible = !this.IsDeviceSelectionVisible, true);
+            this.ToggleAESDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsAESDeviceSelectionVisible = !this.IsAESDeviceSelectionVisible, true);
+            this.ToggleCompressionDeviceSelectionVisibilityCommand = new RelayCommand(() => this.IsCompressionDeviceSelectionVisible = !this.IsCompressionDeviceSelectionVisible, true);
             this.OpenBatteryEditorCommand = new RelayCommand(this.OpenBatteryEditorHandler);
-            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);           
+            this.OpenSolarCellEditorCommand = new RelayCommand(this.OpenSolarCellEditorHandler);
             this.OpenScheduleStatusCommand = new RelayCommand(this.OpenScheduleStatusHandler);
             this.OpenSchedulerPlotterCommand = new RelayCommand(this.OpenSchedulerPlotterHandler);
             this.OpenImportToolGUICommand = new RelayCommand(this.OpenImportToolGUIHandler);
@@ -75,12 +78,14 @@ namespace SchedulerGUI.ViewModels
             };
 
             this.HistoryGraphViewModel = new HistoryGraphViewModel();
-            this.DevicePickerViewModel = new DevicePickerViewModel();
+            this.AESDevicePickerViewModel = new DevicePickerViewModelAES();
+            this.CompressionDevicePickerViewModel = new DevicePickerViewModelCompression();
             this.BatteryEditorViewModel = new EditBatteryControlViewModel();
             this.SolarCellEditorViewModel = new EditSolarCellControlViewModel(this.Passes);
 
             // Update the schedules when the parameters are changed
-            this.DevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
+            this.AESDevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
+            this.CompressionDevicePickerViewModel.PropertyChanged += (s, e) => this.RunSchedule();
             this.BatteryEditorViewModel.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(this.BatteryEditorViewModel.Battery))
@@ -188,9 +193,14 @@ namespace SchedulerGUI.ViewModels
         public ICommand ExportDatabaseCommand { get; }
 
         /// <summary>
-        /// Gets the command to execute to toggle the visibilty of the device selection flyout.
+        /// Gets the command to execute to toggle the visibilty of the AES device selection flyout.
         /// </summary>
-        public ICommand ToggleDeviceSelectionVisibilityCommand { get; }
+        public ICommand ToggleAESDeviceSelectionVisibilityCommand { get; }
+
+        /// <summary>
+        /// Gets the command to execute to toggle the visibilty of the compression device selection flyout.
+        /// </summary>
+        public ICommand ToggleCompressionDeviceSelectionVisibilityCommand { get; }
 
         /// <summary>
         /// Gets the command to execute to open the battery parameters editor.
@@ -276,16 +286,30 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether the device selection flyout is visible.
         /// </summary>
-        public bool IsDeviceSelectionVisible
+        public bool IsAESDeviceSelectionVisible
         {
-            get => this.isDeviceSelectionVisible;
-            set => this.Set(() => this.IsDeviceSelectionVisible, ref this.isDeviceSelectionVisible, value);
+            get => this.isAESDeviceSelectionVisible;
+            set => this.Set(() => this.IsAESDeviceSelectionVisible, ref this.isAESDeviceSelectionVisible, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the AES device selection flyout is visible.
+        /// </summary>
+        public bool IsCompressionDeviceSelectionVisible
+        {
+            get => this.isCompressionDeviceSelectionVisible;
+            set => this.Set(() => this.IsCompressionDeviceSelectionVisible, ref this.isCompressionDeviceSelectionVisible, value);
         }
 
         /// <summary>
         /// Gets the device picker control ViewModel for enabling and disabling AES devices.
         /// </summary>
-        public DevicePickerViewModel DevicePickerViewModel { get; }
+        public DevicePickerViewModelAES AESDevicePickerViewModel { get; }
+
+        /// <summary>
+        /// Gets the device picker control ViewModel for enabling and disabling compression devices.
+        /// </summary>
+        public DevicePickerViewModelCompression CompressionDevicePickerViewModel { get; }
 
         /// <summary>
         /// Gets the battery editor ViewModel.
@@ -464,7 +488,10 @@ namespace SchedulerGUI.ViewModels
 
         private void RunSchedule()
         {
-            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, this.DevicePickerViewModel.EnabledProfiles, this.BatteryEditorViewModel.Battery);
+            var aesSummary = new SchedulingSummarizer(null).SummarizeDeviceResults(this.AESDevicePickerViewModel.EnabledProfiles);
+            var compressionSummary = new SchedulingSummarizer(null).SummarizeDeviceResults(this.CompressionDevicePickerViewModel.EnabledProfiles);
+
+            this.LastSolution = this.SelectedAlgorithm.Solve(this.Passes, aesSummary, compressionSummary, this.BatteryEditorViewModel.Battery);
 
             // Make sure the sidebar updates with new status icons
             // PassOrbit and its phases don't use INotifyPropChanged to bubble up notifications
