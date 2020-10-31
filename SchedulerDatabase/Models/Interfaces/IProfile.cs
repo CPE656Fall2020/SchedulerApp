@@ -1,30 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SchedulerDatabase.Models
 {
     /// <summary>
-    /// <see cref="IByteStreamProcessor"/> defines a generic device that performs a specific operation of a stream
-    /// of data. Byte Processing Devices have a defined throughput rate and known energy consumption rate, varying according
-    /// to the length of the stream being processed. These profiles are uniquely identifiable across the entire scheduling system.
+    /// <see cref="IProfile"/> describes a generic profile for a component of the scheduling system.
     /// </summary>
-    public interface IByteStreamProcessor
+    public interface IProfile
     {
-         /// <summary>
+        /// <summary>
         /// Gets the unique identifier for this profile.
         /// </summary>
         Guid ProfileId { get; }
-
-        /// <summary>
-        /// Gets the amount of energy, in Joules, required to process 1 byte of data.
-        /// </summary>
-        double JoulesPerByte { get; }
-
-        /// <summary>
-        /// Gets the throughput of the encryptor, in bytes per second.
-        /// </summary>
-        double BytesPerSecond { get; }
 
         /// <summary>
         /// Gets a complete description string for this device profile.

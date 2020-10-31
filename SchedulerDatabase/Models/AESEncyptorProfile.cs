@@ -49,24 +49,16 @@ namespace SchedulerDatabase.Models
             CpuHardware,
         }
 
-        /// <summary>
-        /// Gets or sets the unique identifier for this profile.
-        /// </summary>
+        /// <inheritdoc/>
         public Guid ProfileId { get; set; }
 
-        /// <summary>
-        /// Gets or sets a free-form description of the conditions under which this experiment was performed or any other relevant details.
-        /// </summary>
+        /// <inheritdoc/>
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the person who authored this entry.
-        /// </summary>
+        /// <inheritdoc/>
         public string Author { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the computing platform or module.
-        /// </summary>
+        /// <inheritdoc/>
         public string PlatformName { get; set; }
 
         /// <summary>
@@ -76,9 +68,7 @@ namespace SchedulerDatabase.Models
         /// </summary>
         public string ProviderName { get; set; }
 
-        /// <summary>
-        /// Gets or sets any additional information that is required to uniquely identify this profile.
-        /// </summary>
+        /// <inheritdoc/>
         public string AdditionalUniqueInfo { get; set; }
 
         /// <summary>
@@ -111,34 +101,22 @@ namespace SchedulerDatabase.Models
         /// </summary>
         public TimeSpan TotalTestTime { get; set; }
 
-        /// <summary>
-        /// Gets or sets the processor frequency (in Hz) during the test profile when benchmarking this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public int TestedFrequency { get; set; }
 
-        /// <summary>
-        /// Gets or sets the average voltage (in Volts) used to power the device during the duration of the test.
-        /// </summary>
+        /// <inheritdoc/>
         public double AverageVoltage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
-        /// </summary>
+        /// <inheritdoc/>
         public double AverageCurrent { get; set; }
 
-        /// <summary>
-        /// Gets or sets an integer value representing the number of processor cores utilized during the test.
-        /// </summary>
+        /// <inheritdoc/>
         public int NumCores { get; set; }
 
-        /// <summary>
-        /// Gets the amount of energy, in Joules, required to encrypt 1 byte of data.
-        /// </summary>
+        /// <inheritdoc/>
         public double JoulesPerByte => this.TotalTestedEnergyJoules / this.TotalTestedByteSize;
 
-        /// <summary>
-        /// Gets the throughput of the encryptor, in bytes per second.
-        /// </summary>
+        /// <inheritdoc/>
         public double BytesPerSecond => this.TotalTestedByteSize / this.TotalTestTime.TotalSeconds;
 
         /// <inheritdoc/>
