@@ -38,17 +38,17 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets a collection of scheduling warnings.
         /// </summary>
-        public ObservableCollection<Solver.ScheduleSolution.SchedulerProblem> Warnings { get; }
+        public ObservableCollection<ScheduleSolution.SchedulerProblem> Warnings { get; }
 
         /// <summary>
         /// Gets a collection of scheduling errors.
         /// </summary>
-        public ObservableCollection<Solver.ScheduleSolution.SchedulerProblem> Errors { get; }
+        public ObservableCollection<ScheduleSolution.SchedulerProblem> Errors { get; }
 
         /// <summary>
         /// Gets a collection of scheduling fatal errors.
         /// </summary>
-        public ObservableCollection<Solver.ScheduleSolution.SchedulerProblem> Fatal { get; }
+        public ObservableCollection<ScheduleSolution.SchedulerProblem> Fatal { get; }
 
         /// <summary>
         /// Gets a mapping of solutions for each pass.
