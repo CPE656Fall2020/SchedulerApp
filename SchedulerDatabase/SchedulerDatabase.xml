@@ -6,10 +6,10 @@
     <members>
         <member name="T:SchedulerDatabase.Extensions.AcceleratorTypeExtensions">
             <summary>
-            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> enum.
+            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType"/> enum.
             </summary>
         </member>
-        <member name="M:SchedulerDatabase.Extensions.AcceleratorTypeExtensions.ToFriendlyName(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+        <member name="M:SchedulerDatabase.Extensions.AcceleratorTypeExtensions.ToFriendlyName(SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType)">
             <summary>
             Returns a user-friendly name for an accelerator type.
             </summary>
@@ -45,126 +45,126 @@
             // Adapted from https://stackoverflow.com/a/40266660.
             </remarks>
         </member>
-        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile">
+        <member name="T:SchedulerDatabase.Models.AESEncryptorProfile">
             <summary>
-            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
+            <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
             </summary>
         </member>
-        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile.AESMode">
+        <member name="T:SchedulerDatabase.Models.AESEncryptorProfile.AESMode">
             <summary>
-            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AESMode"/> defines the different modes in which the AES encryption can be performed.
+            <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile.AESMode"/> defines the different modes in which the AES encryption can be performed.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.CTR">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AESMode.CTR">
             <summary>
             Counter Mode.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.CBC">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AESMode.CBC">
             <summary>
             Chained Block Cipher Mode.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.ECB">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AESMode.ECB">
             <summary>
             Embedded Codeblock Mode.
             </summary>
         </member>
-        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType">
+        <member name="T:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType">
             <summary>
-            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> defines different types of AES accelerators that can be used.
+            <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType"/> defines different types of AES accelerators that can be used.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType.None">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType.None">
             <summary>
             No accelerator is used.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType.CpuHardware">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType.CpuHardware">
             <summary>
             CPU-provided Hardware acceleration is used.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ProfileId">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ProfileId">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.Description">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.Description">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.Author">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.Author">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformName">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.PlatformName">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ProviderName">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ProviderName">
             <summary>
             Gets or sets the name of the AES implementation provider.
             For software implementations, this likely represents the library name.
             For hardware-accelerated implementations, this value is typically not used.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AdditionalUniqueInfo">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.AdditionalUniqueInfo">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformAccelerator">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.PlatformAccelerator">
             <summary>
              Gets or sets the type of AES Accelerator that is used on this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedAESMode">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedAESMode">
             <summary>
             Gets or sets the AES encryption mode that was tested under this profile.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedAESBitLength">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedAESBitLength">
             <summary>
             Gets or sets the length of the AES encryption key (in bits) that was tested under this profile.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestedByteSize">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestedByteSize">
             <summary>
             Gets or sets the total number of bytes that were encrypted when profiling this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestedEnergyJoules">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestedEnergyJoules">
             <summary>
             Gets or sets the total number of joules that were consumed when profiling this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestTime">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestTime">
             <summary>
             Gets or sets the total runtime of the this profile when benchmarking this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedFrequency">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedFrequency">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AverageVoltage">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.AverageVoltage">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AverageCurrent">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.AverageCurrent">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.NumCores">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.NumCores">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.JoulesPerByte">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.JoulesPerByte">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.BytesPerSecond">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.BytesPerSecond">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.FullProfileDescription">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.FullProfileDescription">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ShortProfileClassDescription">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ShortProfileClassDescription">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ShortProfileSpecificDescription">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ShortProfileSpecificDescription">
             <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ComparisonHashString">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ComparisonHashString">
             <inheritdoc/>
         </member>
         <member name="T:SchedulerDatabase.Models.CompressorProfile">
@@ -414,7 +414,7 @@
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of provider names.</returns>
         </member>
-        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllResultsForAccelerator(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllResultsForAccelerator(SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType)">
             <summary>
             Gets a listing of test profiles for all experiments conducted using a specific accelerator device.
             </summary>
@@ -433,11 +433,11 @@
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of clock speeds, in Hz.</returns>
         </member>
-        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncyptorProfile})">
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncryptorProfile})">
             <summary>
             Computes summarized results for each unique test case provided in a collection of raw AES profiles.
             </summary>
-            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/>.</param>
+            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile"/>.</param>
             <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
         </member>
         <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.CompressorProfile})">

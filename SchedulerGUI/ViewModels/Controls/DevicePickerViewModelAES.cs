@@ -9,7 +9,7 @@ namespace SchedulerGUI.ViewModels.Controls
     /// <see cref="DevicePickerViewModelAES"/> is a concrete implementation of the
     /// <see cref="DevicePickerViewModel{T}"/> class for binding in XAML for selecting AES devices.
     /// </summary>
-    public class DevicePickerViewModelAES : DevicePickerViewModel<AESEncyptorProfile>
+    public class DevicePickerViewModelAES : DevicePickerViewModel<AESEncryptorProfile>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DevicePickerViewModelAES"/> class.

@@ -6,9 +6,9 @@ using SchedulerDatabase.Helpers;
 namespace SchedulerDatabase.Models
 {
     /// <summary>
-    /// <see cref="AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
+    /// <see cref="AESEncryptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
     /// </summary>
-    public class AESEncyptorProfile : IByteStreamProcessor
+    public class AESEncryptorProfile : IByteStreamProcessor
     {
         /// <summary>
         /// <see cref="AESMode"/> defines the different modes in which the AES encryption can be performed.

@@ -22,12 +22,12 @@ namespace SchedulerGUI.Solver.Algorithms
         public object Tag { get; set; }
 
         /// <inheritdoc/>
-        public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncyptorProfile> availableProfiles, Battery battery)
+        public ScheduleSolution Solve(IEnumerable<PassOrbit> passes, IEnumerable<AESEncryptorProfile> availableProfiles, Battery battery)
         {
             var solution = new ScheduleSolution()
             {
                 IsSolvable = true, // Start out assuming it is solvable unless we encounter a problem.
-                ViableProfiles = new Dictionary<PassOrbit, AESEncyptorProfile>(),
+                ViableProfiles = new Dictionary<PassOrbit, AESEncryptorProfile>(),
                 Problems = new List<ScheduleSolution.SchedulerProblem>(),
             };
 
@@ -131,10 +131,10 @@ namespace SchedulerGUI.Solver.Algorithms
         /// <param name="availableProfiles">The profiles that need to be ordered.</param>
         /// <param name="solution">A solution profile to recording warnings into.</param>
         /// <returns>A dictionary sorted by energy efficiency as the key, most efficient first.</returns>
-        private SortedDictionary<double, AESEncyptorProfile> BuildOptimizationMap(IEnumerable<AESEncyptorProfile> availableProfiles, ScheduleSolution solution)
+        private SortedDictionary<double, AESEncryptorProfile> BuildOptimizationMap(IEnumerable<AESEncryptorProfile> availableProfiles, ScheduleSolution solution)
         {
             var summarizedProfiles = new SchedulingSummarizer(null).SummarizeDeviceResults(availableProfiles);
-            var optimizationMap = new SortedDictionary<double, AESEncyptorProfile>();
+            var optimizationMap = new SortedDictionary<double, AESEncryptorProfile>();
 
             // Characterize each profile based on how low-power it can be
             foreach (var profile in summarizedProfiles)

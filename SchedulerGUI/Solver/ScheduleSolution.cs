@@ -18,7 +18,7 @@ namespace SchedulerGUI.Solver
         /// <summary>
         /// Gets or sets a mapping between the orbital passes of the satellite and the recommended viable AES profile to use.
         /// </summary>
-        public Dictionary<PassOrbit, AESEncyptorProfile> ViableProfiles { get; set; }
+        public Dictionary<PassOrbit, AESEncryptorProfile> ViableProfiles { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of problems encountered while computing this schedule.

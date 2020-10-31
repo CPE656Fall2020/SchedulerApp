@@ -64,7 +64,7 @@ namespace SchedulerDatabase
         /// </summary>
         /// <param name="acceleratorType">The specific accelerator type to query for.</param>
         /// <returns>An <see cref="IQueryable{T}"/> of test results.</returns>
-        public IQueryable<AESEncyptorProfile> GetAllResultsForAccelerator(AESEncyptorProfile.AcceleratorType acceleratorType)
+        public IQueryable<AESEncryptorProfile> GetAllResultsForAccelerator(AESEncryptorProfile.AcceleratorType acceleratorType)
         {
             return this.Context.AESProfiles
                 .Where(a => a.PlatformAccelerator == acceleratorType);
@@ -95,17 +95,17 @@ namespace SchedulerDatabase
         /// <summary>
         /// Computes summarized results for each unique test case provided in a collection of raw AES profiles.
         /// </summary>
-        /// <param name="profiles">A collection of raw <see cref="AESEncyptorProfile"/>.</param>
+        /// <param name="profiles">A collection of raw <see cref="AESEncryptorProfile"/>.</param>
         /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
-        public List<AESEncyptorProfile> SummarizeDeviceResults(IEnumerable<AESEncyptorProfile> profiles)
+        public List<AESEncryptorProfile> SummarizeDeviceResults(IEnumerable<AESEncryptorProfile> profiles)
         {
             var buckets = this.GroupIntoBuckets(profiles);
-            var allSummarizedResults = new List<AESEncyptorProfile>();
+            var allSummarizedResults = new List<AESEncryptorProfile>();
 
             // For all related tests in each bucket, compute an average.
             foreach (var bucket in buckets)
             {
-                var summation = new AESEncyptorProfile();
+                var summation = new AESEncryptorProfile();
                 var count = bucket.Value.Count;
 
                 foreach (var result in bucket.Value)
@@ -117,7 +117,7 @@ namespace SchedulerDatabase
                     summation.TotalTestTime += result.TotalTestTime;
                 }
 
-                allSummarizedResults.Add(new AESEncyptorProfile()
+                allSummarizedResults.Add(new AESEncryptorProfile()
                 {
                     /* Static description */
                     ProfileId = Guid.NewGuid(),
