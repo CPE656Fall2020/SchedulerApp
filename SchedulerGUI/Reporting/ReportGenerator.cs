@@ -11,6 +11,7 @@ using OxyPlot.Wpf;
 using SchedulerDatabase.Extensions;
 using SchedulerDatabase.Helpers;
 using SchedulerGUI.Converters;
+using SchedulerGUI.Enums;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
 using SchedulerGUI.ViewModels.Controls;
@@ -59,7 +60,9 @@ namespace SchedulerGUI.Reporting
             resultsSection.Blocks.Add(ReportTheme.MakeHeader1("Info, Warnings, and Errors"));
             resultsSection.Blocks.Add(GenerateWarningsSection(schedulerSolution));
             resultsSection.Blocks.Add(ReportTheme.MakeHeader1("Optimized AES Profiles"));
-            resultsSection.Blocks.Add(GenerateOptimizedProfileSection(schedulerSolution));
+            resultsSection.Blocks.Add(GenerateOptimizedProfileSection(schedulerSolution, PhaseType.Encryption));
+            resultsSection.Blocks.Add(ReportTheme.MakeHeader1("Optimized Compression Profiles"));
+            resultsSection.Blocks.Add(GenerateOptimizedProfileSection(schedulerSolution, PhaseType.Datalink));
             report.Blocks.Add(resultsSection);
 
             // Scheduler results
@@ -263,7 +266,7 @@ namespace SchedulerGUI.Reporting
             return results;
         }
 
-        private static Block GenerateOptimizedProfileSection(ScheduleSolution schedulerSolution)
+        private static Block GenerateOptimizedProfileSection(ScheduleSolution schedulerSolution, PhaseType type)
         {
             var passesList = new List();
             foreach (var pair in schedulerSolution.ViableProfiles)
@@ -275,7 +278,7 @@ namespace SchedulerGUI.Reporting
                 solutionDescription.Inlines.Add(ReportTheme.GetSuccessIcon(pass.IsScheduledSuccessfully));
                 solutionDescription.Inlines.Add(new Bold(new Run(pass.Name)));
 
-                var deviceProfile = new Paragraph(new Run($"Device: {profile.FullProfileDescription}\n"))
+                var deviceProfile = new Paragraph(new Run($"Device: {profile[type]?.FullProfileDescription}\n"))
                 {
                     Margin = new Thickness(20, 0, 0, 0),
                 };

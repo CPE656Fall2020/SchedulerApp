@@ -56,7 +56,7 @@ namespace SchedulerGUI.Models
         {
             this.MaxBytes = (int)maxBytes;
 
-            this.BytesToEncrypt = (long)(random.NextDouble() * this.MaxBytes);
+            this.BytesToEncrypt = (long)(random.NextDouble() * this.MaxBytes) * 10;
 
             // The energy consumption will be a factor of the fake number of bytes scheduled with the fake scheduler.
             this.MaxEnergyUsed = 0;
