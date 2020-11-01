@@ -38,6 +38,7 @@ namespace SchedulerGUI.Solver.Algorithms
             foreach (var pass in passes)
             {
                 pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption).TotalEnergyUsed = 0;
+                pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink).TotalEnergyUsed = 0;
                 pass.IsScheduledSuccessfully = false;
 
                 solution.ViableProfiles[pass] = new Dictionary<PhaseType, IByteStreamProcessor>();
