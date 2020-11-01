@@ -31,7 +31,23 @@ namespace SchedulerGUI.ViewModels
             this.SolutionPerPass = new Dictionary<PassOrbit, string>();
             foreach (var passSln in solution.ViableProfiles)
             {
-                this.SolutionPerPass.Add(passSln.Key, passSln.Value?.FullProfileDescription);
+                // TODO - this is a placeholder just to show both enc and compression in the same place
+                var description = string.Empty;
+
+                var phasesForPass = passSln.Value;
+
+                if (phasesForPass.ContainsKey(Enums.PhaseType.Encryption))
+                {
+                    description += passSln.Value[Enums.PhaseType.Encryption]?.FullProfileDescription;
+                    description += "\n\n";
+                }
+
+                if (phasesForPass.ContainsKey(Enums.PhaseType.Datalink))
+                {
+                    description += passSln.Value[Enums.PhaseType.Datalink]?.FullProfileDescription;
+                }
+
+                this.SolutionPerPass.Add(passSln.Key, description);
             }
         }
 

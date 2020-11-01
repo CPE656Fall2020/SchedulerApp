@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using SchedulerDatabase.Models;
+using SchedulerGUI.Enums;
+using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 
 namespace SchedulerGUI.Solver
@@ -18,7 +20,7 @@ namespace SchedulerGUI.Solver
         /// <summary>
         /// Gets or sets a mapping between the orbital passes of the satellite and the recommended viable AES profile to use.
         /// </summary>
-        public Dictionary<PassOrbit, IByteStreamProcessor> ViableProfiles { get; set; }
+        public Dictionary<PassOrbit, Dictionary<PhaseType, IByteStreamProcessor>> ViableProfiles { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of problems encountered while computing this schedule.

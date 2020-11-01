@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SchedulerDatabase;
 using SchedulerDatabase.Models;
+using SchedulerGUI.Enums;
 using SchedulerGUI.Interfaces;
 using SchedulerGUI.Models;
 
@@ -28,7 +28,7 @@ namespace SchedulerGUI.Solver.Algorithms
             var solution = new ScheduleSolution()
             {
                 IsSolvable = true, // Start out assuming it is solvable unless we encounter a problem.
-                ViableProfiles = new Dictionary<PassOrbit, IByteStreamProcessor>(),
+                ViableProfiles = new Dictionary<PassOrbit, Dictionary<PhaseType, IByteStreamProcessor>>(),
                 Problems = new List<ScheduleSolution.SchedulerProblem>(),
             };
 
@@ -38,7 +38,10 @@ namespace SchedulerGUI.Solver.Algorithms
             foreach (var pass in passes)
             {
                 pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption).TotalEnergyUsed = 0;
+                pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink).TotalEnergyUsed = 0;
                 pass.IsScheduledSuccessfully = false;
+
+                solution.ViableProfiles[pass] = new Dictionary<PhaseType, IByteStreamProcessor>();
             }
 
             var optimizedAES = this.BuildOptimizationMap(summarizedEncryptors, solution);
@@ -47,70 +50,59 @@ namespace SchedulerGUI.Solver.Algorithms
             double currentCapacityJoules = 0;
             foreach (var pass in passes)
             {
-                // Run through every phase to find the energy budget for encryption.
+                // Encryption and Datalink require special treatment - find them first for exacting key parameters.
+                var encryptionPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption) as EncryptionPassPhase;
+                var downlinkPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink);
+
+                var succeededPhasesInPass = 0;
+
+                // Run through every phase to check the cumulative energy status
                 foreach (var phase in pass.PassPhases.OrderBy(p => p.StartTime))
                 {
-                    if (!(phase is EncryptionPassPhase))
+                    if (phase is EncryptionPassPhase enc)
                     {
-                        currentCapacityJoules -= phase.TotalEnergyUsed;
-
-                        if (currentCapacityJoules < 0)
+                        // Handle encryption - Compute valid profile if possible, set energy, and apply
+                        var foundViableAESProfile = this.FindProfileForPhase(optimizedAES, solution, pass, encryptionPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
+                        if (!foundViableAESProfile)
                         {
-                            // Orbit parameters are impossible - we've run out of power.
-                            // Error is fatal - denote the problem and abort scheduling.
-                            solution.IsSolvable = false;
-                            solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
-                                ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
-                                $"Orbit parameters for {pass.Name} are impossible. No power remains after scheduling all prior passes optimally."));
-                            return solution;
+                            this.ReportProfileNotAvailable(solution, pass, "AES encryption");
                         }
-                        else if (currentCapacityJoules > battery.EffectiveCapacityJ)
+                        else
                         {
-                            solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
-                                ScheduleSolution.SchedulerProblem.SeverityLevel.Warning,
-                                $"The battery was a contraint during {pass.Name}. {currentCapacityJoules} J were available, but max charge capacity is {battery.EffectiveCapacityJ}"));
-
-                            // Apply the cap.
-                            currentCapacityJoules = battery.EffectiveCapacityJ;
+                            // Indicate that encryption was successful.
+                            succeededPhasesInPass += 1;
+                        }
+                    }
+                    else if (phase.PhaseName == Enums.PhaseType.Datalink)
+                    {
+                        // Handle datalink - Compute valid profile if possible, set energy, and apply
+                        // Use the number of bytes from the encryption phase as the input size to the compressor.
+                        var foundViableCompressionProfile = this.FindProfileForPhase(optimizedCompression, solution, pass, downlinkPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
+                        if (!foundViableCompressionProfile)
+                        {
+                            this.ReportProfileNotAvailable(solution, pass, "data compression");
+                        }
+                        else
+                        {
+                            // Indicate that compression was successful.
+                            succeededPhasesInPass += 1;
+                        }
+                    }
+                    else
+                    {
+                        // Regular phase - just use the listed energy values and move along.
+                        currentCapacityJoules -= phase.TotalEnergyUsed;
+                        var success = this.EnforceBatteryLimits(ref currentCapacityJoules, battery, solution, pass, phase);
+                        if (success)
+                        {
+                            // Indicate that compression was successful.
+                            succeededPhasesInPass += 1;
                         }
                     }
                 }
 
-                var encryptionPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption) as EncryptionPassPhase;
-
-                /* ----- Handle AES Processing -------- */
-                var foundViableAESProfile = this.FindProfileForPhase(optimizedAES, solution, pass, encryptionPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
-
-                if (!foundViableAESProfile)
-                {
-                    // No profile could be found that fits the available power and time
-                    // All previous schedules have already been done with the lowest-power option that fits
-                    // so if we're out of power, there is no solution possible.
-                    // If we're out of time, faster devices are needed, or the encryption phase needs lengthened.
-                    solution.IsSolvable = false;
-                    solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
-                              ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
-                              $"Orbit parameters for {pass.Name} are impossible. No devices are capable of performing the encryption in the required time window."));
-                    solution.ViableProfiles[pass] = null;
-                }
-
-                /* ----- Handle Compression Processing -------- */
-
-                var downlinkPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink);
-                var foundViableCompressionProfile = this.FindProfileForPhase(optimizedCompression, solution, pass, downlinkPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
-
-                if (!foundViableCompressionProfile)
-                {
-                    // No profile could be found that fits the available power and time
-                    // All previous schedules have already been done with the lowest-power option that fits
-                    // so if we're out of power, there is no solution possible.
-                    // If we're out of time, faster devices are needed, or the compression phase needs lengthened.
-                    solution.IsSolvable = false;
-                    solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
-                              ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
-                              $"Orbit parameters for {pass.Name} are impossible. No devices are capable of performing the compression in the required time window."));
-                    solution.ViableProfiles[pass] = null;
-                }
+                // Only mark the pass successful if each phase was done successfully
+                pass.IsScheduledSuccessfully = succeededPhasesInPass == pass.PassPhases.Count;
             }
 
             return solution;
@@ -119,7 +111,7 @@ namespace SchedulerGUI.Solver.Algorithms
         /// <summary>
         /// Builds a dictionary of Byte Processor Profiles sorted according to energy efficency.
         /// </summary>
-        /// <param name="availableProfiles">The profiles that need to be ordered.</param>
+        /// <param name="summarizedProfiles">The profiles that need to be ordered.</param>
         /// <param name="solution">A solution profile to recording warnings into.</param>
         /// <returns>A dictionary sorted by energy efficiency as the key, most efficient first.</returns>
         private SortedDictionary<double, IByteStreamProcessor> BuildOptimizationMap(IEnumerable<IByteStreamProcessor> summarizedProfiles, ScheduleSolution solution)
@@ -134,11 +126,6 @@ namespace SchedulerGUI.Solver.Algorithms
                     var existingProfile = optimizationMap[profile.JoulesPerByte];
                     var fasterProfile = existingProfile.BytesPerSecond > profile.BytesPerSecond ? existingProfile : profile;
                     optimizationMap[profile.JoulesPerByte] = fasterProfile;
-
-                    /*
-                    var description1 = $"{existingProfile.PlatformName} Accelerator: {existingProfile.PlatformAccelerator} Cores: {existingProfile.NumCores} Provider: {existingProfile.ProviderName} Clock: {existingProfile.TestedFrequency}";
-                    var description2 = $"{profile.PlatformName} Accelerator: {profile.PlatformAccelerator} Cores: {profile.NumCores} Provider: {profile.ProviderName} Clock: {profile.TestedFrequency}";
-                    */
 
                     var fasterNumber = (fasterProfile == existingProfile) ? "1" : "2";
 
@@ -182,9 +169,8 @@ namespace SchedulerGUI.Solver.Algorithms
                 else
                 {
                     // This solution works for this part
-                    solution.ViableProfiles[pass] = profile;
+                    solution.ViableProfiles[pass][phase.PhaseName] = profile;
                     phase.TotalEnergyUsed = energyRequired;
-                    pass.IsScheduledSuccessfully = true;
                     foundViableProfile = true;
                     currentCapacityJoules -= energyRequired;
                     break;
@@ -192,6 +178,63 @@ namespace SchedulerGUI.Solver.Algorithms
             }
 
             return foundViableProfile;
+        }
+
+        /// <summary>
+        /// Applies a bounding function to the current capacity of the battery, to prohibit discharging below 0 joules,
+        /// and the prevent charging above the maximum specified capabilities. If the battery exceeds the specification,
+        /// a warning (for overcharge) or critical error (for discharged) will be logged to the solution.
+        /// </summary>
+        /// <param name="currentCapacityJoules">The charge level of the battery assuming the previous operation ran to completion.</param>
+        /// <param name="battery">The battery parameters to enforce.</param>
+        /// <param name="solution">The solution to log warnings and errors to.</param>
+        /// <param name="pass">The last pass that was executed.</param>
+        /// <returns>A value indicating whether the requested capacity could be accomplished successfully.</returns>
+        private bool EnforceBatteryLimits(ref double currentCapacityJoules, Battery battery, ScheduleSolution solution, PassOrbit pass, IPassPhase phase)
+        {
+            var success = true;
+
+            if (currentCapacityJoules < 0)
+            {
+                // Orbit parameters are impossible - we've run out of power.
+                // Error is fatal - denote the problem and abort scheduling.
+                solution.IsSolvable = false;
+                solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
+                    ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
+                    $"Orbit parameters for {pass.Name} are impossible. No power remains while scheduling the {phase.PhaseName} for {pass.Name}."));
+
+                currentCapacityJoules = 0;
+
+                // Discharging completely is a fatal error that will prevent the pass from completing
+                success = false;
+            }
+            else if (currentCapacityJoules > battery.EffectiveCapacityJ)
+            {
+                solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
+                    ScheduleSolution.SchedulerProblem.SeverityLevel.Warning,
+                    $"The battery was a contraint during {pass.Name}. {currentCapacityJoules:n} J were available, but max charge capacity is {battery.EffectiveCapacityJ:n} J"));
+
+                // Apply the cap.
+                currentCapacityJoules = battery.EffectiveCapacityJ;
+
+                // Overcharging doesn't prevent the mission from continuing, but indicates inefficiency
+                success = true;
+            }
+
+            return success;
+        }
+
+        private void ReportProfileNotAvailable(ScheduleSolution solution, PassOrbit pass, string operation)
+        {
+            // No profile could be found that fits the available power and time
+            // All previous schedules have already been done with the lowest-power option that fits
+            // so if we're out of power, there is no solution possible.
+            // If we're out of time, faster devices are needed, or the phase needs lengthened.
+
+            solution.IsSolvable = false;
+            solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
+                      ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
+                      $"Orbit parameters for {pass.Name} are impossible. No devices are capable of performing the {operation} in the required power and time window."));
         }
     }
 }
