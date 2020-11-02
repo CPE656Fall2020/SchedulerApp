@@ -8,7 +8,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using SchedulerDatabase;
-using SchedulerDatabase.Extensions;
 using SchedulerDatabase.Models;
 using SchedulerGUI.Enums;
 using SchedulerGUI.Models;
