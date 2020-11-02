@@ -37,8 +37,8 @@ namespace SchedulerGUI.Solver.Algorithms
             // are the passes that were completed successfully.
             foreach (var pass in passes)
             {
-                pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption).TotalEnergyUsed = 0;
-                pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink).TotalEnergyUsed = 0;
+                pass.PassPhases.First(p => p.PhaseName == PhaseType.Encryption).TotalEnergyUsed = 0;
+                pass.PassPhases.First(p => p.PhaseName == PhaseType.Datalink).TotalEnergyUsed = 0;
                 pass.IsScheduledSuccessfully = false;
 
                 solution.ViableProfiles[pass] = new Dictionary<PhaseType, IByteStreamProcessor>();
@@ -51,15 +51,15 @@ namespace SchedulerGUI.Solver.Algorithms
             foreach (var pass in passes)
             {
                 // Encryption and Datalink require special treatment - find them first for exacting key parameters.
-                var encryptionPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Encryption) as EncryptionPassPhase;
-                var downlinkPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Datalink);
+                var encryptionPhase = pass.PassPhases.First(p => p.PhaseName == PhaseType.Encryption) as EncryptionPassPhase;
+                var downlinkPhase = pass.PassPhases.First(p => p.PhaseName == PhaseType.Datalink);
 
                 var succeededPhasesInPass = 0;
 
                 // Run through every phase to check the cumulative energy status
                 foreach (var phase in pass.PassPhases.OrderBy(p => p.StartTime))
                 {
-                    if (phase is EncryptionPassPhase enc)
+                    if (phase.PhaseName == PhaseType.Encryption)
                     {
                         // Handle encryption - Compute valid profile if possible, set energy, and apply
                         var foundViableAESProfile = this.FindProfileForPhase(optimizedAES, solution, pass, encryptionPhase, encryptionPhase.BytesToEncrypt, ref currentCapacityJoules);
@@ -73,7 +73,7 @@ namespace SchedulerGUI.Solver.Algorithms
                             succeededPhasesInPass += 1;
                         }
                     }
-                    else if (phase.PhaseName == Enums.PhaseType.Datalink)
+                    else if (phase.PhaseName == PhaseType.Datalink)
                     {
                         // Handle datalink - Compute valid profile if possible, set energy, and apply
                         // Use the number of bytes from the encryption phase as the input size to the compressor.
@@ -230,7 +230,6 @@ namespace SchedulerGUI.Solver.Algorithms
             // All previous schedules have already been done with the lowest-power option that fits
             // so if we're out of power, there is no solution possible.
             // If we're out of time, faster devices are needed, or the phase needs lengthened.
-
             solution.IsSolvable = false;
             solution.Problems.Add(new ScheduleSolution.SchedulerProblem(
                       ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal,
