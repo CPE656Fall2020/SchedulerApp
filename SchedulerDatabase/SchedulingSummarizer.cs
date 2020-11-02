@@ -32,8 +32,15 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of author names.</returns>
         public IQueryable<string> GetAllTestAuthors()
         {
-            return this.Context.AESProfiles
+            var aesAuthors = this.Context.AESProfiles
                 .Select(a => a.Author)
+                .Distinct();
+            var compressorAuthors = this.Context.CompressorProfiles
+                .Select(a => a.Author)
+                .Distinct();
+
+            return aesAuthors
+                .Concat(compressorAuthors)
                 .Distinct();
         }
 
@@ -43,8 +50,15 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
         public IQueryable<string> GetAllTestedPlatforms()
         {
-            return this.Context.AESProfiles
+            var aesPlatforms = this.Context.AESProfiles
                 .Select(a => a.PlatformName)
+                .Distinct();
+            var compressorPlatforms = this.Context.CompressorProfiles
+                .Select(a => a.PlatformName)
+                .Distinct();
+
+            return aesPlatforms
+                .Concat(compressorPlatforms)
                 .Distinct();
         }
 
@@ -76,8 +90,15 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
         public IQueryable<int> GetAllNumCores()
         {
-            return this.Context.AESProfiles
+            var aesNumCores = this.Context.AESProfiles
                 .Select(a => a.NumCores)
+                .Distinct();
+            var compressorNumCores = this.Context.CompressorProfiles
+                .Select(a => a.NumCores)
+                .Distinct();
+
+            return aesNumCores
+                .Concat(compressorNumCores)
                 .Distinct();
         }
 
@@ -87,8 +108,15 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of clock speeds, in Hz.</returns>
         public IQueryable<int> GetAllClockSpeeds()
         {
-            return this.Context.AESProfiles
+            var aesTestedFrequency = this.Context.AESProfiles
                 .Select(a => a.TestedFrequency)
+                .Distinct();
+            var compressorTestedFrequency = this.Context.CompressorProfiles
+                .Select(a => a.TestedFrequency)
+                .Distinct();
+
+            return aesTestedFrequency
+                .Concat(compressorTestedFrequency)
                 .Distinct();
         }
 
@@ -146,6 +174,35 @@ namespace SchedulerDatabase
                 {
                     TestedCompressionMode = bucket.Value.First().TestedCompressionMode,
                 };
+                result = (CompressorProfile)this.GenerateResult(bucket.Value.First(), result);
+
+                /* Averaged results */
+                result = (CompressorProfile)this.AddSummationToResult(summation, result, count);
+
+                allSummarizedResults.Add(result);
+            }
+
+            return allSummarizedResults;
+        }
+
+        /// <summary>
+        /// Computes summarized results for each unique test case provided in a collection of raw profiles.
+        /// </summary>
+        /// <param name="profiles">A collection of raw <see cref="IByteStreamProcessor"/>.</param>
+        /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        public List<IByteStreamProcessor> SummarizeDeviceResults(IEnumerable<IByteStreamProcessor> profiles)
+        {
+            var buckets = this.GroupIntoBuckets(profiles);
+            var allSummarizedResults = new List<IByteStreamProcessor>();
+
+            // For all related tests in each bucket, compute an average.
+            foreach (var bucket in buckets)
+            {
+                var count = bucket.Value.Count;
+                var summation = this.CreateSummation(bucket.Value, new CompressorProfile());
+
+                /* Static description */
+                var result = new CompressorProfile();
                 result = (CompressorProfile)this.GenerateResult(bucket.Value.First(), result);
 
                 /* Averaged results */

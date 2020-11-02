@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
@@ -19,14 +18,14 @@ namespace SchedulerGUI.ViewModels
         /// <param name="solution">The solution to visualize.</param>
         public ScheduleViewerDialogViewModel(ScheduleSolution solution)
         {
-            this.Warnings = new ObservableCollection<Solver.ScheduleSolution.SchedulerProblem>(
-                solution.Problems.Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Warning));
+            this.Warnings = new ObservableCollection<ScheduleSolution.SchedulerProblem>(
+                solution.Problems.Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning));
 
-            this.Errors = new ObservableCollection<Solver.ScheduleSolution.SchedulerProblem>(
-                solution.Problems.Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Error));
+            this.Errors = new ObservableCollection<ScheduleSolution.SchedulerProblem>(
+                solution.Problems.Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error));
 
-            this.Fatal = new ObservableCollection<Solver.ScheduleSolution.SchedulerProblem>(
-                solution.Problems.Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal));
+            this.Fatal = new ObservableCollection<ScheduleSolution.SchedulerProblem>(
+                solution.Problems.Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal));
 
             this.SolutionPerPass = new Dictionary<PassOrbit, string>();
             foreach (var passSln in solution.ViableProfiles)

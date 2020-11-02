@@ -42,8 +42,10 @@ namespace SchedulerGUI.Reporting
         {
             try
             {
-                var printDialog = new PrintDialog();
-                printDialog.PrintQueue = new PrintQueue(new PrintServer(), "Microsoft Print to PDF");
+                var printDialog = new PrintDialog
+                {
+                    PrintQueue = new PrintQueue(new PrintServer(), "Microsoft Print to PDF"),
+                };
 
                 document.PageHeight = printDialog.PrintableAreaHeight;
                 document.PageWidth = printDialog.PrintableAreaWidth;

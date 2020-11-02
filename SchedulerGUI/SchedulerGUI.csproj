@@ -74,12 +74,14 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Enums\PhaseType.cs" />
     <Compile Include="CustomControls\MetroRibbonWindow.cs" />
+    <Compile Include="Enums\ProfileType.cs" />
     <Compile Include="GlobalAssemblyInfo.cs" />
     <Compile Include="Interfaces\IPassPhase.cs" />
     <Compile Include="Models\Battery.cs" />
     <Compile Include="Models\EncryptionPassPhase.cs" />
     <Compile Include="Models\PlotOptions.cs" />
     <Compile Include="Models\SavedSchedule.cs" />
+    <Compile Include="ProfileTypeExtensions.cs" />
     <Compile Include="Reporting\ReportGenerator.cs" />
     <Compile Include="Reporting\ReportIO.cs" />
     <Compile Include="Reporting\ReportTheme.cs" />
@@ -92,7 +94,7 @@
     <Compile Include="Solver\IScheduleSolver.cs" />
     <Compile Include="Solver\ScheduleSolution.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
-    <Compile Include="ViewModels\Controls\AESGraphViewModel.cs" />
+    <Compile Include="ViewModels\Controls\ProfileGraphViewModel.cs" />
     <Compile Include="ViewModels\Controls\DevicePickerViewModelCompression.cs" />
     <Compile Include="ViewModels\Controls\DevicePickerViewModelAES.cs" />
     <Compile Include="ViewModels\Controls\EditBatteryControlViewModel.cs" />
@@ -105,8 +107,8 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PlotWindowViewModel.cs" />
     <Compile Include="ViewModels\ScheduleViewerDialogViewModel.cs" />
-    <Compile Include="Views\Controls\AESGraphControl.xaml.cs">
-      <DependentUpon>AESGraphControl.xaml</DependentUpon>
+    <Compile Include="Views\Controls\ProfileGraphControl.xaml.cs">
+      <DependentUpon>ProfileGraphControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\DevicePickerControl.xaml.cs">
       <DependentUpon>DevicePickerControl.xaml</DependentUpon>
@@ -160,7 +162,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\AESGraphControl.xaml">
+    <Page Include="Views\Controls\ProfileGraphControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

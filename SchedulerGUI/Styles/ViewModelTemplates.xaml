@@ -38,8 +38,8 @@
         <controlviews:Popup />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
-        <controlviews:AESGraphControl />
+    <DataTemplate DataType="{x:Type controlvms:ProfileGraphViewModel}">
+        <controlviews:ProfileGraphControl />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type controlvms:EditControlViewModel}">

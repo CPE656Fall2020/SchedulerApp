@@ -11,9 +11,9 @@ using SchedulerDatabase.Models;
 namespace SchedulerGUI.ViewModels.Controls
 {
     /// <summary>
-    /// <see cref="AESGraphViewModel"/> provides a View-Model for the <see cref="Views.Controls.AESGraphControl"/> control.
+    /// <see cref="ProfileGraphViewModel"/> provides a View-Model for the <see cref="Views.Controls.AESGraphControl"/> control.
     /// </summary>
-    public class AESGraphViewModel : ViewModelBase
+    public class ProfileGraphViewModel : ViewModelBase
     {
         private IEnumerable<IByteStreamProcessor> displayedData;
         private double joulesPerByteStdDev;
@@ -22,18 +22,18 @@ namespace SchedulerGUI.ViewModels.Controls
         private bool showEnergyLog;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AESGraphViewModel"/> class.
+        /// Initializes a new instance of the <see cref="ProfileGraphViewModel"/> class.
         /// </summary>
-        public AESGraphViewModel()
+        public ProfileGraphViewModel()
         {
             this.Plot = new PlotModel()
             {
-                Title = "AES Profile Comparison",
+                Title = "Profile Comparison",
             };
         }
 
         /// <summary>
-        /// Gets or sets the AES profile data to visually display in the graph.
+        /// Gets or sets the profile data to visually display in the graph.
         /// </summary>
         public IEnumerable<IByteStreamProcessor> DisplayedData
         {
@@ -156,7 +156,7 @@ namespace SchedulerGUI.ViewModels.Controls
             {
                 Position = AxisPosition.Bottom,
                 Angle = 45,
-                Key = "AESAxis",
+                Key = "Profile Axis",
                 ItemsSource = categoryAxisData,
                 IsPanEnabled = false,
                 IsZoomEnabled = false,
@@ -254,7 +254,7 @@ namespace SchedulerGUI.ViewModels.Controls
         {
             public string SpeedString
             {
-                get => $"{AESGraphViewModel.BytesToString((long)this.Value)}/sec";
+                get => $"{ProfileGraphViewModel.BytesToString((long)this.Value)}/sec";
             }
         }
 
