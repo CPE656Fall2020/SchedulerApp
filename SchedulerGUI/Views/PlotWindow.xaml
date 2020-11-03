@@ -72,7 +72,8 @@
                                          sdl:SelectedItemsChangedBehaviour.SelectedItemsChanged="{Binding FilterSelectionChangedCommand}"
                                          IsEditable="True"
                                          SelectionMode="Multiple"
-                                         Grid.Column="3"/>
+                                         Grid.Column="3"
+                                         IsEnabled="{Binding IsAesProfileSelected}" />
 
                 <TextBlock Text="Accelerator" Grid.Column="4" />
                 <sdl:MultiSelectComboBox ItemsSource="{Binding Accelerators, Mode=OneWay}"
@@ -81,7 +82,8 @@
                                          IsEditable="True"
                                          SelectionMode="Multiple"
                                          EnableAutoComplete="False"
-                                         Grid.Column="5">
+                                         Grid.Column="5"
+                                         IsEnabled="{Binding IsAesProfileSelected}" >
                     <sdl:MultiSelectComboBox.DropdownItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource acceleratorToStringConverter}}" Style="{StaticResource dropdownOption}"/>

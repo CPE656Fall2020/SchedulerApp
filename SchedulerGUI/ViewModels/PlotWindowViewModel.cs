@@ -14,6 +14,7 @@ using SchedulerGUI.Models;
 using SchedulerGUI.ViewModels.Controls;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.MultiSelectComboBox.Themes.Generic;
+using TimelineLibrary;
 
 namespace SchedulerGUI.ViewModels
 {
@@ -22,7 +23,27 @@ namespace SchedulerGUI.ViewModels
     /// </summary>
     public class PlotWindowViewModel : ViewModelBase
     {
+        private readonly ObservableCollection<string> aesAuthors;
+        private readonly ObservableCollection<string> aesPlatforms;
+        private readonly ObservableCollection<int> aesClockSpeeds;
+        private readonly ObservableCollection<int> aesNumCores;
+
+        private readonly ObservableCollection<string> compressionAuthors;
+        private readonly ObservableCollection<string> compressionPlatforms;
+        private readonly ObservableCollection<int> compressionClockSpeeds;
+        private readonly ObservableCollection<int> compressionNumCores;
+
+        private readonly ObservableCollection<string> allAuthors;
+        private readonly ObservableCollection<string> allPlatforms;
+        private readonly ObservableCollection<string> allProviders;
+        private readonly ObservableCollection<string> allAccelerators;
+        private readonly ObservableCollection<int> allClockSpeeds;
+        private readonly ObservableCollection<int> allNumCores;
+        private readonly ObservableCollection<string> allProfiles;
+
         private PlotOption selectedOption = PlotOption.Raw;
+        private bool isAesProfileSelected;
+
         private IList<object> selectedAuthor;
         private IList<object> selectedPlatform;
         private IList<object> selectedProvider;
@@ -41,13 +62,38 @@ namespace SchedulerGUI.ViewModels
             using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
                 var summarizer = new SchedulingSummarizer(context);
-                this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
-                this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
-                this.Providers = new ObservableCollection<string>(summarizer.GetAllTestedProviders());
-                this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncryptorProfile.AcceleratorType)));
-                this.ClockSpeeds = new ObservableCollection<int>(summarizer.GetAllClockSpeeds().OrderBy(x => x));
-                this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
-                this.Profiles = new ObservableCollection<string>(Enum.GetNames(typeof(ProfileType)));
+
+                this.allAuthors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
+                this.allPlatforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
+                this.allProviders = new ObservableCollection<string>(summarizer.GetAllTestedProviders());
+                this.allAccelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncryptorProfile.AcceleratorType)));
+                this.allClockSpeeds = new ObservableCollection<int>(summarizer.GetAllClockSpeeds().OrderBy(x => x));
+                this.allNumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
+                this.allProfiles = new ObservableCollection<string>(Enum.GetNames(typeof(ProfileType)));
+
+                this.aesAuthors = new ObservableCollection<string>(summarizer.GetAESTestAuthors());
+                this.aesPlatforms = new ObservableCollection<string>(summarizer.GetAESTestedPlatforms());
+                this.aesClockSpeeds = new ObservableCollection<int>(summarizer.GetAESClockSpeeds().OrderBy(x => x));
+                this.aesNumCores = new ObservableCollection<int>(summarizer.GetAESNumCores().OrderBy(x => x));
+
+                this.compressionAuthors = new ObservableCollection<string>(summarizer.GetCompressionTestAuthors());
+                this.compressionPlatforms = new ObservableCollection<string>(summarizer.GetCompressionTestedPlatforms());
+                this.compressionClockSpeeds = new ObservableCollection<int>(summarizer.GetCompressionClockSpeeds().OrderBy(x => x));
+                this.compressionNumCores = new ObservableCollection<int>(summarizer.GetCompressionNumCores().OrderBy(x => x));
+
+                this.Authors = new ObservableCollection<string>();
+                this.Platforms = new ObservableCollection<string>();
+                this.ClockSpeeds = new ObservableCollection<int>();
+                this.NumCores = new ObservableCollection<int>();
+
+                this.allAuthors.ForEach(x => this.Authors.Add(x));
+                this.allPlatforms.ForEach(x => this.Platforms.Add(x));
+                this.allClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+                this.allNumCores.ForEach(x => this.NumCores.Add(x));
+
+                this.Providers = new ObservableCollection<string>(this.allProviders);
+                this.Accelerators = new ObservableCollection<string>(this.allAccelerators);
+                this.Profiles = new ObservableCollection<string>(this.allProfiles);
             }
 
             this.FilterSelectionChangedCommand = new RelayCommand<SelectedItemsChangedEventArgs>(this.DropdownSelectionChangedHandler);
@@ -61,9 +107,9 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<string> Profiles { get; }
 
         /// <summary>
-        /// Gets a listing of available authors.
+        /// Gets or sets a listing of available authors.
         /// </summary>
-        public ObservableCollection<string> Authors { get; }
+        public ObservableCollection<string> Authors { get; set; }
 
         /// <summary>
         /// Gets a listing of available providers.
@@ -71,9 +117,9 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<string> Providers { get; }
 
         /// <summary>
-        /// Gets a listing of available platforms.
+        /// Gets or sets a listing of available platforms.
         /// </summary>
-        public ObservableCollection<string> Platforms { get; }
+        public ObservableCollection<string> Platforms { get; set; }
 
         /// <summary>
         /// Gets a listing of available accelerators.
@@ -81,14 +127,14 @@ namespace SchedulerGUI.ViewModels
         public ObservableCollection<string> Accelerators { get; }
 
         /// <summary>
-        /// Gets a listing of available clock speeds.
+        /// Gets or sets a listing of available clock speeds.
         /// </summary>
-        public ObservableCollection<int> ClockSpeeds { get; }
+        public ObservableCollection<int> ClockSpeeds { get; set; }
 
         /// <summary>
-        /// Gets a listing of available number of cores.
+        /// Gets or sets a listing of available number of cores.
         /// </summary>
-        public ObservableCollection<int> NumCores { get; }
+        public ObservableCollection<int> NumCores { get; set; }
 
         /// <summary>
         /// Gets the command to execute when the selection of options in a filter has changed.
@@ -118,6 +164,15 @@ namespace SchedulerGUI.ViewModels
         {
             get => this.selectedProfile;
             set => this.SetAndUpdatePlot(() => this.SelectedProfile, ref this.selectedProfile, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the AES profile is selected.
+        /// </summary>
+        public bool IsAesProfileSelected
+        {
+            get => this.isAesProfileSelected;
+            set => this.Set(() => this.IsAesProfileSelected, ref this.isAesProfileSelected, value);
         }
 
         /// <summary>
@@ -185,45 +240,75 @@ namespace SchedulerGUI.ViewModels
             this.GeneratePlot();
         }
 
+        private IEnumerable<IByteStreamProcessor> SetProfileData(SchedulerContext context)
+        {
+            // start with default data
+            IEnumerable<IByteStreamProcessor> profileData = new List<IByteStreamProcessor>();
+            var rawCompressionData = context.CompressorProfiles.AsEnumerable();
+            var rawAESData = context.AESProfiles.AsEnumerable();
+
+            if (this.SelectedProfile?.Count > 0)
+            {
+                if (this.SelectedProfile?.Count > 1)
+                {
+                    // Both AES and LZ4 are selected profiles
+                    profileData = rawAESData;
+                    profileData = profileData.Concat(rawCompressionData);
+                    this.IsAesProfileSelected = true;
+                    this.SetAllDataCollections();
+                }
+                else
+                {
+                    // Only one profile selected
+                    if (this.SelectedProfile.Contains(ProfileType.AES.ToString()))
+                    {
+                        // AES is selected profile
+                        profileData = rawAESData;
+                        this.IsAesProfileSelected = true;
+                        this.SetAesCollections();
+                    }
+                    else
+                    {
+                        // LZ4 is selected profile
+                        profileData = rawCompressionData;
+                        this.IsAesProfileSelected = false;
+                        this.SetCompressionCollections();
+                    }
+                }
+            }
+            else
+            {
+                // No profile selected
+                this.IsAesProfileSelected = false;
+            }
+
+            if (this.IsAesProfileSelected)
+            {
+                // Include provider filters
+                if (this.SelectedProvider?.Count > 0)
+                {
+                    profileData = profileData
+                        .Where(a => a is AESEncryptorProfile ap && this.SelectedProvider.Contains(ap.ProviderName));
+                }
+
+                // Include accelerator filters
+                if (this.SelectedAccelerator?.Count > 0)
+                {
+                    profileData = profileData
+                        .Where(a => a is AESEncryptorProfile ap && this.SelectedAccelerator.Contains(ap.PlatformAccelerator.ToString()));
+                }
+            }
+
+            return profileData;
+        }
+
         private void GeneratePlot()
         {
             using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
                 var summarizer = new SchedulingSummarizer(context);
 
-                // start with default data
-                IEnumerable<IByteStreamProcessor> profileData = new List<IByteStreamProcessor>();
-                var rawCompressionData = context.CompressorProfiles.AsEnumerable();
-                var rawAESData = context.AESProfiles.AsEnumerable();
-
-                // Include provider filters
-                if (this.SelectedProvider?.Count > 0)
-                {
-                    rawAESData = rawAESData
-                        .Where(a => this.SelectedProvider.Contains(a.ProviderName));
-                }
-
-                // Include accelerator filters
-                if (this.SelectedAccelerator?.Count > 0)
-                {
-                    rawAESData = rawAESData
-                        .Where(a => this.SelectedAccelerator.Contains(a.PlatformAccelerator.ToString()));
-                }
-
-                // include selected profile filters
-                if (this.SelectedProfile?.Count > 1)
-                {
-                    profileData = rawAESData;
-                    profileData = profileData.Concat(rawCompressionData);
-                }
-                else if (this.SelectedProfile?.Count > 0 && this.SelectedProfile.Contains(ProfileType.AES.ToString()))
-                {
-                    profileData = rawAESData;
-                }
-                else if (this.SelectedProfile?.Count == 1 && this.SelectedProfile.Contains(ProfileType.LZ4.ToString()))
-                {
-                    profileData = rawCompressionData;
-                }
+                var profileData = this.SetProfileData(context);
 
                 // Include platform filters
                 if (this.SelectedPlatform?.Count > 0)
@@ -264,6 +349,51 @@ namespace SchedulerGUI.ViewModels
                         break;
                 }
             }
+        }
+
+        private void SetAllDataCollections()
+        {
+            this.Authors.Clear();
+            this.allAuthors.ForEach(x => this.Authors.Add(x));
+
+            this.Platforms.Clear();
+            this.allPlatforms.ForEach(x => this.Platforms.Add(x));
+
+            this.NumCores.Clear();
+            this.allNumCores.ForEach(x => this.NumCores.Add(x));
+
+            this.ClockSpeeds.Clear();
+            this.allClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+        }
+
+        private void SetAesCollections()
+        {
+            this.Authors.Clear();
+            this.aesAuthors.ForEach(x => this.Authors.Add(x));
+
+            this.ClockSpeeds.Clear();
+            this.aesClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+
+            this.NumCores.Clear();
+            this.aesNumCores.ForEach(x => this.NumCores.Add(x));
+
+            this.Platforms.Clear();
+            this.aesPlatforms.ForEach(x => this.Platforms.Add(x));
+        }
+
+        private void SetCompressionCollections()
+        {
+            this.Authors.Clear();
+            this.compressionAuthors.ForEach(x => this.Authors.Add(x));
+
+            this.ClockSpeeds.Clear();
+            this.compressionClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+
+            this.NumCores.Clear();
+            this.compressionNumCores.ForEach(x => this.NumCores.Add(x));
+
+            this.Platforms.Clear();
+            this.compressionPlatforms.ForEach(x => this.Platforms.Add(x));
         }
 
         private void DropdownSelectionChangedHandler(SelectedItemsChangedEventArgs e)

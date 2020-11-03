@@ -38,24 +38,22 @@ namespace SchedulerGUI.ViewModels
                 description += "Optimized AES Profile: ";
                 if (phasesForPass.ContainsKey(Enums.PhaseType.Encryption))
                 {
-                    description += $"\n{passSln.Value[Enums.PhaseType.Encryption]?.FullProfileDescription}\n";
+                    description += $"\n{passSln.Value[Enums.PhaseType.Encryption]?.FullProfileDescription}\n\n";
                 }
                 else
                 {
-                    description += "No viable solution\n";
+                    description += "No viable solution\n\n";
                 }
 
                 description += "Optimized Compression Profile: ";
                 if (phasesForPass.ContainsKey(Enums.PhaseType.Datalink))
                 {
-                    description += $"\n{passSln.Value[Enums.PhaseType.Datalink]?.FullProfileDescription}\n";
+                    description += $"\n{passSln.Value[Enums.PhaseType.Datalink]?.FullProfileDescription}\n\n";
                 }
                 else
                 {
-                    description += "No viable solution\n";
+                    description += "No viable solution\n\n";
                 }
-
-                description += "\n";
 
                 this.SolutionPerPass.Add(passSln.Key, description);
             }
