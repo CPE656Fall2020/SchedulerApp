@@ -32,15 +32,30 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of author names.</returns>
         public IQueryable<string> GetAllTestAuthors()
         {
-            var aesAuthors = this.Context.AESProfiles
-                .Select(a => a.Author)
+            return this.GetCompressionTestAuthors()
+                .Concat(this.GetAESTestAuthors())
                 .Distinct();
-            var compressorAuthors = this.Context.CompressorProfiles
-                .Select(a => a.Author)
-                .Distinct();
+        }
 
-            return aesAuthors
-                .Concat(compressorAuthors)
+        /// <summary>
+        /// Gets a listing of all the authors who have compression test results included in the database.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of author names.</returns>
+        public IQueryable<string> GetCompressionTestAuthors()
+        {
+            return this.Context.CompressorProfiles
+                .Select(a => a.Author)
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Gets a listing of all the authors who have AES test results included in the database.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of author names.</returns>
+        public IQueryable<string> GetAESTestAuthors()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.Author)
                 .Distinct();
         }
 
@@ -50,15 +65,30 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
         public IQueryable<string> GetAllTestedPlatforms()
         {
-            var aesPlatforms = this.Context.AESProfiles
-                .Select(a => a.PlatformName)
+            return this.GetAESTestedPlatforms()
+                .Concat(this.GetCompressionTestedPlatforms())
                 .Distinct();
-            var compressorPlatforms = this.Context.CompressorProfiles
-                .Select(a => a.PlatformName)
-                .Distinct();
+        }
 
-            return aesPlatforms
-                .Concat(compressorPlatforms)
+        /// <summary>
+        /// Gets a listing of all the platforms which have AES test results included in the database.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
+        public IQueryable<string> GetAESTestedPlatforms()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.PlatformName)
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Gets a listing of all the platforms which have compression test results included in the database.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
+        public IQueryable<string> GetCompressionTestedPlatforms()
+        {
+            return this.Context.CompressorProfiles
+                .Select(a => a.PlatformName)
                 .Distinct();
         }
 
@@ -90,15 +120,30 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
         public IQueryable<int> GetAllNumCores()
         {
-            var aesNumCores = this.Context.AESProfiles
-                .Select(a => a.NumCores)
+            return this.GetAESNumCores()
+                .Concat(this.GetCompressionNumCores())
                 .Distinct();
-            var compressorNumCores = this.Context.CompressorProfiles
-                .Select(a => a.NumCores)
-                .Distinct();
+        }
 
-            return aesNumCores
-                .Concat(compressorNumCores)
+        /// <summary>
+        /// Gets a listing of the different numbers of cores available for the available AES platforms.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
+        public IQueryable<int> GetAESNumCores()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.NumCores)
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Gets a listing of the different numbers of cores available for the available platforms.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
+        public IQueryable<int> GetCompressionNumCores()
+        {
+            return this.Context.CompressorProfiles
+                .Select(a => a.NumCores)
                 .Distinct();
         }
 
@@ -108,15 +153,30 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of clock speeds, in Hz.</returns>
         public IQueryable<int> GetAllClockSpeeds()
         {
-            var aesTestedFrequency = this.Context.AESProfiles
-                .Select(a => a.TestedFrequency)
+            return this.GetAESClockSpeeds()
+                .Concat(this.GetCompressionClockSpeeds())
                 .Distinct();
-            var compressorTestedFrequency = this.Context.CompressorProfiles
-                .Select(a => a.TestedFrequency)
-                .Distinct();
+        }
 
-            return aesTestedFrequency
-                .Concat(compressorTestedFrequency)
+        /// <summary>
+        /// Gets a listing of the different clock speeds for the available AES platforms.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of clock speeds, in Hz.</returns>
+        public IQueryable<int> GetAESClockSpeeds()
+        {
+            return this.Context.AESProfiles
+                .Select(a => a.TestedFrequency)
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Gets a listing of the different clock speeds for the available compression platforms.
+        /// </summary>
+        /// <returns>An <see cref="IQueryable{T}"/> of clock speeds, in Hz.</returns>
+        public IQueryable<int> GetCompressionClockSpeeds()
+        {
+            return this.Context.CompressorProfiles
+                .Select(a => a.TestedFrequency)
                 .Distinct();
         }
 
