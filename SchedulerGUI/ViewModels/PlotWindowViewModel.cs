@@ -14,6 +14,7 @@ using SchedulerGUI.Models;
 using SchedulerGUI.ViewModels.Controls;
 using Sdl.MultiSelectComboBox.EventArgs;
 using Sdl.MultiSelectComboBox.Themes.Generic;
+using TimelineLibrary;
 
 namespace SchedulerGUI.ViewModels
 {
@@ -39,11 +40,6 @@ namespace SchedulerGUI.ViewModels
         private readonly ObservableCollection<int> allClockSpeeds;
         private readonly ObservableCollection<int> allNumCores;
         private readonly ObservableCollection<string> allProfiles;
-
-        private ObservableCollection<string> authors;
-        private ObservableCollection<string> platforms;
-        private ObservableCollection<int> clockSpeeds;
-        private ObservableCollection<int> numCores;
 
         private PlotOption selectedOption = PlotOption.Raw;
         private bool isAesProfileSelected;
@@ -107,11 +103,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets a listing of available authors.
         /// </summary>
-        public ObservableCollection<string> Authors
-        {
-            get => this.authors;
-            set => this.Set(() => this.Authors, ref this.authors, value);
-        }
+        public ObservableCollection<string> Authors { get; set; }
 
         /// <summary>
         /// Gets a listing of available providers.
@@ -121,12 +113,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets a listing of available platforms.
         /// </summary>
-        public ObservableCollection<string> Platforms
-        {
-            get => this.platforms;
-            set => this.Set(() => this.Platforms, ref this.platforms, value);
-        }
-
+        public ObservableCollection<string> Platforms { get; set; }
         /// <summary>
         /// Gets a listing of available accelerators.
         /// </summary>
@@ -135,20 +122,12 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets or sets a listing of available clock speeds.
         /// </summary>
-        public ObservableCollection<int> ClockSpeeds
-        {
-            get => this.clockSpeeds;
-            set => this.Set(() => this.ClockSpeeds, ref this.clockSpeeds, value);
-        }
+        public ObservableCollection<int> ClockSpeeds { get; set; }
 
         /// <summary>
         /// Gets or sets a listing of available number of cores.
         /// </summary>
-        public ObservableCollection<int> NumCores
-        {
-            get => this.numCores;
-            set => this.Set(() => this.NumCores, ref this.numCores, value);
-        }
+        public ObservableCollection<int> NumCores { get; set; }
 
         /// <summary>
         /// Gets the command to execute when the selection of options in a filter has changed.
@@ -360,26 +339,47 @@ namespace SchedulerGUI.ViewModels
 
         private void SetAllDataCollections()
         {
-            this.Authors = this.allAuthors;
-            this.Platforms = this.allPlatforms;
-            this.ClockSpeeds = this.allClockSpeeds;
-            this.NumCores = this.allNumCores;
+            this.Authors.Clear();
+            this.allAuthors.ForEach(x => this.Authors.Add(x));
+
+            this.Platforms.Clear();
+            this.allPlatforms.ForEach(x => this.Platforms.Add(x));
+
+            this.NumCores.Clear();
+            this.allNumCores.ForEach(x => this.NumCores.Add(x));
+
+            this.ClockSpeeds.Clear();
+            this.allClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
         }
 
         private void SetAesCollections()
         {
-            this.Authors = this.aesAuthors;
-            this.ClockSpeeds = this.aesClockSpeeds;
-            this.NumCores = this.aesNumCores;
-            this.Platforms = this.aesPlatforms;
+            this.Authors.Clear();
+            this.aesAuthors.ForEach(x => this.Authors.Add(x));
+
+            this.ClockSpeeds.Clear();
+            this.aesClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+
+            this.NumCores.Clear();
+            this.aesNumCores.ForEach(x => this.NumCores.Add(x));
+
+            this.Platforms.Clear();
+            this.aesPlatforms.ForEach(x => this.Platforms.Add(x));
         }
 
         private void SetCompressionCollections()
         {
-            this.Authors = this.compressionAuthors;
-            this.ClockSpeeds = this.compressionClockSpeeds;
-            this.NumCores = this.compressionNumCores;
-            this.Platforms = this.compressionPlatforms;
+            this.Authors.Clear();
+            this.compressionAuthors.ForEach(x => this.Authors.Add(x));
+
+            this.ClockSpeeds.Clear();
+            this.compressionClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+
+            this.NumCores.Clear();
+            this.compressionNumCores.ForEach(x => this.NumCores.Add(x));
+
+            this.Platforms.Clear();
+            this.compressionPlatforms.ForEach(x => this.Platforms.Add(x));
         }
 
         private void DropdownSelectionChangedHandler(SelectedItemsChangedEventArgs e)
