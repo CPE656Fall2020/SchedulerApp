@@ -81,13 +81,19 @@ namespace SchedulerGUI.ViewModels
                 this.compressionClockSpeeds = new ObservableCollection<int>(summarizer.GetCompressionClockSpeeds().OrderBy(x => x));
                 this.compressionNumCores = new ObservableCollection<int>(summarizer.GetCompressionNumCores().OrderBy(x => x));
 
-                this.Authors = this.allAuthors;
-                this.Platforms = this.allPlatforms;
-                this.Providers = this.allProviders;
-                this.Accelerators = this.allAccelerators;
-                this.ClockSpeeds = this.allClockSpeeds;
-                this.NumCores = this.allNumCores;
-                this.Profiles = this.allProfiles;
+                this.Authors = new ObservableCollection<string>();
+                this.Platforms = new ObservableCollection<string>();
+                this.ClockSpeeds = new ObservableCollection<int>();
+                this.NumCores = new ObservableCollection<int>();
+
+                this.allAuthors.ForEach(x => this.Authors.Add(x));
+                this.allPlatforms.ForEach(x => this.Platforms.Add(x));
+                this.allClockSpeeds.ForEach(x => this.ClockSpeeds.Add(x));
+                this.allNumCores.ForEach(x => this.NumCores.Add(x));
+
+                this.Providers = new ObservableCollection<string>(this.allProviders);
+                this.Accelerators = new ObservableCollection<string>(this.allAccelerators);
+                this.Profiles = new ObservableCollection<string>(this.allProfiles);
             }
 
             this.FilterSelectionChangedCommand = new RelayCommand<SelectedItemsChangedEventArgs>(this.DropdownSelectionChangedHandler);
@@ -114,6 +120,7 @@ namespace SchedulerGUI.ViewModels
         /// Gets or sets a listing of available platforms.
         /// </summary>
         public ObservableCollection<string> Platforms { get; set; }
+
         /// <summary>
         /// Gets a listing of available accelerators.
         /// </summary>
@@ -233,68 +240,75 @@ namespace SchedulerGUI.ViewModels
             this.GeneratePlot();
         }
 
+        private IEnumerable<IByteStreamProcessor> SetProfileData(SchedulerContext context)
+        {
+            // start with default data
+            IEnumerable<IByteStreamProcessor> profileData = new List<IByteStreamProcessor>();
+            var rawCompressionData = context.CompressorProfiles.AsEnumerable();
+            var rawAESData = context.AESProfiles.AsEnumerable();
+
+            if (this.SelectedProfile?.Count > 0)
+            {
+                if (this.SelectedProfile?.Count > 1)
+                {
+                    // Both AES and LZ4 are selected profiles
+                    profileData = rawAESData;
+                    profileData = profileData.Concat(rawCompressionData);
+                    this.IsAesProfileSelected = true;
+                    this.SetAllDataCollections();
+                }
+                else
+                {
+                    // Only one profile selected
+                    if (this.SelectedProfile.Contains(ProfileType.AES.ToString()))
+                    {
+                        // AES is selected profile
+                        profileData = rawAESData;
+                        this.IsAesProfileSelected = true;
+                        this.SetAesCollections();
+                    }
+                    else
+                    {
+                        // LZ4 is selected profile
+                        profileData = rawCompressionData;
+                        this.IsAesProfileSelected = false;
+                        this.SetCompressionCollections();
+                    }
+                }
+            }
+            else
+            {
+                // No profile selected
+                this.IsAesProfileSelected = false;
+            }
+
+            if (this.IsAesProfileSelected)
+            {
+                // Include provider filters
+                if (this.SelectedProvider?.Count > 0)
+                {
+                    profileData = profileData
+                        .Where(a => a is AESEncryptorProfile ap && this.SelectedProvider.Contains(ap.ProviderName));
+                }
+
+                // Include accelerator filters
+                if (this.SelectedAccelerator?.Count > 0)
+                {
+                    profileData = profileData
+                        .Where(a => a is AESEncryptorProfile ap && this.SelectedAccelerator.Contains(ap.PlatformAccelerator.ToString()));
+                }
+            }
+
+            return profileData;
+        }
+
         private void GeneratePlot()
         {
             using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
                 var summarizer = new SchedulingSummarizer(context);
 
-                // start with default data
-                IEnumerable<IByteStreamProcessor> profileData = new List<IByteStreamProcessor>();
-                var rawCompressionData = context.CompressorProfiles.AsEnumerable();
-                var rawAESData = context.AESProfiles.AsEnumerable();
-
-                if (this.SelectedProfile?.Count > 0)
-                {
-                    if (this.SelectedProfile?.Count > 1)
-                    {
-                        // Both AES and LZ4 are selected profiles
-                        profileData = rawAESData;
-                        profileData = profileData.Concat(rawCompressionData);
-                        this.IsAesProfileSelected = true;
-                        this.SetAllDataCollections();
-                    }
-                    else
-                    {
-                        // Only one profile selected
-                        if (this.SelectedProfile.Contains(ProfileType.AES.ToString()))
-                        {
-                            // AES is selected profile
-                            profileData = rawAESData;
-                            this.IsAesProfileSelected = true;
-                            this.SetAesCollections();
-                        }
-                        else
-                        {
-                            // LZ4 is selected profile
-                            profileData = rawCompressionData;
-                            this.IsAesProfileSelected = false;
-                            this.SetCompressionCollections();
-                        }
-                    }
-                }
-                else
-                {
-                    // No profile selected
-                    this.IsAesProfileSelected = false;
-                }
-
-                if (this.IsAesProfileSelected)
-                {
-                    // Include provider filters
-                    if (this.SelectedProvider?.Count > 0)
-                    {
-                        profileData = profileData
-                            .Where(a => a is AESEncryptorProfile ap && this.SelectedProvider.Contains(ap.ProviderName));
-                    }
-
-                    // Include accelerator filters
-                    if (this.SelectedAccelerator?.Count > 0)
-                    {
-                        profileData = profileData
-                            .Where(a => a is AESEncryptorProfile ap && this.SelectedAccelerator.Contains(ap.PlatformAccelerator.ToString()));
-                    }
-                }
+                var profileData = this.SetProfileData(context);
 
                 // Include platform filters
                 if (this.SelectedPlatform?.Count > 0)
