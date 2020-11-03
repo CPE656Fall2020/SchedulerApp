@@ -105,6 +105,7 @@ namespace SchedulerGUI.ViewModels.Controls
                         Title = pass.Name,
                         Color = colors[colorIndex],
                         TrackerFormatString = $"{{0}}\n{{2}}\n{phase.PhaseName} Phase\n{{4}} Joules",
+                        LineStyle = (phase.TotalEnergyUsed != 0) ? LineStyle.Solid : LineStyle.Dot,
                     };
 
                     scatterSeries.Points.Add(new DataPoint(
@@ -113,6 +114,7 @@ namespace SchedulerGUI.ViewModels.Controls
 
                     cumulativeEnergy += -1 * phase.TotalEnergyUsed;
                     cumulativeEnergy = Math.Min(cumulativeEnergy, this.Battery.EffectiveCapacityJ);
+                    cumulativeEnergy = Math.Max(0, cumulativeEnergy);
 
                     scatterSeries.Points.Add(new DataPoint(
                         DateTimeAxis.ToDouble(phase.EndTime),
