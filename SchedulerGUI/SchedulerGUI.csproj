@@ -69,6 +69,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\EnumBindingSourceExtension.cs" />
     <Compile Include="Converters\AcceleratorToStringConverter.cs" />
+    <Compile Include="Converters\MetricToStringConverter.cs" />
     <Compile Include="Converters\HzToStringConverter.cs" />
     <Compile Include="Converters\ImageUtils.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />

@@ -6,5 +6,6 @@
     <BooleanToVisibilityConverter x:Key="boolToVisibilityConverter" />
     
     <converters:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
+    <converters:MetricToStringConverter x:Key="metricToStringConverter" />
 
 </ResourceDictionary>
