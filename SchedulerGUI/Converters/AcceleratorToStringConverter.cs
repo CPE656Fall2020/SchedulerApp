@@ -7,7 +7,7 @@ using SchedulerDatabase.Models;
 namespace SchedulerGUI.Converters
 {
     /// <summary>
-    /// <see cref="AcceleratorToStringConverter"/> provides a converter to display <see cref="AESEncyptorProfile.AcceleratorType"/>s
+    /// <see cref="AcceleratorToStringConverter"/> provides a converter to display <see cref="AESEncryptorProfile.AcceleratorType"/>s
     /// in a user-friendly string format.
     /// </summary>
     public sealed class AcceleratorToStringConverter : IValueConverter
@@ -15,7 +15,7 @@ namespace SchedulerGUI.Converters
         /// <inheritdoc />
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string enumStr && Enum.TryParse<AESEncyptorProfile.AcceleratorType>(enumStr, out var acc))
+            if (value is string enumStr && Enum.TryParse<AESEncryptorProfile.AcceleratorType>(enumStr, out var acc))
             {
                 return acc.ToFriendlyName();
             }

@@ -150,24 +150,6 @@
                             Background="{Binding Source={StaticResource TimelineEventBackground}, Path=Brush,  Mode=OneWay}" >
 
                             <StackPanel Orientation="Vertical" Width="220">
-
-                                <Image
-                                    x:Name="EventImage"
-                                    Source="{Binding Event.TeaserEventImage, Converter={StaticResource NullToUnsetConverter}, Mode=OneWay}"
-                                    Width="Auto"
-                                    Height="Auto"
-                                    Stretch="None"
-                                    Margin="0 1 0 0"
-                                    HorizontalAlignment="Left">
-
-                                    <local:TooltipServiceEx.ToolTipEx>
-                                        <local:ToolTipEx HideToolTipTimeout="{StaticResource TooltipTimeout}" />
-                                    </local:TooltipServiceEx.ToolTipEx>
-
-                                    <ToolTipService.ToolTip>
-                                        <ToolTip Template="{StaticResource EventTooltipStyle}" />
-                                    </ToolTipService.ToolTip>
-                                </Image>
                                 <StackPanel Margin="2 0 0 0" Orientation="Vertical" Width="Auto">
 
                                     <TextBlock

@@ -1,16 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SchedulerGUI.Converters
+namespace SchedulerDatabase.Helpers
 {
     /// <summary>
-    /// <see cref="MetricTools"/> provides helper methods for dealing with Metric units.
+    /// <see cref="MetricUtils"/> provides helper methods for converting metric values.
     /// </summary>
-    public static class MetricTools
+    public class MetricUtils
     {
+        /// <summary>
+        /// Converts a clock speed in Hz to a human-readable size representation.
+        /// </summary>
+        /// <param name="hz">The frequency in Hz.</param>
+        /// <returns>A human-readable clockrate string.</returns>
+        /// <remarks>
+        /// Adapted from https://stackoverflow.com/a/4975942.
+        /// </remarks>
+        public static string HzToString(long hz)
+        {
+            string[] suf = { "Hz", "kHz", "MHz", "GHz" };
+            if (hz == 0)
+            {
+                return "0" + suf[0];
+            }
+
+            long bytes = Math.Abs(hz);
+            int place = System.Convert.ToInt32(Math.Floor(Math.Log(bytes, 1000)));
+            double num = Math.Round(bytes / Math.Pow(1000, place), 1);
+            return (Math.Sign(hz) * num).ToString() + " " + suf[place];
+        }
+
         /// <summary>
         /// Formats a value into a label with the most appropriate SI prefix.
         /// </summary>

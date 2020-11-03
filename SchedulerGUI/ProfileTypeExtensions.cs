@@ -1,32 +1,32 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using static SchedulerDatabase.Models.AESEncryptorProfile;
+using SchedulerGUI.Enums;
 
 namespace SchedulerDatabase.Extensions
 {
     /// <summary>
-    /// Defines extension methods for the <see cref="AcceleratorType"/> enum.
+    /// Defines extension methods for the <see cref="ProfileType"/> enum.
     /// </summary>
-    public static class AcceleratorTypeExtensions
+    public static class ProfileTypeExtensions
     {
         /// <summary>
         /// Returns a user-friendly name for an accelerator type.
         /// </summary>
-        /// <param name="acceleratorType">The accelerator to return a name for.</param>
+        /// <param name="profileType">The profile to return a name for.</param>
         /// <returns>A user friendly name.</returns>
         /// <remarks>
         /// Adapted from https://codereview.stackexchange.com/questions/157871/method-that-returns-description-attribute-of-enum-value.</remarks>
-        public static string ToFriendlyName(this AcceleratorType acceleratorType)
+        public static string ToFriendlyName(this ProfileType profileType)
         {
             return
-                acceleratorType
+                profileType
                     .GetType()
-                    .GetMember(acceleratorType.ToString())
+                    .GetMember(profileType.ToString())
                     .FirstOrDefault()
                     ?.GetCustomAttribute<DescriptionAttribute>()
                     ?.Description
-                ?? acceleratorType.ToString();
+                ?? profileType.ToString();
         }
     }
 }

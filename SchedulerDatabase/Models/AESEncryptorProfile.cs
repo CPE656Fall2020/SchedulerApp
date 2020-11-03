@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
+using SchedulerDatabase.Extensions;
+using SchedulerDatabase.Helpers;
 
 namespace SchedulerDatabase.Models
 {
     /// <summary>
-    /// <see cref="AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
+    /// <see cref="AESEncryptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
     /// </summary>
-    public class AESEncyptorProfile
+    public class AESEncryptorProfile : IByteStreamProcessor
     {
         /// <summary>
         /// <see cref="AESMode"/> defines the different modes in which the AES encryption can be performed.
@@ -47,24 +49,16 @@ namespace SchedulerDatabase.Models
             CpuHardware,
         }
 
-        /// <summary>
-        /// Gets or sets the unique identifier for this profile.
-        /// </summary>
+        /// <inheritdoc/>
         public Guid ProfileId { get; set; }
 
-        /// <summary>
-        /// Gets or sets a free-form description of the conditions under which this experiment was performed or any other relevant details.
-        /// </summary>
+        /// <inheritdoc/>
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the person who authored this entry.
-        /// </summary>
+        /// <inheritdoc/>
         public string Author { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name of the computing platform or module.
-        /// </summary>
+        /// <inheritdoc/>
         public string PlatformName { get; set; }
 
         /// <summary>
@@ -74,9 +68,7 @@ namespace SchedulerDatabase.Models
         /// </summary>
         public string ProviderName { get; set; }
 
-        /// <summary>
-        /// Gets or sets any additional information that is required to uniquely identify this profile.
-        /// </summary>
+        /// <inheritdoc/>
         public string AdditionalUniqueInfo { get; set; }
 
         /// <summary>
@@ -94,49 +86,65 @@ namespace SchedulerDatabase.Models
         /// </summary>
         public int TestedAESBitLength { get; set; }
 
-        /// <summary>
-        /// Gets or sets the total number of bytes that were encrypted when profiling this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public long TotalTestedByteSize { get; set; }
 
-        /// <summary>
-        /// Gets or sets the total number of joules that were consumed when profiling this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public double TotalTestedEnergyJoules { get; set; }
 
-        /// <summary>
-        /// Gets or sets the total runtime of the this profile when benchmarking this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public TimeSpan TotalTestTime { get; set; }
 
-        /// <summary>
-        /// Gets or sets the processor frequency (in Hz) during the test profile when benchmarking this platform.
-        /// </summary>
+        /// <inheritdoc/>
         public int TestedFrequency { get; set; }
 
-        /// <summary>
-        /// Gets or sets the average voltage (in Volts) used to power the device during the duration of the test.
-        /// </summary>
+        /// <inheritdoc/>
         public double AverageVoltage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
-        /// </summary>
+        /// <inheritdoc/>
         public double AverageCurrent { get; set; }
 
-        /// <summary>
-        /// Gets or sets an integer value representing the number of processor cores utilized during the test.
-        /// </summary>
+        /// <inheritdoc/>
         public int NumCores { get; set; }
 
-        /// <summary>
-        /// Gets the amount of energy, in Joules, required to encrypt 1 byte of data.
-        /// </summary>
+        /// <inheritdoc/>
         public double JoulesPerByte => this.TotalTestedEnergyJoules / this.TotalTestedByteSize;
 
-        /// <summary>
-        /// Gets the throughput of the encryptor, in bytes per second.
-        /// </summary>
+        /// <inheritdoc/>
         public double BytesPerSecond => this.TotalTestedByteSize / this.TotalTestTime.TotalSeconds;
+
+        /// <inheritdoc/>
+        public string FullProfileDescription
+        {
+            get
+            {
+                var additional = string.Empty;
+                if (!string.IsNullOrEmpty(this.AdditionalUniqueInfo))
+                {
+                    additional = $@"Additional : {this.AdditionalUniqueInfo}" + "\n";
+                }
+
+                return
+                    $@"Platform: {this.PlatformName}" + "\n" +
+                    $@"Accelerator: {this.PlatformAccelerator.ToFriendlyName()}" + "\n" +
+                    additional +
+                    $@"AES Mode: {this.TestedAESMode}, {this.TestedAESBitLength}-bit" + "\n" +
+                    $@"Provider: {this.ProviderName}" + "\n" +
+                    $@"Tested Frequency: {this.TestedFrequency:N0} Hz" + "\n" +
+                    $@"Description: {this.Description}";
+            }
+        }
+
+        /// <inheritdoc/>
+        public string ShortProfileClassDescription =>
+            $"{this.PlatformAccelerator.ToFriendlyName()}, {this.AdditionalUniqueInfo} {MetricUtils.HzToString(this.TestedFrequency)} {this.NumCores} Cores, {this.ProviderName}";
+
+        /// <inheritdoc/>
+        public string ShortProfileSpecificDescription =>
+            $"{this.PlatformName} {this.ProviderName} {this.AdditionalUniqueInfo}\n{MetricUtils.HzToString(this.TestedFrequency)} {this.NumCores} core(s) {this.Author}";
+
+        /// <inheritdoc/>
+        public string ComparisonHashString =>
+            $"{this.PlatformName}{this.PlatformAccelerator}{this.ProviderName}{this.TestedAESBitLength}{this.TestedAESMode}{this.TestedFrequency}{this.NumCores}{this.AdditionalUniqueInfo}";
     }
 }

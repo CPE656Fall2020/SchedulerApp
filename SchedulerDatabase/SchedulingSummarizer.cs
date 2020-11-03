@@ -22,14 +22,25 @@ namespace SchedulerDatabase
 
         private SchedulerContext Context { get; }
 
+        private string SummarizedAuthor => "CPE656 Authors";
+
+        private string SummarizedDescription => "Summarized data computed with the SchedulerDatabase tool";
+
         /// <summary>
         /// Gets a listing of all the authors who have test results included in the database.
         /// </summary>
         /// <returns>An <see cref="IQueryable{T}"/> of author names.</returns>
         public IQueryable<string> GetAllTestAuthors()
         {
-            return this.Context.AESProfiles
+            var aesAuthors = this.Context.AESProfiles
                 .Select(a => a.Author)
+                .Distinct();
+            var compressorAuthors = this.Context.CompressorProfiles
+                .Select(a => a.Author)
+                .Distinct();
+
+            return aesAuthors
+                .Concat(compressorAuthors)
                 .Distinct();
         }
 
@@ -39,8 +50,15 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of platform names.</returns>
         public IQueryable<string> GetAllTestedPlatforms()
         {
-            return this.Context.AESProfiles
+            var aesPlatforms = this.Context.AESProfiles
                 .Select(a => a.PlatformName)
+                .Distinct();
+            var compressorPlatforms = this.Context.CompressorProfiles
+                .Select(a => a.PlatformName)
+                .Distinct();
+
+            return aesPlatforms
+                .Concat(compressorPlatforms)
                 .Distinct();
         }
 
@@ -60,7 +78,7 @@ namespace SchedulerDatabase
         /// </summary>
         /// <param name="acceleratorType">The specific accelerator type to query for.</param>
         /// <returns>An <see cref="IQueryable{T}"/> of test results.</returns>
-        public IQueryable<AESEncyptorProfile> GetAllResultsForAccelerator(AESEncyptorProfile.AcceleratorType acceleratorType)
+        public IQueryable<AESEncryptorProfile> GetAllResultsForAccelerator(AESEncryptorProfile.AcceleratorType acceleratorType)
         {
             return this.Context.AESProfiles
                 .Where(a => a.PlatformAccelerator == acceleratorType);
@@ -72,8 +90,15 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of platform core counts.</returns>
         public IQueryable<int> GetAllNumCores()
         {
-            return this.Context.AESProfiles
+            var aesNumCores = this.Context.AESProfiles
                 .Select(a => a.NumCores)
+                .Distinct();
+            var compressorNumCores = this.Context.CompressorProfiles
+                .Select(a => a.NumCores)
+                .Distinct();
+
+            return aesNumCores
+                .Concat(compressorNumCores)
                 .Distinct();
         }
 
@@ -83,76 +108,170 @@ namespace SchedulerDatabase
         /// <returns>An <see cref="IQueryable{T}"/> of clock speeds, in Hz.</returns>
         public IQueryable<int> GetAllClockSpeeds()
         {
-            return this.Context.AESProfiles
+            var aesTestedFrequency = this.Context.AESProfiles
                 .Select(a => a.TestedFrequency)
                 .Distinct();
+            var compressorTestedFrequency = this.Context.CompressorProfiles
+                .Select(a => a.TestedFrequency)
+                .Distinct();
+
+            return aesTestedFrequency
+                .Concat(compressorTestedFrequency)
+                .Distinct();
+        }
+
+        /// <summary>
+        /// Computes summarized results for each unique test case provided in a collection of raw AES profiles.
+        /// </summary>
+        /// <param name="profiles">A collection of raw <see cref="AESEncryptorProfile"/>.</param>
+        /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        public List<AESEncryptorProfile> SummarizeDeviceResults(IEnumerable<AESEncryptorProfile> profiles)
+        {
+            var buckets = this.GroupIntoBuckets(profiles);
+            var allSummarizedResults = new List<AESEncryptorProfile>();
+
+            // For all related tests in each bucket, compute an average.
+            foreach (var bucket in buckets)
+            {
+                var count = bucket.Value.Count;
+                var summation = this.CreateSummation(bucket.Value, new AESEncryptorProfile());
+
+                /* Static description */
+                var result = new AESEncryptorProfile()
+                {
+                    TestedAESBitLength = bucket.Value.First().TestedAESBitLength,
+                    TestedAESMode = bucket.Value.First().TestedAESMode,
+                };
+                result = (AESEncryptorProfile)this.GenerateResult(bucket.Value.First(), result);
+
+                /* Averaged results */
+                result = (AESEncryptorProfile)this.AddSummationToResult(summation, result, count);
+
+                allSummarizedResults.Add(result);
+            }
+
+            return allSummarizedResults;
+        }
+
+        /// <summary>
+        /// Computes summarized results for each unique test case provided in a collection of raw compression profiles.
+        /// </summary>
+        /// <param name="profiles">A collection of raw <see cref="CompressorProfile"/>.</param>
+        /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        public List<CompressorProfile> SummarizeDeviceResults(IEnumerable<CompressorProfile> profiles)
+        {
+            var buckets = this.GroupIntoBuckets(profiles);
+            var allSummarizedResults = new List<CompressorProfile>();
+
+            // For all related tests in each bucket, compute an average.
+            foreach (var bucket in buckets)
+            {
+                var count = bucket.Value.Count;
+                var summation = this.CreateSummation(bucket.Value, new CompressorProfile());
+
+                /* Static description */
+                var result = new CompressorProfile()
+                {
+                    TestedCompressionMode = bucket.Value.First().TestedCompressionMode,
+                };
+                result = (CompressorProfile)this.GenerateResult(bucket.Value.First(), result);
+
+                /* Averaged results */
+                result = (CompressorProfile)this.AddSummationToResult(summation, result, count);
+
+                allSummarizedResults.Add(result);
+            }
+
+            return allSummarizedResults;
         }
 
         /// <summary>
         /// Computes summarized results for each unique test case provided in a collection of raw profiles.
         /// </summary>
-        /// <param name="profiles">A collection of raw <see cref="AESEncyptorProfile"/>.</param>
+        /// <param name="profiles">A collection of raw <see cref="IByteStreamProcessor"/>.</param>
         /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
-        public List<AESEncyptorProfile> SummarizeResults(IEnumerable<AESEncyptorProfile> profiles)
+        public List<IByteStreamProcessor> SummarizeDeviceResults(IEnumerable<IByteStreamProcessor> profiles)
         {
-            var buckets = new Dictionary<string, List<AESEncyptorProfile>>();
+            var buckets = this.GroupIntoBuckets(profiles);
+            var allSummarizedResults = new List<IByteStreamProcessor>();
+
+            // For all related tests in each bucket, compute an average.
+            foreach (var bucket in buckets)
+            {
+                var count = bucket.Value.Count;
+                var summation = this.CreateSummation(bucket.Value, new CompressorProfile());
+
+                /* Static description */
+                var result = new CompressorProfile();
+                result = (CompressorProfile)this.GenerateResult(bucket.Value.First(), result);
+
+                /* Averaged results */
+                result = (CompressorProfile)this.AddSummationToResult(summation, result, count);
+
+                allSummarizedResults.Add(result);
+            }
+
+            return allSummarizedResults;
+        }
+
+        private IByteStreamProcessor GenerateResult(IByteStreamProcessor bucketValue, IByteStreamProcessor result)
+        {
+            result.ProfileId = Guid.NewGuid();
+            result.Author = this.SummarizedAuthor;
+            result.Description = this.SummarizedDescription;
+            result.PlatformName = bucketValue.PlatformName;
+            result.TestedFrequency = bucketValue.TestedFrequency;
+            result.NumCores = bucketValue.NumCores;
+            result.AdditionalUniqueInfo = bucketValue.AdditionalUniqueInfo;
+
+            return result;
+        }
+
+        private IByteStreamProcessor AddSummationToResult(IByteStreamProcessor summation, IByteStreamProcessor result, int count)
+        {
+            result.AverageCurrent = summation.AverageCurrent / count;
+            result.AverageVoltage = summation.AverageVoltage / count;
+            result.TotalTestedByteSize = summation.TotalTestedByteSize / count;
+            result.TotalTestedEnergyJoules = summation.TotalTestedEnergyJoules / count;
+            result.TotalTestTime = TimeSpan.FromTicks(summation.TotalTestTime.Ticks / count);
+
+            return result;
+        }
+
+        private IByteStreamProcessor CreateSummation<T>(List<T> devices, IByteStreamProcessor summation)
+            where T : IByteStreamProcessor
+        {
+            foreach (var device in devices)
+            {
+                summation.AverageCurrent += device.AverageCurrent;
+                summation.AverageVoltage += device.AverageVoltage;
+                summation.TotalTestedByteSize += device.TotalTestedByteSize;
+                summation.TotalTestedEnergyJoules += device.TotalTestedEnergyJoules;
+                summation.TotalTestTime += device.TotalTestTime;
+            }
+
+            return summation;
+        }
+
+        private Dictionary<string, List<T>> GroupIntoBuckets<T>(IEnumerable<T> profiles)
+            where T : IProfile
+        {
+            var buckets = new Dictionary<string, List<T>>();
 
             // Group all the independent test runs provided into buckets, based on which test runs are done under the same conditions.
             foreach (var profile in profiles)
             {
-                // For two profiles to be considered different iterations of the same test case, they have to match on the following criteria:
-                var id = $"{profile.PlatformName}{profile.PlatformAccelerator}{profile.ProviderName}{profile.TestedAESBitLength}{profile.TestedAESMode}{profile.TestedFrequency}{profile.NumCores}{profile.AdditionalUniqueInfo}";
+                var id = profile.ComparisonHashString;
 
                 if (!buckets.ContainsKey(id))
                 {
-                    buckets.Add(id, new List<AESEncyptorProfile>());
+                    buckets.Add(id, new List<T>());
                 }
 
                 buckets[id].Add(profile);
             }
 
-            var allSummarizedResults = new List<AESEncyptorProfile>();
-
-            // For all related tests in each bucket, compute an average.
-            foreach (var bucket in buckets)
-            {
-                var summation = new AESEncyptorProfile();
-                var count = bucket.Value.Count;
-
-                foreach (var result in bucket.Value)
-                {
-                    summation.AverageCurrent += result.AverageCurrent;
-                    summation.AverageVoltage += result.AverageVoltage;
-                    summation.TotalTestedByteSize += result.TotalTestedByteSize;
-                    summation.TotalTestedEnergyJoules += result.TotalTestedEnergyJoules;
-                    summation.TotalTestTime += result.TotalTestTime;
-                }
-
-                allSummarizedResults.Add(new AESEncyptorProfile()
-                {
-                    /* Static description */
-                    ProfileId = Guid.NewGuid(),
-                    Author = "CPE656 Authors",
-                    Description = "Summarized data computed with the SchedulerDatabase tool",
-                    PlatformName = bucket.Value.First().PlatformName,
-                    PlatformAccelerator = bucket.Value.First().PlatformAccelerator,
-                    ProviderName = bucket.Value.First().ProviderName,
-                    TestedAESBitLength = bucket.Value.First().TestedAESBitLength,
-                    TestedAESMode = bucket.Value.First().TestedAESMode,
-                    TestedFrequency = bucket.Value.First().TestedFrequency,
-                    NumCores = bucket.Value.First().NumCores,
-                    AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
-
-                    /* Averaged results */
-                    AverageCurrent = summation.AverageCurrent / count,
-                    AverageVoltage = summation.AverageVoltage / count,
-                    TotalTestedByteSize = summation.TotalTestedByteSize / count,
-                    TotalTestedEnergyJoules = summation.TotalTestedEnergyJoules / count,
-                    TotalTestTime = TimeSpan.FromTicks(summation.TotalTestTime.Ticks / count),
-                });
-            }
-
-            return allSummarizedResults;
+            return buckets;
         }
     }
 }

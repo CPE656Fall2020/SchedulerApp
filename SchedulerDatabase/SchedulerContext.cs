@@ -29,9 +29,14 @@ namespace SchedulerDatabase
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="AESProfiles"/>s stored in the database.
+        /// Gets or sets the <see cref="AESEncryptorProfile"/>s stored in the database.
         /// </summary>
-        public DbSet<AESEncyptorProfile> AESProfiles { get; set; }
+        public DbSet<AESEncryptorProfile> AESProfiles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="CompressorProfile"/>s stored in the database.
+        /// </summary>
+        public DbSet<CompressorProfile> CompressorProfiles { get; set; }
 
         private string DatabaseName { get; set; }
 
@@ -44,7 +49,8 @@ namespace SchedulerDatabase
         /// <inheritdoc/>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AESEncyptorProfile>().HasKey(m => m.ProfileId);
+            modelBuilder.Entity<AESEncryptorProfile>().HasKey(m => m.ProfileId);
+            modelBuilder.Entity<CompressorProfile>().HasKey(m => m.ProfileId);
         }
     }
 }

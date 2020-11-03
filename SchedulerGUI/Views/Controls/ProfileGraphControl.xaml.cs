@@ -7,9 +7,9 @@ namespace SchedulerGUI.Views.Controls
     /// <summary>
     /// Interaction logic for AESGraphControl.xaml
     /// </summary>
-    public partial class AESGraphControl : UserControl
+    public partial class ProfileGraphControl : UserControl
     {
-        public AESGraphControl()
+        public ProfileGraphControl()
         {
             InitializeComponent();
         }

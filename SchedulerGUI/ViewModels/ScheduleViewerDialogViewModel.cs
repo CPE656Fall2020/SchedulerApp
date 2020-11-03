@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
-using SchedulerDatabase.Extensions;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
 
@@ -20,36 +18,63 @@ namespace SchedulerGUI.ViewModels
         /// <param name="solution">The solution to visualize.</param>
         public ScheduleViewerDialogViewModel(ScheduleSolution solution)
         {
-            this.Warnings = new ObservableCollection<Solver.ScheduleSolution.SchedulerProblem>(
-                solution.Problems.Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Warning));
+            this.Warnings = new ObservableCollection<ScheduleSolution.SchedulerProblem>(
+                solution.Problems.Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning));
 
-            this.Errors = new ObservableCollection<Solver.ScheduleSolution.SchedulerProblem>(
-                solution.Problems.Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Error));
+            this.Errors = new ObservableCollection<ScheduleSolution.SchedulerProblem>(
+                solution.Problems.Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error));
 
-            this.Fatal = new ObservableCollection<Solver.ScheduleSolution.SchedulerProblem>(
-                solution.Problems.Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal));
+            this.Fatal = new ObservableCollection<ScheduleSolution.SchedulerProblem>(
+                solution.Problems.Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal));
 
             this.SolutionPerPass = new Dictionary<PassOrbit, string>();
             foreach (var passSln in solution.ViableProfiles)
             {
-                this.SolutionPerPass.Add(passSln.Key, passSln.Value?.ToFullDescription());
+                // TODO - this is a placeholder just to show both enc and compression in the same place
+                var description = string.Empty;
+
+                var phasesForPass = passSln.Value;
+
+                description += "Optimized AES Profile: ";
+                if (phasesForPass.ContainsKey(Enums.PhaseType.Encryption))
+                {
+                    description += $"\n{passSln.Value[Enums.PhaseType.Encryption]?.FullProfileDescription}\n";
+                }
+                else
+                {
+                    description += "No viable solution\n";
+                }
+
+                description += "Optimized Compression Profile: ";
+                if (phasesForPass.ContainsKey(Enums.PhaseType.Datalink))
+                {
+                    description += $"\n{passSln.Value[Enums.PhaseType.Datalink]?.FullProfileDescription}\n";
+                }
+                else
+                {
+                    description += "No viable solution\n";
+                }
+
+                description += "\n";
+
+                this.SolutionPerPass.Add(passSln.Key, description);
             }
         }
 
         /// <summary>
         /// Gets a collection of scheduling warnings.
         /// </summary>
-        public ObservableCollection<Solver.ScheduleSolution.SchedulerProblem> Warnings { get; }
+        public ObservableCollection<ScheduleSolution.SchedulerProblem> Warnings { get; }
 
         /// <summary>
         /// Gets a collection of scheduling errors.
         /// </summary>
-        public ObservableCollection<Solver.ScheduleSolution.SchedulerProblem> Errors { get; }
+        public ObservableCollection<ScheduleSolution.SchedulerProblem> Errors { get; }
 
         /// <summary>
         /// Gets a collection of scheduling fatal errors.
         /// </summary>
-        public ObservableCollection<Solver.ScheduleSolution.SchedulerProblem> Fatal { get; }
+        public ObservableCollection<ScheduleSolution.SchedulerProblem> Fatal { get; }
 
         /// <summary>
         /// Gets a mapping of solutions for each pass.

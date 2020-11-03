@@ -6,10 +6,10 @@
     <members>
         <member name="T:SchedulerDatabase.Extensions.AcceleratorTypeExtensions">
             <summary>
-            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> enum.
+            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType"/> enum.
             </summary>
         </member>
-        <member name="M:SchedulerDatabase.Extensions.AcceleratorTypeExtensions.ToFriendlyName(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+        <member name="M:SchedulerDatabase.Extensions.AcceleratorTypeExtensions.ToFriendlyName(SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType)">
             <summary>
             Returns a user-friendly name for an accelerator type.
             </summary>
@@ -18,149 +18,346 @@
             <remarks>
             Adapted from https://codereview.stackexchange.com/questions/157871/method-that-returns-description-attribute-of-enum-value.</remarks>
         </member>
-        <member name="T:SchedulerDatabase.Extensions.AESEncryptorProfileExtensions">
+        <member name="T:SchedulerDatabase.Helpers.MetricUtils">
             <summary>
-            Defines extension methods for the <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> type.
+            <see cref="T:SchedulerDatabase.Helpers.MetricUtils"/> provides helper methods for converting metric values.
             </summary>
         </member>
-        <member name="M:SchedulerDatabase.Extensions.AESEncryptorProfileExtensions.ToFullDescription(SchedulerDatabase.Models.AESEncyptorProfile)">
+        <member name="M:SchedulerDatabase.Helpers.MetricUtils.HzToString(System.Int64)">
             <summary>
-            Returns a complete description string for the profile.
+            Converts a clock speed in Hz to a human-readable size representation.
             </summary>
-            <param name="profile">The profile to describe.</param>
-            <returns>The complete description string.</returns>
+            <param name="hz">The frequency in Hz.</param>
+            <returns>A human-readable clockrate string.</returns>
+            <remarks>
+            Adapted from https://stackoverflow.com/a/4975942.
+            </remarks>
         </member>
-        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile">
+        <member name="M:SchedulerDatabase.Helpers.MetricUtils.MetricValueAxisLabelFormatter(System.Double,System.String,System.Boolean)">
             <summary>
-            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
+            Formats a value into a label with the most appropriate SI prefix.
             </summary>
+            <param name="input">The numerical value to format.</param>
+            <param name="unit">The base SI unit. Examples include byte, Joule, or Volt.</param>
+            <param name="binary">True to use base 1024 for digital storage formats, false to use standard SI base_10.</param>
+            <returns>A formatted string.</returns>
+            <remarks>
+            // Adapted from https://stackoverflow.com/a/40266660.
+            </remarks>
         </member>
-        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile.AESMode">
+        <member name="T:SchedulerDatabase.Models.AESEncryptorProfile">
             <summary>
-            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AESMode"/> defines the different modes in which the AES encryption can be performed.
+            <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile"/> describes the characteristics of a computing module and methodology for performing AES encryption.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.CTR">
+        <member name="T:SchedulerDatabase.Models.AESEncryptorProfile.AESMode">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile.AESMode"/> defines the different modes in which the AES encryption can be performed.
+            </summary>
+        </member>
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AESMode.CTR">
             <summary>
             Counter Mode.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.CBC">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AESMode.CBC">
             <summary>
             Chained Block Cipher Mode.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AESMode.ECB">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AESMode.ECB">
             <summary>
             Embedded Codeblock Mode.
             </summary>
         </member>
-        <member name="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType">
+        <member name="T:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType">
             <summary>
-            <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType"/> defines different types of AES accelerators that can be used.
+            <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType"/> defines different types of AES accelerators that can be used.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType.None">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType.None">
             <summary>
             No accelerator is used.
             </summary>
         </member>
-        <member name="F:SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType.CpuHardware">
+        <member name="F:SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType.CpuHardware">
             <summary>
             CPU-provided Hardware acceleration is used.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ProfileId">
-            <summary>
-            Gets or sets the unique identifier for this profile.
-            </summary>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ProfileId">
+            <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.Description">
-            <summary>
-            Gets or sets a free-form description of the conditions under which this experiment was performed or any other relevant details.
-            </summary>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.Description">
+            <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.Author">
-            <summary>
-            Gets or sets the name of the person who authored this entry.
-            </summary>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.Author">
+            <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformName">
-            <summary>
-            Gets or sets the name of the computing platform or module.
-            </summary>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.PlatformName">
+            <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.ProviderName">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ProviderName">
             <summary>
             Gets or sets the name of the AES implementation provider.
             For software implementations, this likely represents the library name.
             For hardware-accelerated implementations, this value is typically not used.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AdditionalUniqueInfo">
-            <summary>
-            Gets or sets any additional information that is required to uniquely identify this profile.
-            </summary>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.AdditionalUniqueInfo">
+            <inheritdoc/>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.PlatformAccelerator">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.PlatformAccelerator">
             <summary>
              Gets or sets the type of AES Accelerator that is used on this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedAESMode">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedAESMode">
             <summary>
             Gets or sets the AES encryption mode that was tested under this profile.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedAESBitLength">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedAESBitLength">
             <summary>
             Gets or sets the length of the AES encryption key (in bits) that was tested under this profile.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestedByteSize">
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestedByteSize">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestedEnergyJoules">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TotalTestTime">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.TestedFrequency">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.AverageVoltage">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.AverageCurrent">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.NumCores">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.JoulesPerByte">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.BytesPerSecond">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.FullProfileDescription">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ShortProfileClassDescription">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ShortProfileSpecificDescription">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.AESEncryptorProfile.ComparisonHashString">
+            <inheritdoc/>
+        </member>
+        <member name="T:SchedulerDatabase.Models.CompressorProfile">
             <summary>
-            Gets or sets the total number of bytes that were encrypted when profiling this platform.
+            <see cref="T:SchedulerDatabase.Models.CompressorProfile"/>  describes the characteristics of a computing module and methodology for performing data compression.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestedEnergyJoules">
+        <member name="T:SchedulerDatabase.Models.CompressorProfile.CompressionMode">
             <summary>
-            Gets or sets the total number of joules that were consumed when profiling this platform.
+            Different compression modes that can applied to data.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TotalTestTime">
+        <member name="F:SchedulerDatabase.Models.CompressorProfile.CompressionMode.Lz4">
             <summary>
-            Gets or sets the total runtime of the this profile when benchmarking this platform.
+            LZ4 Algorithm.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.TestedFrequency">
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.ProfileId">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.Author">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.PlatformName">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.AdditionalUniqueInfo">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.TestedCompressionMode">
+            <summary>
+            Gets or sets the AES encryption mode that was tested under this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.TotalTestedByteSize">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.TotalTestedEnergyJoules">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.TotalTestTime">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.TestedFrequency">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.AverageVoltage">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.AverageCurrent">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.NumCores">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.JoulesPerByte">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.BytesPerSecond">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.FullProfileDescription">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.ShortProfileClassDescription">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.ShortProfileSpecificDescription">
+            <inheritdoc/>
+        </member>
+        <member name="P:SchedulerDatabase.Models.CompressorProfile.ComparisonHashString">
+            <inheritdoc/>
+        </member>
+        <member name="T:SchedulerDatabase.Models.IByteStreamProcessor">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.IByteStreamProcessor"/> defines a generic device that performs a specific operation of a stream
+            of data. Byte Processing Devices have a defined throughput rate and known energy consumption rate, varying according
+            to the length of the stream being processed. These profiles are uniquely identifiable across the entire scheduling system.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IByteStreamProcessor.JoulesPerByte">
+            <summary>
+            Gets the amount of energy, in Joules, required to process 1 byte of data.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IByteStreamProcessor.BytesPerSecond">
+            <summary>
+            Gets the throughput of the encryptor, in bytes per second.
+            </summary>
+        </member>
+        <member name="T:SchedulerDatabase.Models.IExperimentalHardwareProfile">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.IExperimentalHardwareProfile"/> defines a profile for device data that was collected experimentally.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IExperimentalHardwareProfile.Description">
+            <summary>
+            Gets or sets a free-form description of the conditions under which this experiment was performed or any other relevant details.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IExperimentalHardwareProfile.AdditionalUniqueInfo">
+            <summary>
+            Gets or sets any additional information that is required to uniquely identify this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IExperimentalHardwareProfile.Author">
+            <summary>
+            Gets or sets the name of the person who authored this entry.
+            </summary>
+        </member>
+        <member name="T:SchedulerDatabase.Models.IHardwareProfile">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.IHardwareProfile"/> describes a generic profile for a component of the scheduling system that is implemented in hardware.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.PlatformName">
+            <summary>
+            Gets or sets the name of the hardware platform described by this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TestedFrequency">
             <summary>
             Gets or sets the processor frequency (in Hz) during the test profile when benchmarking this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AverageVoltage">
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.AverageVoltage">
             <summary>
             Gets or sets the average voltage (in Volts) used to power the device during the duration of the test.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.AverageCurrent">
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.AverageCurrent">
             <summary>
             Gets or sets the average current (in Amps) consumed by the platform during the duration of the test.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.NumCores">
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.NumCores">
             <summary>
             Gets or sets an integer value representing the number of processor cores utilized during the test.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.JoulesPerByte">
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TotalTestedByteSize">
             <summary>
-            Gets the amount of energy, in Joules, required to encrypt 1 byte of data.
+            Gets or sets the total number of bytes that were modified when profiling this platform.
             </summary>
         </member>
-        <member name="P:SchedulerDatabase.Models.AESEncyptorProfile.BytesPerSecond">
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TotalTestedEnergyJoules">
             <summary>
-            Gets the throughput of the encryptor, in bytes per second.
+            Gets or sets the total number of joules that were consumed when profiling this platform.
             </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IHardwareProfile.TotalTestTime">
+            <summary>
+            Gets or sets the total runtime of the this profile when benchmarking this platform.
+            </summary>
+        </member>
+        <member name="T:SchedulerDatabase.Models.IProfile">
+            <summary>
+            <see cref="T:SchedulerDatabase.Models.IProfile"/> describes a generic profile for a component of the scheduling system.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IProfile.ProfileId">
+            <summary>
+            Gets or sets the unique identifier for this profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IProfile.FullProfileDescription">
+            <summary>
+            Gets a complete description string for this device profile.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IProfile.ShortProfileClassDescription">
+            <summary>
+            Gets a short description string for this class of device profile. This description is suitable
+            for identifying an entire class of related experiments/profiles, when it is NOT necessary to be
+            able to precisely identify the exact run(s) that were conducted. See also <seealso cref="P:SchedulerDatabase.Models.IProfile.ShortProfileSpecificDescription"/>.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IProfile.ShortProfileSpecificDescription">
+            <summary>
+            Gets a short description string for this precise experimental run of a device profile. This description includes
+            metadata from the experiment such as the name of the test engineer, making it too narrow to be able to describe an entire
+            class of related experiments. For a more general description of a device profile see also <seealso cref="P:SchedulerDatabase.Models.IProfile.ShortProfileClassDescription"/>.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.Models.IProfile.ComparisonHashString">
+            <summary>
+            Gets a hash string that can be used to compare different <see cref="T:SchedulerDatabase.Models.IProfile"/>s
+            to determine if they both describe the same device, setup, experiment, and intentions.
+            Equivalent profiles may be averaged or interpolated together to accomidate for incomplete data sets.
+            </summary>
+            <remarks>
+            Formatting is not relevant here, this value will never be displayed to end users.
+            However, it should be treated as a hash value. Identical profiles must always
+            produce the same hash, and the likelihood of collisions (identical hashes being produced by
+            differing profiles) must be minimized.
+            </remarks>
         </member>
         <member name="T:SchedulerDatabase.SchedulerContext">
             <summary>
@@ -181,7 +378,12 @@
         </member>
         <member name="P:SchedulerDatabase.SchedulerContext.AESProfiles">
             <summary>
-            Gets or sets the <see cref="P:SchedulerDatabase.SchedulerContext.AESProfiles"/>s stored in the database.
+            Gets or sets the <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile"/>s stored in the database.
+            </summary>
+        </member>
+        <member name="P:SchedulerDatabase.SchedulerContext.CompressorProfiles">
+            <summary>
+            Gets or sets the <see cref="T:SchedulerDatabase.Models.CompressorProfile"/>s stored in the database.
             </summary>
         </member>
         <member name="M:SchedulerDatabase.SchedulerContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
@@ -220,7 +422,7 @@
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of provider names.</returns>
         </member>
-        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllResultsForAccelerator(SchedulerDatabase.Models.AESEncyptorProfile.AcceleratorType)">
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.GetAllResultsForAccelerator(SchedulerDatabase.Models.AESEncryptorProfile.AcceleratorType)">
             <summary>
             Gets a listing of test profiles for all experiments conducted using a specific accelerator device.
             </summary>
@@ -239,11 +441,25 @@
             </summary>
             <returns>An <see cref="T:System.Linq.IQueryable`1"/> of clock speeds, in Hz.</returns>
         </member>
-        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncyptorProfile})">
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.AESEncryptorProfile})">
+            <summary>
+            Computes summarized results for each unique test case provided in a collection of raw AES profiles.
+            </summary>
+            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.AESEncryptorProfile"/>.</param>
+            <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.CompressorProfile})">
+            <summary>
+            Computes summarized results for each unique test case provided in a collection of raw compression profiles.
+            </summary>
+            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.CompressorProfile"/>.</param>
+            <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
+        </member>
+        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.IByteStreamProcessor})">
             <summary>
             Computes summarized results for each unique test case provided in a collection of raw profiles.
             </summary>
-            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.AESEncyptorProfile"/>.</param>
+            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.IByteStreamProcessor"/>.</param>
             <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
         </member>
     </members>

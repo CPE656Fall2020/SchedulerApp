@@ -41,7 +41,7 @@ namespace SchedulerGUI.Models
         public double MaxEnergyUsed { get; private set; }
 
         /// <inheritdoc/>
-        public void SetRandomValues(Random random, double maxEnergy, int? maxBytes = null)
+        public void SetRandomValues(Random random, double maxEnergy, long? maxBytes = null)
         {
             if (this.PhaseName == PhaseType.Sunlight)
             {

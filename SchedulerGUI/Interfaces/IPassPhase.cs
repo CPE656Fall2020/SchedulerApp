@@ -44,6 +44,6 @@ namespace SchedulerGUI.Interfaces
         /// <param name="random">Random number generator.</param>
         /// <param name="maxEnergy">Max energy allotted for phase.</param>
         /// <param name="maxBytes">Max bytes alloted for encryption phase.</param>
-        void SetRandomValues(Random random, double maxEnergy, int? maxBytes = null);
+        void SetRandomValues(Random random, double maxEnergy, long? maxBytes = null);
     }
 }

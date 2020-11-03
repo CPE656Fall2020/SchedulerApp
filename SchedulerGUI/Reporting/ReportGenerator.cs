@@ -8,8 +8,9 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using OxyPlot;
 using OxyPlot.Wpf;
-using SchedulerDatabase.Extensions;
-using SchedulerGUI.Converters;
+using SchedulerDatabase.Helpers;
+using SchedulerDatabase.Models;
+using SchedulerGUI.Enums;
 using SchedulerGUI.Models;
 using SchedulerGUI.Solver;
 using SchedulerGUI.ViewModels.Controls;
@@ -43,8 +44,10 @@ namespace SchedulerGUI.Reporting
             report.Blocks.Add(GeneratePassDataSection(passes));
 
             // Battery Capacity Graph
-            var graphSection = new Section();
-            graphSection.BreakPageBefore = true;
+            var graphSection = new Section
+            {
+                BreakPageBefore = true,
+            };
             graphSection.Blocks.Add(ReportTheme.MakeHeader1("Battery Utilization Graph"));
             graphSection.Blocks.Add(GenerateEnergyCapacityGraphExport(passes, batterySpecs));
             graphSection.Blocks.Add(ReportTheme.MakeHeader1("Power Specifications"));
@@ -52,13 +55,14 @@ namespace SchedulerGUI.Reporting
             report.Blocks.Add(graphSection);
 
             // Scheduler results
-            var resultsSection = new Section();
-            resultsSection.BreakPageBefore = true;
+            var resultsSection = new Section
+            {
+                BreakPageBefore = true,
+            };
             resultsSection.Blocks.Add(ReportTheme.MakeHeader1("Computed Schedule"));
             resultsSection.Blocks.Add(ReportTheme.MakeHeader1("Info, Warnings, and Errors"));
             resultsSection.Blocks.Add(GenerateWarningsSection(schedulerSolution));
-            resultsSection.Blocks.Add(ReportTheme.MakeHeader1("Optimized AES Profiles"));
-            resultsSection.Blocks.Add(GenerateOptimizedProfileSection(schedulerSolution));
+            resultsSection.Blocks.Add(GenerateOptimizedProfileSection(schedulerSolution, PhaseType.Encryption, "Optimized AES Profile: ", PhaseType.Datalink, "Optimized Compression Profile: "));
             report.Blocks.Add(resultsSection);
 
             // Scheduler results
@@ -100,7 +104,7 @@ namespace SchedulerGUI.Reporting
                     var phaseDescription = new Paragraph();
                     phaseDescription.Inlines.Add(new Run($"Phase: {phase.PhaseName}"));
                     phaseDescription.Inlines.Add(new LineBreak());
-                    phaseDescription.Inlines.Add(new Run($"Energy Used: {MetricTools.MetricValueAxisLabelFormatter(phase.TotalEnergyUsed, "J")}"));
+                    phaseDescription.Inlines.Add(new Run($"Energy Used: {MetricUtils.MetricValueAxisLabelFormatter(phase.TotalEnergyUsed, "J")}"));
                     phaseDescription.Inlines.Add(new LineBreak());
                     phaseDescription.Inlines.Add(new Run($"Start Time: {phase.StartTime:hh:mm:ss tt}"));
                     phaseDescription.Inlines.Add(new LineBreak());
@@ -229,15 +233,15 @@ namespace SchedulerGUI.Reporting
             var fatalErrorHeader = ReportTheme.MakeHeader2(string.Empty, new List<Inline>() { criticalIcon, new Run("Critical Error Messages") });
 
             var warnings = schedulerSolution.Problems
-                .Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Warning)
+                .Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning)
                 .Select(x => new ListItem(new Paragraph(new Run(x.Message))));
 
             var errors = schedulerSolution.Problems
-                .Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Error)
+                .Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error)
                 .Select(x => new ListItem(new Paragraph(new Run(x.Message))));
 
             var fatal = schedulerSolution.Problems
-                .Where(p => p.Level == Solver.ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal)
+                .Where(p => p.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal)
                 .Select(x => new ListItem(new Paragraph(new Run(x.Message))));
 
             var warningList = new List();
@@ -262,26 +266,64 @@ namespace SchedulerGUI.Reporting
             return results;
         }
 
-        private static Block GenerateOptimizedProfileSection(ScheduleSolution schedulerSolution)
+        private static Block GenerateOptimizedProfileSection(ScheduleSolution schedulerSolution, PhaseType typeOne, string typeOneText, PhaseType typeTwo, string typeTwoText)
         {
             var passesList = new List();
             foreach (var pair in schedulerSolution.ViableProfiles)
             {
                 var pass = pair.Key;
                 var profile = pair.Value;
+                bool hasPhaseOne = profile.TryGetValue(typeOne, out IByteStreamProcessor _);
+                bool hasPhaseTwo = profile.TryGetValue(typeTwo, out IByteStreamProcessor _);
+
+                if (!hasPhaseOne && !hasPhaseTwo)
+                {
+                    continue;
+                }
 
                 var solutionDescription = new Paragraph();
                 solutionDescription.Inlines.Add(ReportTheme.GetSuccessIcon(pass.IsScheduledSuccessfully));
-                solutionDescription.Inlines.Add(new Bold(new Run(pass.Name)));
-
-                var deviceProfile = new Paragraph(new Run($"Device: {profile.ToFullDescription()}\n"))
+                solutionDescription.Inlines.Add(new Bold(new Run($"{pass.Name}\n")));
+                ListItem passSolutionItem;
+                solutionDescription.Inlines.Add(new Bold(new Run(typeOneText)));
+                if (hasPhaseOne)
                 {
-                    Margin = new Thickness(20, 0, 0, 0),
-                };
+                    var deviceProfile = new Paragraph(new Run($"\nDevice: {profile[typeOne]?.FullProfileDescription}\n"))
+                    {
+                        Margin = new Thickness(20, 0, 0, 0),
+                    };
 
-                var passSolutionItem = new ListItem();
-                passSolutionItem.Blocks.Add(solutionDescription);
-                passSolutionItem.Blocks.Add(deviceProfile);
+                    passSolutionItem = new ListItem();
+                    passSolutionItem.Blocks.Add(solutionDescription);
+                    passSolutionItem.Blocks.Add(deviceProfile);
+                }
+                else
+                {
+                    solutionDescription.Inlines.Add(new Run("No viable solutions\n"));
+
+                    passSolutionItem = new ListItem();
+                    passSolutionItem.Blocks.Add(solutionDescription);
+                }
+
+                solutionDescription.Inlines.Add(new Bold(new Run(typeTwoText)));
+                if (hasPhaseTwo)
+                {
+                    var deviceProfile = new Paragraph(new Run($"Device: {profile[typeTwo]?.FullProfileDescription}\n"))
+                    {
+                        Margin = new Thickness(20, 0, 0, 0),
+                    };
+
+                    passSolutionItem = new ListItem();
+                    passSolutionItem.Blocks.Add(solutionDescription);
+                    passSolutionItem.Blocks.Add(deviceProfile);
+                }
+                else
+                {
+                    solutionDescription.Inlines.Add(new Run("No viable solutions\n"));
+
+                    passSolutionItem = new ListItem();
+                    passSolutionItem.Blocks.Add(solutionDescription);
+                }
 
                 passesList.ListItems.Add(passSolutionItem);
             }

@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using SchedulerDatabase;
 using SchedulerDatabase.Models;
+using SchedulerGUI.Enums;
 using SchedulerGUI.Models;
 using SchedulerGUI.ViewModels.Controls;
 using Sdl.MultiSelectComboBox.EventArgs;
@@ -17,7 +18,7 @@ using Sdl.MultiSelectComboBox.Themes.Generic;
 namespace SchedulerGUI.ViewModels
 {
     /// <summary>
-    /// <see cref="PlotWindowViewModel"/> provides a View-Model for the <see cref="SchedulerGUI.Views.PlotWindow"/> view.
+    /// <see cref="PlotWindowViewModel"/> provides a View-Model for the <see cref="Views.PlotWindow"/> view.
     /// </summary>
     public class PlotWindowViewModel : ViewModelBase
     {
@@ -28,13 +29,14 @@ namespace SchedulerGUI.ViewModels
         private IList<object> selectedAccelerator;
         private IList<object> selectedClockSpeed;
         private IList<object> selectedNumCores;
+        private IList<object> selectedProfile;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlotWindowViewModel"/> class.
         /// </summary>
         public PlotWindowViewModel()
         {
-            this.Plot = new AESGraphViewModel();
+            this.Plot = new ProfileGraphViewModel();
 
             using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
@@ -42,15 +44,21 @@ namespace SchedulerGUI.ViewModels
                 this.Authors = new ObservableCollection<string>(summarizer.GetAllTestAuthors());
                 this.Platforms = new ObservableCollection<string>(summarizer.GetAllTestedPlatforms());
                 this.Providers = new ObservableCollection<string>(summarizer.GetAllTestedProviders());
-                this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncyptorProfile.AcceleratorType)));
+                this.Accelerators = new ObservableCollection<string>(Enum.GetNames(typeof(AESEncryptorProfile.AcceleratorType)));
                 this.ClockSpeeds = new ObservableCollection<int>(summarizer.GetAllClockSpeeds().OrderBy(x => x));
                 this.NumCores = new ObservableCollection<int>(summarizer.GetAllNumCores().OrderBy(x => x));
+                this.Profiles = new ObservableCollection<string>(Enum.GetNames(typeof(ProfileType)));
             }
 
             this.FilterSelectionChangedCommand = new RelayCommand<SelectedItemsChangedEventArgs>(this.DropdownSelectionChangedHandler);
 
             this.GeneratePlot();
         }
+
+        /// <summary>
+        /// Gets a listing of available profile types.
+        /// </summary>
+        public ObservableCollection<string> Profiles { get; }
 
         /// <summary>
         /// Gets a listing of available authors.
@@ -101,6 +109,15 @@ namespace SchedulerGUI.ViewModels
         {
             get => this.selectedOption;
             set => this.SetAndUpdatePlot(() => this.SelectedOption, ref this.selectedOption, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the selected profile type to display data for.
+        /// </summary>
+        public IList<object> SelectedProfile
+        {
+            get => this.selectedProfile;
+            set => this.SetAndUpdatePlot(() => this.SelectedProfile, ref this.selectedProfile, value);
         }
 
         /// <summary>
@@ -160,7 +177,7 @@ namespace SchedulerGUI.ViewModels
         /// <summary>
         /// Gets the generated AES plot.
         /// </summary>
-        public AESGraphViewModel Plot { get; }
+        public ProfileGraphViewModel Plot { get; }
 
         private void SetAndUpdatePlot<T>(Expression<Func<T>> propertyExpression, ref T field, T newValue)
         {
@@ -173,58 +190,77 @@ namespace SchedulerGUI.ViewModels
             using (var context = SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>())
             {
                 var summarizer = new SchedulingSummarizer(context);
-                var rawData = context.AESProfiles.AsEnumerable();
 
-                // Include platform filters
-                if (this.SelectedPlatform?.Count > 0)
-                {
-                    rawData = rawData
-                        .Where(a => this.SelectedPlatform.Contains(a.PlatformName));
-                }
+                // start with default data
+                IEnumerable<IByteStreamProcessor> profileData = new List<IByteStreamProcessor>();
+                var rawCompressionData = context.CompressorProfiles.AsEnumerable();
+                var rawAESData = context.AESProfiles.AsEnumerable();
 
                 // Include provider filters
                 if (this.SelectedProvider?.Count > 0)
                 {
-                    rawData = rawData
+                    rawAESData = rawAESData
                         .Where(a => this.SelectedProvider.Contains(a.ProviderName));
-                }
-
-                // Include author filters
-                if (this.SelectedAuthor?.Count > 0)
-                {
-                    rawData = rawData
-                        .Where(a => this.SelectedAuthor.Contains(a.Author));
                 }
 
                 // Include accelerator filters
                 if (this.SelectedAccelerator?.Count > 0)
                 {
-                    rawData = rawData
+                    rawAESData = rawAESData
                         .Where(a => this.SelectedAccelerator.Contains(a.PlatformAccelerator.ToString()));
+                }
+
+                // include selected profile filters
+                if (this.SelectedProfile?.Count > 1)
+                {
+                    profileData = rawAESData;
+                    profileData = profileData.Concat(rawCompressionData);
+                }
+                else if (this.SelectedProfile?.Count > 0 && this.SelectedProfile.Contains(ProfileType.AES.ToString()))
+                {
+                    profileData = rawAESData;
+                }
+                else if (this.SelectedProfile?.Count == 1 && this.SelectedProfile.Contains(ProfileType.LZ4.ToString()))
+                {
+                    profileData = rawCompressionData;
+                }
+
+                // Include platform filters
+                if (this.SelectedPlatform?.Count > 0)
+                {
+                    profileData = profileData
+                        .Where(a => this.SelectedPlatform.Contains(a.PlatformName));
+                }
+
+                // Include author filters
+                if (this.SelectedAuthor?.Count > 0)
+                {
+                    profileData = profileData
+                        .Where(a => this.SelectedAuthor.Contains(a.Author));
                 }
 
                 // Include speed filters
                 if (this.SelectedClockSpeed?.Count > 0)
                 {
-                    rawData = rawData
+                    profileData = profileData
                         .Where(a => this.SelectedClockSpeed.Contains(a.TestedFrequency));
                 }
 
                 // Include core count filters
                 if (this.SelectedNumCores?.Count > 0)
                 {
-                    rawData = rawData
+                    profileData = profileData
                         .Where(a => this.SelectedNumCores.Contains(a.NumCores));
                 }
 
                 switch (this.SelectedOption)
                 {
                     case PlotOption.Raw:
-                        this.Plot.DisplayedData = rawData.ToList();
+                        this.Plot.DisplayedData = profileData.ToList();
                         break;
 
                     case PlotOption.Summarized:
-                        this.Plot.DisplayedData = summarizer.SummarizeResults(rawData).ToList();
+                        this.Plot.DisplayedData = summarizer.SummarizeDeviceResults(profileData).ToList();
                         break;
                 }
             }

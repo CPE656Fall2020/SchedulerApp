@@ -38,8 +38,8 @@
         <controlviews:Popup />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type controlvms:AESGraphViewModel}">
-        <controlviews:AESGraphControl />
+    <DataTemplate DataType="{x:Type controlvms:ProfileGraphViewModel}">
+        <controlviews:ProfileGraphControl />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type controlvms:EditControlViewModel}">
@@ -50,11 +50,18 @@
         <controlviews:HistoryGraph />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModel}">
+    <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModelAES}">
         <controlviews:DevicePickerControl />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type controlvms:DevicePickerViewModelCompression}">
+        <controlviews:DevicePickerControl />
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type controlvms:EditBatteryControlViewModel}">
         <controlviews:EditBatteryControl />
-    </DataTemplate>    <DataTemplate DataType="{x:Type controlvms:EditSolarCellControlViewModel}">
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type controlvms:EditSolarCellControlViewModel}">
         <controlviews:EditSolarCellControl />
     </DataTemplate></ResourceDictionary>
