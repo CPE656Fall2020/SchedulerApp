@@ -140,8 +140,12 @@ namespace SchedulerGUI.ViewModels.Controls
         {
             foreach (PassOrbit pass in this.Passes)
             {
-                IPassPhase sunlightPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Sunlight);
+                var sunlightPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Sunlight);
                 sunlightPhase.TotalEnergyUsed = -1 * this.solarPanel.EffectivePowerW * sunlightPhase.Duration.TotalSeconds;
+
+                // Simulate 80% of the power being automatically allocated to the mission.
+                var missionPhase = pass.PassPhases.First(p => p.PhaseName == Enums.PhaseType.Mission);
+                missionPhase.TotalEnergyUsed = Math.Abs(0.80 * sunlightPhase.TotalEnergyUsed);
             }
 
             this.RaisePropertyChanged(nameof(this.Passes));
