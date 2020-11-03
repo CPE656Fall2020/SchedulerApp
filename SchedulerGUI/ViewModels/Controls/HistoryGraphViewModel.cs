@@ -105,6 +105,7 @@ namespace SchedulerGUI.ViewModels.Controls
                         Title = pass.Name,
                         Color = colors[colorIndex],
                         TrackerFormatString = $"{{0}}\n{{2}}\n{phase.PhaseName} Phase\n{{4}} Joules",
+                        LineStyle = (phase.TotalEnergyUsed != 0) ? LineStyle.Solid : LineStyle.Dot,
                     };
 
                     scatterSeries.Points.Add(new DataPoint(

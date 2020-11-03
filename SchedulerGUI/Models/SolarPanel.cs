@@ -25,7 +25,7 @@ namespace SchedulerGUI.Models
         /// <summary>
         /// Gets or sets the multiplicative scale factor used to derate the solar panel's power output.
         /// </summary>
-        public int DeratedPct { get; set; } = 100;
+        public int DeratedPct { get; set; } = 75;
 
         /// <summary>
         /// Gets the output power in watts.
