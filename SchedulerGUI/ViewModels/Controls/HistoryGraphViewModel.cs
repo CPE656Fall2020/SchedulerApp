@@ -113,6 +113,7 @@ namespace SchedulerGUI.ViewModels.Controls
 
                     cumulativeEnergy += -1 * phase.TotalEnergyUsed;
                     cumulativeEnergy = Math.Min(cumulativeEnergy, this.Battery.EffectiveCapacityJ);
+                    cumulativeEnergy = Math.Max(0, cumulativeEnergy);
 
                     scatterSeries.Points.Add(new DataPoint(
                         DateTimeAxis.ToDouble(phase.EndTime),
