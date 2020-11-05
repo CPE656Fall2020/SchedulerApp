@@ -4,14 +4,14 @@
       "src": [
         {
           "files": [ "**.csproj" ],
-          "exclude": [ "**/bin/**", "**/obj/**" ],
+          "exclude": [ "**/bin/**", "**/obj/**", "externals/**" ],
           "src": "../"
         }
       ],
       "dest": "api",
-	  "filter": "filter.yml",
+      "filter": "filter.yml",
       "disableGitFeatures": false,
-      "disableDefaultFilter": false
+      "disableDefaultFilter": false,
     }
   ],
   "build": {
@@ -38,6 +38,10 @@
         ]
       }
     ],
+    "globalMetadata": {
+        "_appLogoPath": "images/satellite_ico.png",
+        "_appFaviconPath": "images/satellite_small.ico"
+    },
     "overwrite": [
       {
         "files": [
