@@ -199,6 +199,8 @@ namespace SchedulerDatabase
                 /* Static description */
                 var result = new AESEncryptorProfile()
                 {
+                    AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
+                    PlatformAccelerator = bucket.Value.First().PlatformAccelerator,
                     TestedAESBitLength = bucket.Value.First().TestedAESBitLength,
                     TestedAESMode = bucket.Value.First().TestedAESMode,
                 };
