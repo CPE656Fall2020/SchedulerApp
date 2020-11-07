@@ -1,4 +1,4 @@
-# Welcome the the UAH Satellite Power Scheduling Application Design Manual!
+# Welcome to the UAH Satellite Power Scheduling Application Design Manual!
 
 Designed by the CPE656, Fall 2020 Team:
 - Alex Dillon

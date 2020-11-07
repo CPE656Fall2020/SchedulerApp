@@ -4,7 +4,7 @@
 The Power Scheduling System is developed in C#/WPF, targetting .NET Framework 4.7. The following environment is recommended for development:
 - Microsoft Visual Studio 2019 [Community Edition or better]
 - Git for Windows
-  - *The binaries are automatically versioned from Git tag number, without system Git installed, the compilation process will fail.*
+  - *The binaries are automatically versioned from the tag number in Git, without Git installed at the system level, the compilation process will fail.*
 - \[Recommended] Microsoft Excel for use in data collection.
 - \[Recommended] A text editor for writing JSON files
 - \[Recommended] DB Browser for SQLite, if modifications are being made to the embedded database system.
@@ -35,7 +35,7 @@ We are using the MVVMLight toolkit to aid in reducing MVVM boilerplate code. MVV
 
 ## Code Styling
 In order to maintain high code quality, a uniform style is enforced on all C# code. To aid in this, the StyleCop.Analyzers NuGet package is used for compile-time source code validation. In large, the default style rules are used with only minor exceptions. When code quality problems are detected, Warning messages are emitted during the compilation process, and should be corrected. As a convenience, we do not treat Warnings as Errors that would half the compilation process, but all warnings should be resolved or dismissed prior to committing the code. Some of the major style points are:
-- All public elements must be fully XMLdoc'ed. This includes ```protected```. The tool does not require xmldoc for ```private``` members, since that's a low-level implementation detail, however, they can be freely added if beneficial.
+- All public elements must be fully XMLdoc'ed. This includes ```protected```. The tool does not require xmldoc for ```private``` members, since they represent a low-level implementation detail. However, annotations can be freely added if beneficial, regardless.
 - Naming, spacing, and capitalization standards
 - Ordering (Fields, Properties, and Methods, in that order, each sorted within by `public`, `protected`, `private`).
 - Inclusion of this `this` prefix for class-scoped references.
