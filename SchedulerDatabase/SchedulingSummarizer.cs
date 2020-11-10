@@ -247,35 +247,6 @@ namespace SchedulerDatabase
             return allSummarizedResults;
         }
 
-        /// <summary>
-        /// Computes summarized results for each unique test case provided in a collection of raw profiles.
-        /// </summary>
-        /// <param name="profiles">A collection of raw <see cref="IByteStreamProcessor"/>.</param>
-        /// <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
-        public List<IByteStreamProcessor> SummarizeDeviceResults(IEnumerable<IByteStreamProcessor> profiles)
-        {
-            var buckets = this.GroupIntoBuckets(profiles);
-            var allSummarizedResults = new List<IByteStreamProcessor>();
-
-            // For all related tests in each bucket, compute an average.
-            foreach (var bucket in buckets)
-            {
-                var count = bucket.Value.Count;
-                var summation = this.CreateSummation(bucket.Value, new CompressorProfile());
-
-                /* Static description */
-                var result = new CompressorProfile();
-                result = (CompressorProfile)this.GenerateResult(bucket.Value.First(), result);
-
-                /* Averaged results */
-                result = (CompressorProfile)this.AddSummationToResult(summation, result, count);
-
-                allSummarizedResults.Add(result);
-            }
-
-            return allSummarizedResults;
-        }
-
         private IByteStreamProcessor GenerateResult(IByteStreamProcessor bucketValue, IByteStreamProcessor result)
         {
             result.ProfileId = Guid.NewGuid();

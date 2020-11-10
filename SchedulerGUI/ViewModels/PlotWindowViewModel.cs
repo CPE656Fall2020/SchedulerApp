@@ -345,7 +345,9 @@ namespace SchedulerGUI.ViewModels
                         break;
 
                     case PlotOption.Summarized:
-                        this.Plot.DisplayedData = summarizer.SummarizeDeviceResults(profileData).ToList();
+                        var summarizedAES = summarizer.SummarizeDeviceResults(profileData.OfType<AESEncryptorProfile>());
+                        var summarizedLZ4 = summarizer.SummarizeDeviceResults(profileData.OfType<CompressorProfile>());
+                        this.Plot.DisplayedData = Enumerable.Concat<IByteStreamProcessor>(summarizedAES, summarizedLZ4).ToList();
                         break;
                 }
             }
