@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -371,12 +372,11 @@ namespace SchedulerGUI.ViewModels
 
         private void SaveCommand(PassOrbit passData)
         {
+            this.RunSchedule();
             var currentIndex = this.Passes.IndexOf(this.SelectedPass);
             this.Passes[currentIndex] = passData;
 
             this.SelectedPass = passData;
-
-            this.RunSchedule();
         }
 
         private void OpenBatteryEditorHandler()
@@ -497,7 +497,7 @@ namespace SchedulerGUI.ViewModels
             // PassOrbit and its phases don't use INotifyPropChanged to bubble up notifications
             // and since this is the only place it will ever change, just re-render the entire
             // list at once instead of piecemeal anyways.
-            System.Windows.Data.CollectionViewSource.GetDefaultView(this.Passes).Refresh();
+            CollectionViewSource.GetDefaultView(this.Passes).Refresh();
 
             var hasWarnings = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning);
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);

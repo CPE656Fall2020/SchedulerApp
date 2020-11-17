@@ -22,6 +22,19 @@ namespace SchedulerGUI.Models
             this.PhaseName = phaseName;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PassPhase"/> class.
+        /// </summary>
+        /// <param name="passPhaseToCopy">Phase to copy.</param>
+        public PassPhase(IPassPhase passPhaseToCopy)
+        {
+            this.StartTime = passPhaseToCopy.StartTime;
+            this.EndTime = passPhaseToCopy.EndTime;
+            this.PhaseName = passPhaseToCopy.PhaseName;
+            this.TotalEnergyUsed = passPhaseToCopy.TotalEnergyUsed;
+            this.MaxEnergyUsed = passPhaseToCopy.MaxEnergyUsed;
+        }
+
         /// <inheritdoc/>
         public TimeSpan Duration => this.EndTime - this.StartTime;
 
@@ -41,7 +54,7 @@ namespace SchedulerGUI.Models
         public double MaxEnergyUsed { get; private set; }
 
         /// <inheritdoc/>
-        public void SetRandomValues(Random random, double maxEnergy, long? maxBytes = null)
+        public void SetRandomValues(double randomDouble, double maxEnergy, long? maxBytes = null)
         {
             if (this.PhaseName == PhaseType.Sunlight)
             {
@@ -49,7 +62,7 @@ namespace SchedulerGUI.Models
             }
 
             this.MaxEnergyUsed = Math.Round(maxEnergy, 3);
-            this.TotalEnergyUsed = Math.Round(random.NextDouble() * this.MaxEnergyUsed, 3);
+            this.TotalEnergyUsed = Math.Round(randomDouble * this.MaxEnergyUsed, 3);
         }
     }
 }

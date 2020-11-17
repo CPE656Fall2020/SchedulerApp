@@ -16,6 +16,7 @@ namespace SchedulerGUI.ViewModels.Controls
         private IPassPhase sunlightPhase;
         private IPassPhase missionPhase;
         private IPassPhase datalinkPhase;
+        private PassOrbit originalPass;
         private EncryptionPassPhase encryptionPhase;
 
         /// <summary>
@@ -25,18 +26,13 @@ namespace SchedulerGUI.ViewModels.Controls
         /// <param name="editComplete">The action to execute when the edit is completed.</param>
         public EditControlViewModel(PassOrbit pass, Action<PassOrbit> editComplete)
         {
-            this.Pass = pass;
+            this.originalPass = pass;
             this.InitPhases();
 
             this.SaveCallback = editComplete;
             this.SaveCommand = new RelayCommand(this.SaveCommandHandler);
             this.CancelCommand = new RelayCommand(this.CancelCommandHandler);
         }
-
-        /// <summary>
-        /// Gets the <see cref="PassOrbit"/> that is currently being edited.
-        /// </summary>
-        public PassOrbit Pass { get; }
 
         /// <summary>
         /// Gets or sets the sunlight phase.
@@ -93,22 +89,22 @@ namespace SchedulerGUI.ViewModels.Controls
 
         private void InitPhases()
         {
-            this.SunlightPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight);
-            this.MissionPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission);
-            this.EncryptionPhase = (EncryptionPassPhase)this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption);
-            this.DatalinkPhase = this.Pass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink);
+            this.SunlightPhase = new PassPhase(this.originalPass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Sunlight));
+            this.MissionPhase = new PassPhase(this.originalPass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Mission));
+            this.EncryptionPhase = new EncryptionPassPhase((EncryptionPassPhase)this.originalPass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Encryption));
+            this.DatalinkPhase = new PassPhase(this.originalPass.PassPhases.First(x => x.PhaseName == Enums.PhaseType.Datalink));
         }
 
         private void SaveCommandHandler()
         {
-            this.Pass.PassPhases.Clear();
+            this.originalPass.PassPhases.Clear();
 
-            this.Pass.PassPhases.Add(this.SunlightPhase);
-            this.Pass.PassPhases.Add(this.MissionPhase);
-            this.Pass.PassPhases.Add(this.EncryptionPhase);
-            this.Pass.PassPhases.Add(this.DatalinkPhase);
+            this.originalPass.PassPhases.Add(this.SunlightPhase);
+            this.originalPass.PassPhases.Add(this.MissionPhase);
+            this.originalPass.PassPhases.Add(this.EncryptionPhase);
+            this.originalPass.PassPhases.Add(this.DatalinkPhase);
 
-            this.SaveCallback(this.Pass);
+            this.SaveCallback(this.originalPass);
         }
     }
 }

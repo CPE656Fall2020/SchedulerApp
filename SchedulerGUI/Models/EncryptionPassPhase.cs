@@ -23,6 +23,21 @@ namespace SchedulerGUI.Models
             this.Duration = endTime - startTime;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncryptionPassPhase"/> class.
+        /// </summary>
+        /// <param name="passPhaseToCopy">Phase to copy.</param>
+        public EncryptionPassPhase(EncryptionPassPhase passPhaseToCopy)
+        {
+            this.StartTime = passPhaseToCopy.StartTime;
+            this.EndTime = passPhaseToCopy.EndTime;
+            this.PhaseName = passPhaseToCopy.PhaseName;
+            this.TotalEnergyUsed = passPhaseToCopy.TotalEnergyUsed;
+            this.MaxEnergyUsed = passPhaseToCopy.MaxEnergyUsed;
+            this.BytesToEncrypt = passPhaseToCopy.BytesToEncrypt;
+            this.MaxBytes = passPhaseToCopy.MaxBytes;
+        }
+
         /// <inheritdoc/>
         public TimeSpan Duration { get; set; }
 
@@ -52,11 +67,11 @@ namespace SchedulerGUI.Models
         public long BytesToEncrypt { get; set; }
 
         /// <inheritdoc/>
-        public void SetRandomValues(Random random, double maxEnergy, long? maxBytes = null)
+        public void SetRandomValues(double randomDouble, double maxEnergy, long? maxBytes = null)
         {
             this.MaxBytes = (int)maxBytes;
 
-            this.BytesToEncrypt = (long)(random.NextDouble() * this.MaxBytes) * 10;
+            this.BytesToEncrypt = (long)(randomDouble * this.MaxBytes) * 10;
 
             // The energy consumption will be a factor of the fake number of bytes scheduled with the fake scheduler.
             this.MaxEnergyUsed = 0;
