@@ -336,7 +336,10 @@ namespace SchedulerGUI.ViewModels
         /// </summary>
         public void InitEditControl()
         {
-            this.EditControlViewModel = new EditControlViewModel(this.SelectedPass, this.SaveCommand);
+            if (this.SelectedPass != null)
+            {
+                this.EditControlViewModel = new EditControlViewModel(this.SelectedPass, this.SaveCommand);
+            }
         }
 
         private void Init()
@@ -370,13 +373,18 @@ namespace SchedulerGUI.ViewModels
             Task.Run(() => SimpleIoc.Default.GetInstanceWithoutCaching<SchedulerContext>().AESProfiles.Count());
         }
 
-        private void SaveCommand(PassOrbit passData)
+        private void UpdateEditControlVM(PassOrbit passData)
         {
-            this.RunSchedule();
             var currentIndex = this.Passes.IndexOf(this.SelectedPass);
             this.Passes[currentIndex] = passData;
 
             this.SelectedPass = passData;
+        }
+
+        private void SaveCommand(PassOrbit passData)
+        {
+            this.RunSchedule();
+            this.UpdateEditControlVM(passData);
         }
 
         private void OpenBatteryEditorHandler()
@@ -499,6 +507,8 @@ namespace SchedulerGUI.ViewModels
             // list at once instead of piecemeal anyways.
             CollectionViewSource.GetDefaultView(this.Passes).Refresh();
 
+            this.InitEditControl();
+
             var hasWarnings = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Warning);
             var hasError = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Error);
             var hasFatal = this.LastSolution.Problems.Exists(x => x.Level == ScheduleSolution.SchedulerProblem.SeverityLevel.Fatal);
@@ -537,8 +547,10 @@ namespace SchedulerGUI.ViewModels
 
         private void SaveScheduleHandler()
         {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Scheduler Json Documents|*.sjn";
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Scheduler Json Documents|*.sjn",
+            };
 
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -561,8 +573,10 @@ namespace SchedulerGUI.ViewModels
 
         private void OpenScheduleHandler()
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Scheduler Json Documents|*.sjn";
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Scheduler Json Documents|*.sjn",
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -593,8 +607,10 @@ namespace SchedulerGUI.ViewModels
 
         private void ExportReportXPSHandler()
         {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Microsoft XPS Document|*.xps";
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Microsoft XPS Document|*.xps",
+            };
 
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -609,8 +625,10 @@ namespace SchedulerGUI.ViewModels
 
         private void ExportDatabaseHandler()
         {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Database|*.db";
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Database|*.db",
+            };
 
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -621,8 +639,10 @@ namespace SchedulerGUI.ViewModels
 
         private void ImportDatabaseHandler()
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Database|*.db";
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "Database|*.db",
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {

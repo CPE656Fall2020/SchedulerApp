@@ -32,7 +32,6 @@ namespace SchedulerGUI.Models
             this.EndTime = passPhaseToCopy.EndTime;
             this.PhaseName = passPhaseToCopy.PhaseName;
             this.TotalEnergyUsed = passPhaseToCopy.TotalEnergyUsed;
-            this.MaxEnergyUsed = passPhaseToCopy.MaxEnergyUsed;
         }
 
         /// <inheritdoc/>
@@ -51,9 +50,6 @@ namespace SchedulerGUI.Models
         public double TotalEnergyUsed { get; set; }
 
         /// <inheritdoc/>
-        public double MaxEnergyUsed { get; private set; }
-
-        /// <inheritdoc/>
         public void SetRandomValues(double randomDouble, double maxEnergy, long? maxBytes = null)
         {
             if (this.PhaseName == PhaseType.Sunlight)
@@ -61,8 +57,8 @@ namespace SchedulerGUI.Models
                 maxEnergy *= -1.0;
             }
 
-            this.MaxEnergyUsed = Math.Round(maxEnergy, 3);
-            this.TotalEnergyUsed = Math.Round(randomDouble * this.MaxEnergyUsed, 3);
+            maxEnergy = Math.Round(maxEnergy, 3);
+            this.TotalEnergyUsed = Math.Round(randomDouble * maxEnergy, 3);
         }
     }
 }

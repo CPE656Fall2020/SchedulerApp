@@ -33,9 +33,7 @@ namespace SchedulerGUI.Models
             this.EndTime = passPhaseToCopy.EndTime;
             this.PhaseName = passPhaseToCopy.PhaseName;
             this.TotalEnergyUsed = passPhaseToCopy.TotalEnergyUsed;
-            this.MaxEnergyUsed = passPhaseToCopy.MaxEnergyUsed;
             this.BytesToEncrypt = passPhaseToCopy.BytesToEncrypt;
-            this.MaxBytes = passPhaseToCopy.MaxBytes;
         }
 
         /// <inheritdoc/>
@@ -53,14 +51,6 @@ namespace SchedulerGUI.Models
         /// <inheritdoc/>
         public double TotalEnergyUsed { get; set; }
 
-        /// <inheritdoc/>
-        public double MaxEnergyUsed { get; private set; }
-
-        /// <summary>
-        /// Gets max number of bytes to encrypt during phase.
-        /// </summary>
-        public long MaxBytes { get; private set; }
-
         /// <summary>
         /// Gets or sets number of bytes to encrypt during phase.
         /// </summary>
@@ -69,12 +59,9 @@ namespace SchedulerGUI.Models
         /// <inheritdoc/>
         public void SetRandomValues(double randomDouble, double maxEnergy, long? maxBytes = null)
         {
-            this.MaxBytes = (int)maxBytes;
-
-            this.BytesToEncrypt = (long)(randomDouble * this.MaxBytes) * 10;
+            this.BytesToEncrypt = (long)(randomDouble * (int)maxBytes) * 10;
 
             // The energy consumption will be a factor of the fake number of bytes scheduled with the fake scheduler.
-            this.MaxEnergyUsed = 0;
             this.TotalEnergyUsed = 0;
         }
     }
