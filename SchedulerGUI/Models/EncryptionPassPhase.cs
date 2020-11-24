@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using SchedulerGUI.Enums;
 using SchedulerGUI.Interfaces;
 
@@ -15,6 +16,7 @@ namespace SchedulerGUI.Models
         /// <param name="startTime">Start of phase.</param>
         /// <param name="endTime">End of phase.</param>
         /// <param name="name">Name of phase.</param>
+        [JsonConstructor]
         public EncryptionPassPhase(DateTime startTime, DateTime endTime, PhaseType name)
         {
             this.StartTime = startTime;
