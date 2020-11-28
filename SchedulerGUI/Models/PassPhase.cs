@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using SchedulerGUI.Enums;
 using SchedulerGUI.Interfaces;
 
@@ -15,11 +16,24 @@ namespace SchedulerGUI.Models
         /// <param name="startTime">Start of phase.</param>
         /// <param name="endTime">End of phase.</param>
         /// <param name="phaseName">Name of phase.</param>
+        [JsonConstructor]
         public PassPhase(DateTime startTime, DateTime endTime, PhaseType phaseName)
         {
             this.StartTime = startTime;
             this.EndTime = endTime;
             this.PhaseName = phaseName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PassPhase"/> class.
+        /// </summary>
+        /// <param name="passPhaseToCopy">Phase to copy.</param>
+        public PassPhase(IPassPhase passPhaseToCopy)
+        {
+            this.StartTime = passPhaseToCopy.StartTime;
+            this.EndTime = passPhaseToCopy.EndTime;
+            this.PhaseName = passPhaseToCopy.PhaseName;
+            this.TotalEnergyUsed = passPhaseToCopy.TotalEnergyUsed;
         }
 
         /// <inheritdoc/>
@@ -38,18 +52,15 @@ namespace SchedulerGUI.Models
         public double TotalEnergyUsed { get; set; }
 
         /// <inheritdoc/>
-        public double MaxEnergyUsed { get; private set; }
-
-        /// <inheritdoc/>
-        public void SetRandomValues(Random random, double maxEnergy, long? maxBytes = null)
+        public void SetRandomValues(double randomDouble, double maxEnergy, long? maxBytes = null)
         {
             if (this.PhaseName == PhaseType.Sunlight)
             {
                 maxEnergy *= -1.0;
             }
 
-            this.MaxEnergyUsed = Math.Round(maxEnergy, 3);
-            this.TotalEnergyUsed = Math.Round(random.NextDouble() * this.MaxEnergyUsed, 3);
+            maxEnergy = Math.Round(maxEnergy, 3);
+            this.TotalEnergyUsed = Math.Round(randomDouble * maxEnergy, 3);
         }
     }
 }

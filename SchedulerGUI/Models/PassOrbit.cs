@@ -78,25 +78,25 @@ namespace SchedulerGUI.Models
 
             // Do sunlight
             var sunlight = new PassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Sunlight);
-            sunlight.SetRandomValues(random, phaseEnergy);
+            sunlight.SetRandomValues(random.NextDouble(), phaseEnergy);
             startTime = startTime.AddSeconds(duration);
             this.PassPhases.Add(sunlight);
 
             // Do mission
             var mission = new PassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Mission);
-            mission.SetRandomValues(random, phaseEnergy);
+            mission.SetRandomValues(random.NextDouble(), phaseEnergy);
             startTime = startTime.AddSeconds(duration);
             this.PassPhases.Add(mission);
 
-            // Do encyrption
+            // Do encryption
             EncryptionPassPhase encryptionPhase = new EncryptionPassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Encryption);
-            encryptionPhase.SetRandomValues(random, phaseEnergy, random.Next());
+            encryptionPhase.SetRandomValues(random.NextDouble(), phaseEnergy, random.Next());
             startTime = startTime.AddSeconds(duration);
             this.PassPhases.Add(encryptionPhase);
 
             // Do datalink
             var datalink = new PassPhase(startTime, startTime.AddSeconds(duration), PhaseType.Datalink);
-            datalink.SetRandomValues(random, phaseEnergy);
+            datalink.SetRandomValues(random.NextDouble(), phaseEnergy);
             startTime = startTime.AddSeconds(duration);
             this.PassPhases.Add(datalink);
         }

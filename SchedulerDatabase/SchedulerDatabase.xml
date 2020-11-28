@@ -503,12 +503,5 @@
             <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.CompressorProfile"/>.</param>
             <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
         </member>
-        <member name="M:SchedulerDatabase.SchedulingSummarizer.SummarizeDeviceResults(System.Collections.Generic.IEnumerable{SchedulerDatabase.Models.IByteStreamProcessor})">
-            <summary>
-            Computes summarized results for each unique test case provided in a collection of raw profiles.
-            </summary>
-            <param name="profiles">A collection of raw <see cref="T:SchedulerDatabase.Models.IByteStreamProcessor"/>.</param>
-            <returns>A collection of each unique test case present in the input, containing averaged results for each parameter.</returns>
-        </member>
     </members>
 </doc>

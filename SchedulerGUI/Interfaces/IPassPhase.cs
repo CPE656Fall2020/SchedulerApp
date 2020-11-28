@@ -34,16 +34,11 @@ namespace SchedulerGUI.Interfaces
         double TotalEnergyUsed { get; set; }
 
         /// <summary>
-        /// Gets max energy of phase.
-        /// </summary>
-        double MaxEnergyUsed { get; }
-
-        /// <summary>
         /// Sets properties with randomly-generated values.
         /// </summary>
-        /// <param name="random">Random number generator.</param>
+        /// <param name="randomDouble">Random double.</param>
         /// <param name="maxEnergy">Max energy allotted for phase.</param>
         /// <param name="maxBytes">Max bytes alloted for encryption phase.</param>
-        void SetRandomValues(Random random, double maxEnergy, long? maxBytes = null);
+        void SetRandomValues(double randomDouble, double maxEnergy, long? maxBytes = null);
     }
 }
