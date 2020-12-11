@@ -201,6 +201,7 @@ namespace SchedulerDatabase
                 {
                     AdditionalUniqueInfo = bucket.Value.First().AdditionalUniqueInfo,
                     PlatformAccelerator = bucket.Value.First().PlatformAccelerator,
+                    ProviderName = bucket.Value.First().ProviderName,
                     TestedAESBitLength = bucket.Value.First().TestedAESBitLength,
                     TestedAESMode = bucket.Value.First().TestedAESMode,
                 };
