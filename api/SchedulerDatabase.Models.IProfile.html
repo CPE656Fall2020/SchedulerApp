@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IProfile
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IProfile
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../images/satellite_small.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/satellite_ico.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SchedulerDatabase.Models.IProfile">
+  
+  
+  <h1 id="SchedulerDatabase_Models_IProfile" data-uid="SchedulerDatabase.Models.IProfile" class="text-break">Interface IProfile
+  </h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="SchedulerDatabase.Models.IProfile.html">IProfile</a> describes a generic profile for a component of the scheduling system.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SchedulerDatabase.Models.html">SchedulerDatabase.Models</a></h6>
+  <h6><strong>Assembly</strong>: SchedulerDatabase.dll</h6>
+  <h5 id="SchedulerDatabase_Models_IProfile_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IProfile</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerDatabase_Models_IProfile_ComparisonHashString.md&amp;value=---%0Auid%3A%20SchedulerDatabase.Models.IProfile.ComparisonHashString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerDatabase/Models/Interfaces/IProfile.cs/#L45">View Source</a>
+  </span>
+  <a id="SchedulerDatabase_Models_IProfile_ComparisonHashString_" data-uid="SchedulerDatabase.Models.IProfile.ComparisonHashString*"></a>
+  <h4 id="SchedulerDatabase_Models_IProfile_ComparisonHashString" data-uid="SchedulerDatabase.Models.IProfile.ComparisonHashString">ComparisonHashString</h4>
+  <div class="markdown level1 summary"><p>Gets a hash string that can be used to compare different <a class="xref" href="SchedulerDatabase.Models.IProfile.html">IProfile</a>s
+to determine if they both describe the same device, setup, experiment, and intentions.
+Equivalent profiles may be averaged or interpolated together to accomidate for incomplete data sets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string ComparisonHashString { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SchedulerDatabase_Models_IProfile_ComparisonHashString_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Formatting is not relevant here, this value will never be displayed to end users.
+However, it should be treated as a hash value. Identical profiles must always
+produce the same hash, and the likelihood of collisions (identical hashes being produced by
+differing profiles) must be minimized.</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerDatabase_Models_IProfile_FullProfileDescription.md&amp;value=---%0Auid%3A%20SchedulerDatabase.Models.IProfile.FullProfileDescription%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerDatabase/Models/Interfaces/IProfile.cs/#L18">View Source</a>
+  </span>
+  <a id="SchedulerDatabase_Models_IProfile_FullProfileDescription_" data-uid="SchedulerDatabase.Models.IProfile.FullProfileDescription*"></a>
+  <h4 id="SchedulerDatabase_Models_IProfile_FullProfileDescription" data-uid="SchedulerDatabase.Models.IProfile.FullProfileDescription">FullProfileDescription</h4>
+  <div class="markdown level1 summary"><p>Gets a complete description string for this device profile.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string FullProfileDescription { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerDatabase_Models_IProfile_ProfileId.md&amp;value=---%0Auid%3A%20SchedulerDatabase.Models.IProfile.ProfileId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerDatabase/Models/Interfaces/IProfile.cs/#L13">View Source</a>
+  </span>
+  <a id="SchedulerDatabase_Models_IProfile_ProfileId_" data-uid="SchedulerDatabase.Models.IProfile.ProfileId*"></a>
+  <h4 id="SchedulerDatabase_Models_IProfile_ProfileId" data-uid="SchedulerDatabase.Models.IProfile.ProfileId">ProfileId</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the unique identifier for this profile.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Guid ProfileId { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Guid</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerDatabase_Models_IProfile_ShortProfileClassDescription.md&amp;value=---%0Auid%3A%20SchedulerDatabase.Models.IProfile.ShortProfileClassDescription%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerDatabase/Models/Interfaces/IProfile.cs/#L25">View Source</a>
+  </span>
+  <a id="SchedulerDatabase_Models_IProfile_ShortProfileClassDescription_" data-uid="SchedulerDatabase.Models.IProfile.ShortProfileClassDescription*"></a>
+  <h4 id="SchedulerDatabase_Models_IProfile_ShortProfileClassDescription" data-uid="SchedulerDatabase.Models.IProfile.ShortProfileClassDescription">ShortProfileClassDescription</h4>
+  <div class="markdown level1 summary"><p>Gets a short description string for this class of device profile. This description is suitable
+for identifying an entire class of related experiments/profiles, when it is NOT necessary to be
+able to precisely identify the exact run(s) that were conducted. See also <a class="xref" href="SchedulerDatabase.Models.IProfile.html#SchedulerDatabase_Models_IProfile_ShortProfileSpecificDescription">ShortProfileSpecificDescription</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string ShortProfileClassDescription { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerDatabase_Models_IProfile_ShortProfileSpecificDescription.md&amp;value=---%0Auid%3A%20SchedulerDatabase.Models.IProfile.ShortProfileSpecificDescription%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerDatabase/Models/Interfaces/IProfile.cs/#L32">View Source</a>
+  </span>
+  <a id="SchedulerDatabase_Models_IProfile_ShortProfileSpecificDescription_" data-uid="SchedulerDatabase.Models.IProfile.ShortProfileSpecificDescription*"></a>
+  <h4 id="SchedulerDatabase_Models_IProfile_ShortProfileSpecificDescription" data-uid="SchedulerDatabase.Models.IProfile.ShortProfileSpecificDescription">ShortProfileSpecificDescription</h4>
+  <div class="markdown level1 summary"><p>Gets a short description string for this precise experimental run of a device profile. This description includes
+metadata from the experiment such as the name of the test engineer, making it too narrow to be able to describe an entire
+class of related experiments. For a more general description of a device profile see also <a class="xref" href="SchedulerDatabase.Models.IProfile.html#SchedulerDatabase_Models_IProfile_ShortProfileClassDescription">ShortProfileClassDescription</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string ShortProfileSpecificDescription { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerDatabase_Models_IProfile.md&amp;value=---%0Auid%3A%20SchedulerDatabase.Models.IProfile%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerDatabase/Models/Interfaces/IProfile.cs/#L8" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

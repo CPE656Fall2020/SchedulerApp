@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>System Overview </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="System Overview ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../images/satellite_small.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/satellite_ico.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="system-overview">System Overview</h1>
+
+<h2 id="build-tools">Build Tools</h2>
+<p>The Power Scheduling System is developed in C#/WPF, targetting .NET Framework 4.7. The following environment is recommended for development:</p>
+<ul>
+<li>Microsoft Visual Studio 2019 [Community Edition or better]</li>
+<li>Git for Windows
+<ul>
+<li><em>The binaries are automatically versioned from the tag number in Git, without Git installed at the system level, the compilation process will fail.</em></li>
+</ul>
+</li>
+<li>[Recommended] Microsoft Excel for use in data collection.</li>
+<li>[Recommended] A text editor for writing JSON files</li>
+<li>[Recommended] DB Browser for SQLite, if modifications are being made to the embedded database system.</li>
+</ul>
+<h2 id="hosting">Hosting</h2>
+<p>All project components are hosted on GitHub. This documentation is automatically built from the documentation markdown hosted in the <code>/docs</code> folder, and combined with the API Reference manual generated automatically from the embedded xmldoc in the code. This documentation site (that you've found) is hosted with GitHub Pages, and is automatically deployed everytime a commit or Pull Request is merged into <code>master</code>.</p>
+<h2 id="system-design">System Design</h2>
+<p>The Power Scheduling Application consists of three main components, each in its own C# Project File.</p>
+<ul>
+<li><strong>SchedulerGUI</strong> is the main user-interface for the application, and houses the scheduling logic, along with user features. See the <strong>Scheduler GUI Overview</strong> article for details about this component.</li>
+<li><strong>SchedulerImportTools</strong> is a command-line application and series of APIs that allow for importing experimental power profile data from Excel worksheets. This tool is usable stand-alone for bulk imports, and is incorporated into the GUI. See the <strong>Import Tools Overview</strong> article for additional details.</li>
+<li><strong>SchedulerDatabase</strong> is the embedded database component of the application. This project houses all the database abstraction functionality, and programatically describes the schema of the database. This component provides database services to all other aspects of the system. See the <strong>Database Components</strong> article for more details.</li>
+</ul>
+<h2 id="mvvm-paradigm">MVVM Paradigm</h2>
+<p>MVVM, or Model-View-ViewModel is the predominant pattern for WPF/C# UI development. MVVM is somewhat analogous to the common MVC (Model-View-Controller) pattern, although Controllers and ViewModels differ in some meaningful ways.</p>
+<ul>
+<li><strong>Models</strong> are simple classes, with little to no logic added, that describe the &quot;shape&quot; of the data being processed.</li>
+<li><strong>Views</strong> represent the user-interface, and are done purely from a design and user-interaction perspective. In WPF, UIs are designed using XAML (eXtensible Application Markup Lanugage, an XML derivative), a declarative markup language. These XAML Views define the overall appearance/style and structure of the UI, but contain no data. Data is loaded from Models using dynamic bindings at runtime.</li>
+<li><strong>ViewModels</strong> are the magic component that houses the translation and processing logic needed to create and process <strong>Models</strong> and expose them to <strong>Views</strong>
+<ul>
+<li>In MVVM, each View has a ViewModel.</li>
+<li>WPF also defines &quot;code-behind&quot;, which is the <code>MyView.xaml.cs</code> file, which allows for C# code that directly interacts with the View. This substantially breaks the MVVM paradigm of loose binding between C# logic code and displayed XAML UIs, and should only be used if absolutely necessary. All application logic code should be stored in <code>MyViewModel.cs</code> instead, and bound dynamically.</li>
+</ul>
+</li>
+</ul>
+<p>We are using &quot;View-Model first&quot; navigation, which is a style of MVVM that dictates that all navigation is handled with ViewModels, by ViewModels. This allows for ViewModels to never directly reference any View in code, enforcing strong seperation of concerns. Of course, these Views and ViewModels are 1-to-1 and have to be dynamically bound at runtime, which is handled by the WPF DataContext system. However, thse mapping must be defined in XAML once, in the  <code>Styles\ViewModelTemplates.xaml</code> file. This is used by the WPF system to initialize global Data Templates, so whenever a ViewModel requests navigation or display of a new ViewModel and associated data, the display system can implicitly create the correct view.</p>
+<p>For a good outside reference on ViewModel First MVVM, see <a href="https://www.wintellect.com/model-view-viewmodel-mvvm-explained/">Model-View-ViewModel-MVVM-Explained</a>.</p>
+<p>We are using the MVVMLight toolkit to aid in reducing MVVM boilerplate code. MVVMLight makes the property changed notifications substantially easier, and provides ready-to-use implementations of common requirements like <code>RelayCommand</code>. MVVMLight also provides basic dependency-injection functionality, which is used for some top-level ViewModel service registrations. Make good use of MVVMLight - it will make the code substantially easier and quicker to develop!</p>
+<h2 id="code-styling">Code Styling</h2>
+<p>In order to maintain high code quality, a uniform style is enforced on all C# code. To aid in this, the StyleCop.Analyzers NuGet package is used for compile-time source code validation. In large, the default style rules are used with only minor exceptions. When code quality problems are detected, Warning messages are emitted during the compilation process, and should be corrected. As a convenience, we do not treat Warnings as Errors that would half the compilation process, but all warnings should be resolved or dismissed prior to committing the code. Some of the major style points are:</p>
+<ul>
+<li>All public elements must be fully XMLdoc'ed. This includes <code>protected</code>. The tool does not require xmldoc for <code>private</code> members, since they represent a low-level implementation detail. However, annotations can be freely added if beneficial, regardless.</li>
+<li>Naming, spacing, and capitalization standards</li>
+<li>Ordering (Fields, Properties, and Methods, in that order, each sorted within by <code>public</code>, <code>protected</code>, <code>private</code>).</li>
+<li>Inclusion of this <code>this</code> prefix for class-scoped references.</li>
+<li>See StyleCop.Analyzers on NuGet or GitHub for full details.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/docs/articles/intro.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

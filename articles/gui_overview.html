@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Scheduler GUI Overview </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Scheduler GUI Overview ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../images/satellite_small.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/satellite_ico.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="scheduler-gui-overview">Scheduler GUI Overview</h1>
+
+<p>The Scheduler GUI project contains the bulk of the application source code. The following responsibilities are realized by this code:</p>
+<ul>
+<li>User input for orbital pass parameters</li>
+<li>User input for system parameters (battery and solar)</li>
+<li>User input for available devices (from SchedulerDatabase)</li>
+<li>Scheduling Capability for computing optmized device profiles for required tasks</li>
+<li>On screen comparison of available device profiles</li>
+<li>On screen display of inputted parameters</li>
+<li>On screen display of optimized profiles</li>
+<li>Report generation capabilities.</li>
+</ul>
+<p>This article will summarize the high-level responsibilities of each major namespace or functional component of the application. The Api Documentation tab of this resouce can provide a great wealth of component-level design details regarding the implementation of the Scheduler GUI, and should be consulted for further details.</p>
+<h2 id="wpfmvvm-boilerplate-components">WPF/MVVM Boilerplate Components</h2>
+<h3 id="converters">Converters</h3>
+<p>In WPF, ValueConverters are an essential component used to translate one data type into another. ValueConverters are supported in bindings, and allow for reformatting and manipulating data from one portion of the ViewModel to be displayed in various locations of the View. Sample use cases include the common <code>NullToVisibilityConverter</code> and <code>BoolToVisibilityConverter</code> (the latter of which is common enough that it ships natively with .NET). These converters each convert from Object and Boolean types that satisfy a condition into a WPF Visibility level, and can be used to show or hide certain UI controls based on the state of data in the ViewModel and Model. Other examples of converters include complex string formatters to handle a variety of data types specific to the Scheduler application.</p>
+<h3 id="custom-controls">Custom Controls</h3>
+<p>Custom Controls houses custom-developed and extended controls. These are similar to native WPF controls from the <code>System.Windows.</code> namespace.</p>
+<h2 id="mvvm-specific-components">MVVM Specific Components</h2>
+<h3 id="models">Models</h3>
+<p>The Models namespace contains POCO classes that directly represent real-world data processed by the Scheduler Application. This includes things such as the Orbital Pass Parameters, Simulated Battery Characteristics, Simulated Solar Panel Parameters, and Encryption options.</p>
+<h3 id="views">Views</h3>
+<p>Views houses the XAML-based components that form the visible user interface. As these are MVVM-focused Views, they contain little to no traditional code-behind in the corresponding <code>View.xaml.cs</code> file. All data is loaded into the Views through XAML Data Binding, and is sourced from the matched ViewModel.</p>
+<p>Examples of high-level views include the main window, the plot tool dialog, the about dialog, and the data import dialog.</p>
+<h3 id="control-views">Control Views</h3>
+<p>Control Views are MVVM-based controls used to represent complex data. They are functionally no different than the elements housed in the Views namespace, and the distinction is purely application-specific. Our Control Views are intended to be used as much smaller scoped views that are composited into larger View (in the main Views namespace).</p>
+<p>Examples of control-level views include editor controls, popup dialog frames, graph controls, and custom list controls.</p>
+<h3 id="view-models">View-Models</h3>
+<p>ViewModels house the bulk of the application processing (or &quot;business&quot;) logic. A View-Model exists and for each and every View.</p>
+<p>MVVMLight is used to simplify the implementation of ViewModels. As such, all VMs inherit from the <code>ViewModelBase</code> class. This base class also assists in raising the <code>IPropertyNotifyChangedEvent</code> triggers, which are used to efficiently update only portions of the View that are bound to data that is changing. This improves application performance since only small portions of the view have to be recomputed at a time as data is changed.</p>
+<p>MainViewModel is the entry point for the application, and contains the majority the scheduling flow-control logic.</p>
+<h2 id="application-specific-components">Application Specific Components</h2>
+<h3 id="solver-components">Solver Components</h3>
+<p>The Solver namespace contains all algorithmic and data-structure components used to solve the device scheduling problem.</p>
+<h3 id="reporting-components">Reporting Components</h3>
+<p>The Reporting namespace contains helper methods and the main report generation code for creating exportable reports. This functionality is based around WPF's <code>FlowDocument</code> model, and allows for the report to be fluidly generated at runtime. WPF Native XPS functionality, and Microsoft Print to PDF Driver are used for exporting the reports into a user-readable format for distribution.</p>
+<h3 id="settings">Settings</h3>
+<p>The Scheduler Application contains a robust user settings system, although a majority of the settings functionality currently remains unutilized. At startup, a user's local settings file is read from <code>settings.json</code> by the <code>SettingsManager</code>, and the processed parameters are made available throughout the application. And application component, via <code>SettingsManager</code>, can read and write values to the settings file. At the current time, only the location of the <code>data.db</code> file is stored in settings, although this is fully extensible and designed to accomidate future application growth.</p>
+<h3 id="services">Services</h3>
+<p>Services is a catch-all namespace for universal components that perform low-level, application specific tasks.</p>
+<p>The <code>ViewModelLocator</code> service is used to provide the initial binding between the <code>MainWindow</code> view, and the <code>MainWindowViewModel</code> VM at application initialization.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/docs/articles/gui_overview.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

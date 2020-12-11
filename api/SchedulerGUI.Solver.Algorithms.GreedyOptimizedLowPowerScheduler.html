@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class GreedyOptimizedLowPowerScheduler
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class GreedyOptimizedLowPowerScheduler
+   ">
+    <meta name="generator" content="docfx 2.45.1.0">
+    
+    <link rel="shortcut icon" href="../images/satellite_small.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../images/satellite_ico.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler">
+  
+  
+  <h1 id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler" class="text-break">Class GreedyOptimizedLowPowerScheduler
+  </h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.html">GreedyOptimizedLowPowerScheduler</a> solves the scheduling problem using a greedy algorithm
+to always pick the lowest power device for each pass that can compute the AES encryption problem within the
+allowed time window. If a solution can be found, it will be globally optimized to use the minimal amount of power,
+however, it is NOT guaranteed to be optimized to be the fastest. Alternative profiles may be possible to allow
+for solving the problem with the the same or greater level of energy (but NOT less), but at a faster rate.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">GreedyOptimizedLowPowerScheduler</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SchedulerGUI.Solver.IScheduleSolver.html">IScheduleSolver</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SchedulerGUI.Solver.Algorithms.html">SchedulerGUI.Solver.Algorithms</a></h6>
+  <h6><strong>Assembly</strong>: SchedulerGUI.dll</h6>
+  <h5 id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class GreedyOptimizedLowPowerScheduler : object, IScheduleSolver</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Name.md&amp;value=---%0Auid%3A%20SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerGUI/Solver/Algorithms/GreedyOptimizedLowPowerScheduler.cs/#L23">View Source</a>
+  </span>
+  <a id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Name_" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Name*"></a>
+  <h4 id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Name" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Name">Name</h4>
+  <div class="markdown level1 summary"><p>Gets the name of this solver.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Tag.md&amp;value=---%0Auid%3A%20SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Tag%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerGUI/Solver/Algorithms/GreedyOptimizedLowPowerScheduler.cs/#L26">View Source</a>
+  </span>
+  <a id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Tag_" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Tag*"></a>
+  <h4 id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Tag" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Tag">Tag</h4>
+  <div class="markdown level1 summary"><p>Gets or sets freeform user content used to tag this algorithm.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Tag { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Solve_IEnumerable_SchedulerGUI_Models_PassOrbit__IEnumerable_SchedulerDatabase_Models_IByteStreamProcessor__IEnumerable_SchedulerDatabase_Models_IByteStreamProcessor__SchedulerGUI_Models_Battery_.md&amp;value=---%0Auid%3A%20SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Solve(IEnumerable%7BSchedulerGUI.Models.PassOrbit%7D%2CIEnumerable%7BSchedulerDatabase.Models.IByteStreamProcessor%7D%2CIEnumerable%7BSchedulerDatabase.Models.IByteStreamProcessor%7D%2CSchedulerGUI.Models.Battery)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerGUI/Solver/Algorithms/GreedyOptimizedLowPowerScheduler.cs/#L29">View Source</a>
+  </span>
+  <a id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Solve_" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Solve*"></a>
+  <h4 id="SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler_Solve_IEnumerable_SchedulerGUI_Models_PassOrbit__IEnumerable_SchedulerDatabase_Models_IByteStreamProcessor__IEnumerable_SchedulerDatabase_Models_IByteStreamProcessor__SchedulerGUI_Models_Battery_" data-uid="SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler.Solve(IEnumerable{SchedulerGUI.Models.PassOrbit},IEnumerable{SchedulerDatabase.Models.IByteStreamProcessor},IEnumerable{SchedulerDatabase.Models.IByteStreamProcessor},SchedulerGUI.Models.Battery)">Solve(IEnumerable&lt;PassOrbit&gt;, IEnumerable&lt;IByteStreamProcessor&gt;, IEnumerable&lt;IByteStreamProcessor&gt;, Battery)</h4>
+  <div class="markdown level1 summary"><p>Computes a solution to the scheduling problem, and stores the final energy values in <a class="xref" href="SchedulerGUI.Models.PassOrbit.html">PassOrbit</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ScheduleSolution Solve(IEnumerable&lt;PassOrbit&gt; passes, IEnumerable&lt;IByteStreamProcessor&gt; summarizedEncryptors, IEnumerable&lt;IByteStreamProcessor&gt; summarizedCompressors, Battery battery)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="SchedulerGUI.Models.PassOrbit.html">PassOrbit</a>&gt;</td>
+        <td><span class="parametername">passes</span></td>
+        <td><p>The orbital passes and associated constraints that need scheduled.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="SchedulerDatabase.Models.IByteStreamProcessor.html">IByteStreamProcessor</a>&gt;</td>
+        <td><span class="parametername">summarizedEncryptors</span></td>
+        <td><p>The byte processing encryption profiles describing the summarized devices that are available to schedule for.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="SchedulerDatabase.Models.IByteStreamProcessor.html">IByteStreamProcessor</a>&gt;</td>
+        <td><span class="parametername">summarizedCompressors</span></td>
+        <td><p>The byte processing compression profiles describing the summarized devices that are available to schedule for.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SchedulerGUI.Models.Battery.html">Battery</a></td>
+        <td><span class="parametername">battery</span></td>
+        <td><p>The specification for the battery powering the satellite.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SchedulerGUI.Solver.ScheduleSolution.html">ScheduleSolution</a></td>
+        <td><p>A <a class="xref" href="SchedulerGUI.Solver.ScheduleSolution.html">ScheduleSolution</a> describing if the scenerio is possible and which device are required.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SchedulerGUI.Solver.IScheduleSolver.html">IScheduleSolver</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/CPE656Fall2020/SchedulerApp/new/c2eea1e45698a50ecf32259b10368f7de9667592/apiSpec/new?filename=SchedulerGUI_Solver_Algorithms_GreedyOptimizedLowPowerScheduler.md&amp;value=---%0Auid%3A%20SchedulerGUI.Solver.Algorithms.GreedyOptimizedLowPowerScheduler%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/CPE656Fall2020/SchedulerApp/blob/c2eea1e45698a50ecf32259b10368f7de9667592/SchedulerGUI/Solver/Algorithms/GreedyOptimizedLowPowerScheduler.cs/#L17" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
